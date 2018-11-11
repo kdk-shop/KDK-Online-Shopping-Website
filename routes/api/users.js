@@ -16,15 +16,16 @@ const User=require('../../models/User');
 //@Route  GET api/users/test
 //@test   test users Route 
 //@access public
-router.get('/test',(req,res)=>res.json({msg:'User Works!'}));
+router.post('/test',(req,res)=>res.json({msg:'success'}));
 
-//@Route  GET api/users/register
+//@Route  POST api/users/register
 //@test   register user 
 //@access public
 router.post('/register',(req,res)=>{
+    
     const {errors,isValid}=validationRegisterInput(req.body);
     //check validation
-    if(!isValid){
+    if(!isValid){       
         return res.status(400).json(errors)
     }
     User.findOne({email:req.body.email})
@@ -60,6 +61,7 @@ router.post('/register',(req,res)=>{
                 })
             }
         })
+       console.log(req.body)
 })
 
 //@Route  GET api/users/login
