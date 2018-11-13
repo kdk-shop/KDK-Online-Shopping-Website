@@ -29,6 +29,9 @@ import classNames from 'classnames'
         //console.log(user)
         axios.post('/api/users/login',user)
         .then(res=>{
+          
+          localStorage.setItem("jwt_token",res.data.token)
+
           if (res.data.redirect === '/profile') {
                window.location = "/profile"
           } else window.location = "/login"
@@ -41,7 +44,9 @@ import classNames from 'classnames'
           // })
         })
         .catch(err=>this.setState(
-          {errors:err.response.data ,status:''}))
+          {errors:err.response.data 
+            //,status:''
+            }))
     }
   render() {
     const {errors}=this.state;

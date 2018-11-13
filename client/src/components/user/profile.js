@@ -32,7 +32,7 @@ onSubmit(e){
         tel:this.state.tel,
 
     }
-
+    axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
     axios.post('/api/users/profile',updateUser)
          .then(res=>{
            if (res.data.redirect === '/profile') {

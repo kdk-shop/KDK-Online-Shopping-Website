@@ -17,7 +17,7 @@ const User=require('../../models/User');
 //@Route  GET api/users/test
 //@test   test users Route 
 //@access public
-router.get('/test',(req,res)=>res.json({msg:'success'}));
+// router.get('/test',(req,res)=>res.json({msg:'success'}));
 
 //@Route  POST api/users/register
 //@test   register user 
@@ -47,7 +47,9 @@ router.post('/register',(req,res)=>{
                     name:req.body.name,
                     email:req.body.email,
                     avatar,
-                    password:req.body.password 
+                    password:req.body.password,
+                    address: "",
+                    phoneNumber: null
                 });
 
                 bcrypt.genSalt(10,(err,salt)=>{
@@ -55,12 +57,12 @@ router.post('/register',(req,res)=>{
                         if(err) throw err;
                         newUser.password=hash;
                         newUser.save()
-                            //.then(user=>res.json(user))
-                            //.catch(err=>console.log(err))
+                            .then(user=>res.json(user))
+                            .catch(err=>console.log(err))
                     })
                 })
-                let redir = { redirect: "/login" };
-                return res.json(redir);
+                //let redir = { redirect: "/login" };
+                //return res.json(redir);
   
             }
         })
@@ -98,12 +100,12 @@ router.post('/login',(req,res)=>{
                         jwt.sign(payload,keys.secretOrKey , {expiresIn :3600},(err,token)=>{
                             res.json({
                                 success:true,
-                                token: token
+                                token: token,
+                                redirect: "/profile"
                             })
-                            
                         });
-                         let redir = { redirect: "/profile" };
-                         return res.json(redir);
+                         // let redir = { redirect: "/profile" };
+                         // return res.json(redir);
                     }
                     else{                        
                         return res.status(401).json(errors.password='Password incorrect')
@@ -116,21 +118,35 @@ router.post('/login',(req,res)=>{
 //@Route  GET api/users/current
 //@test   return current user 
 //@access private
-router.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
-    return res.json({
-        id:req.user.id,
-        name:req.user.name,
-        email:req.user.email
-    })
-})
-
+// router.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
+//     return res.json({
+//         id:req.user.id,
+//         name:req.user.name,
+//         email:req.user.email
+//     })
+// })
+router.get('/profile',
+  passport.authenticate('jwt',{session:false}),
+  (req,res)=>{
+    User.findById(req.user.id,(err,user) => {
+      if(err) return res.send(404,{error: err});
+      else{
+        res.json({
+          name: user.name,
+          email: user.email,
+          address: user.address,
+          tel: user.phoneNumber
+        })
+        console.log(res.body);
+      }
+    }) 
+  })
 //@Route  POST api/users/profile
 //@test   post current user profile
 //@access private
 router.post('/profile',
   passport.authenticate('jwt',{session:false}),
   (req,res)=>{
-    console.log("inside post handler") 
     const {errors,isValid}=validationProfileInput(req.body);
     
     if(!isValid){       
@@ -142,7 +158,7 @@ router.post('/profile',
       address: req.body.address,
       phoneNumber: req.body.tel
     }
-    User.update({email:req.body.email},{$set:newUser},{},(err,doc) => {
+    User.update({_id:req.user.id},{$set:newUser},{},(err,doc) => {
       
       if(err) return res.send(500, {error: err});
       return res.json(doc);
@@ -152,7 +168,7 @@ router.post('/profile',
 
 router.get('/logout', function(req, res){
   req.logout();
-  return res.redirect('/');
+  return res.json({redirect:'/'});
 });
 
 module.exports=router;
