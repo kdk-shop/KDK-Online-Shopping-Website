@@ -9,7 +9,7 @@ class profile extends Component {
     this.state={
         name:'',
         email:'',
-        location:'',
+        address:'',
         tel:'',
         errors:{},
     };
@@ -28,7 +28,7 @@ onSubmit(e){
     const updateUser={
         name:this.state.name,
         email:this.state.email,
-        location:this.state.location,
+        address:this.state.address,
         tel:this.state.tel,
 
     }
@@ -67,11 +67,11 @@ onSubmit(e){
                 </div>
             
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Location" name="location" />
+              <input type="text" className="form-control form-control-lg" placeholder="Address" name="address" value={this.state.address} onChange={this.onChange} />
             </div>
 
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Tel" name="tel" />
+              <input type="text" className="form-control form-control-lg" placeholder="Tel" name="tel" value={this.state.tel} onChange={this.onChange} />
             </div>
 
             <input type="submit" className="btn btn-info mt-4" />{' '}

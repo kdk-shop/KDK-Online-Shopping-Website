@@ -9,6 +9,7 @@ const passport=require('passport');
 //load validation
 const validationRegisterInput=require('../../validation/register')
 const validationLoginInput=require('../../validation/login')
+const validationProfileInput= require('../../validation/profile')
 
 //load user model
 const User=require('../../models/User');
@@ -97,7 +98,7 @@ router.post('/login',(req,res)=>{
                         jwt.sign(payload,keys.secretOrKey , {expiresIn :3600},(err,token)=>{
                             res.json({
                                 success:true,
-                                token:'Bearer '+ token
+                                token: token
                             })
                             
                         });
@@ -105,7 +106,7 @@ router.post('/login',(req,res)=>{
                          return res.json(redir);
                     }
                     else{                        
-                        return res.status(400).json(errors.password='Password incorrect')
+                        return res.status(401).json(errors.password='Password incorrect')
                     }
                 })
         })
@@ -116,11 +117,42 @@ router.post('/login',(req,res)=>{
 //@test   return current user 
 //@access private
 router.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
-    res.json({
+    return res.json({
         id:req.user.id,
         name:req.user.name,
         email:req.user.email
     })
 })
+
+//@Route  POST api/users/profile
+//@test   post current user profile
+//@access private
+router.post('/profile',
+  passport.authenticate('jwt',{session:false}),
+  (req,res)=>{
+    console.log("inside post handler") 
+    const {errors,isValid}=validationProfileInput(req.body);
+    
+    if(!isValid){       
+        return res.status(400).json(errors)
+    }
+    let newUser={
+      name: req.body.name,
+      email: req.body.email,
+      address: req.body.address,
+      phoneNumber: req.body.tel
+    }
+    User.update({email:req.body.email},{$set:newUser},{},(err,doc) => {
+      
+      if(err) return res.send(500, {error: err});
+      return res.json(doc);
+    })
+    
+  })
+
+router.get('/logout', function(req, res){
+  req.logout();
+  return res.redirect('/');
+});
 
 module.exports=router;

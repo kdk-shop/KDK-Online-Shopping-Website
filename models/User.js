@@ -3,31 +3,12 @@ const Schema=mongoose.Schema;
 
 //create Schema 
 const UserSchema=new Schema({
-    name:{
-        type:String,
-        required:true
-    },
-    email:{
-        type:String,
-        required:true
-    },
-    password:{
-        type:String,
-        required:true
-    },
-    avatar:{
-        type:String
-    },
-    address:{
-        type:String
-    },
-    phone:{
-        type:String
-    },
-    date:{
-        type:Date,
-        default:Date.now
-    }
+  email:{ type: String, required: true, lowercase: true, maxlength:40,unique: true},
+  password: { type: String, required: true},
+  name: {type: String , maxlength: 80},
+  date: { type: Date, default: Date.now, index:true },
+  phoneNumber: { type: Number },
+  address: {type: String, maxlength: 200}
 })
 
 module.exports=User=mongoose.model('users',UserSchema);
