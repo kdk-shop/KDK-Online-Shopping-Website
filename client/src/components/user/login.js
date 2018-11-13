@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 
+
  class login extends Component {
     constructor(){
         super();
@@ -9,7 +10,7 @@ import classNames from 'classnames'
             email:'',
             password:'',
             errors:{},
-            success:''
+           // success:''
         };
         this.onChange=this.onChange.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
@@ -28,20 +29,23 @@ import classNames from 'classnames'
         //console.log(user)
         axios.post('/api/users/login',user)
         .then(res=>{
+          if (res.data.redirect === '/profile') {
+               window.location = "/profile"
+          } else window.location = "/login"
           console.log(res.data);
-          this.setState({
-            //status:'You have successfully logged in to your account, in the next sprint, you will be redirected to your profile page!'
-            status:`Dear ${user.email} you\'ve successfully logged into your account,
-            in the next sprint, you\'ll be redirected to your profile page. 
-            thank you for your patience!`
-          })
+          // this.setState({
+          //   status:`Dear ${user.email} you\'ve successfully logged into your account,
+          //   in the next sprint, you\'ll be redirected to your profile page. 
+          //   thank you for your patience!`,
+            
+          // })
         })
         .catch(err=>this.setState(
           {errors:err.response.data ,status:''}))
     }
   render() {
     const {errors}=this.state;
-    let {status}=this.state;
+    //let {status}=this.state;
     return (
         <div className="login">
         <div className="container">
@@ -59,7 +63,7 @@ import classNames from 'classnames'
                   {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
-                {status && (<div style={{color:'green'}}>{status}</div>)}
+                {/* {status && (<div style={{color:'green'}}>{status}</div>)} */}
               </form>
             </div>
           </div>

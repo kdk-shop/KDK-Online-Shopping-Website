@@ -10,12 +10,13 @@ import classNames from 'classnames'
              email:'',
              password:'',
              password2:'',
-             errors:{}
+             errors:{},
          };
          this.onChange=this.onChange.bind(this);
          this.onSubmit=this.onSubmit.bind(this);
      }
      
+
      onChange(e){
          this.setState({[e.target.name]:e.target.value})
      }
@@ -32,7 +33,12 @@ import classNames from 'classnames'
          }
          //console.log(newUser)
          axios.post('/api/users/register',newUser)
-              .then(res=>console.log(res.data))
+              .then(res=>{
+                if (res.data.redirect === '/login') {
+                  window.location = "/login"
+                } else window.location = "/register"
+                console.log(res.data)
+              })
               .catch(err=>this.setState({errors:err.response.data}))
      }
   render() {

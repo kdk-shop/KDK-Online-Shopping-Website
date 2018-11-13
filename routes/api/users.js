@@ -16,7 +16,7 @@ const User=require('../../models/User');
 //@Route  GET api/users/test
 //@test   test users Route 
 //@access public
-router.post('/test',(req,res)=>res.json({msg:'success'}));
+router.get('/test',(req,res)=>res.json({msg:'success'}));
 
 //@Route  POST api/users/register
 //@test   register user 
@@ -30,9 +30,8 @@ router.post('/register',(req,res)=>{
     }
     User.findOne({email:req.body.email})
         .then(user=>{
-            if(user){
-                errors.email='Email already exists'
-                return res.status(400).json(errors)
+            if(user){               
+                return res.status(400).json(errors.email='Email already exists')
             }
     
             else{
@@ -55,16 +54,19 @@ router.post('/register',(req,res)=>{
                         if(err) throw err;
                         newUser.password=hash;
                         newUser.save()
-                            .then(user=>res.json(user))
-                            .catch(err=>console.log(err))
+                            //.then(user=>res.json(user))
+                            //.catch(err=>console.log(err))
                     })
                 })
+                let redir = { redirect: "/login" };
+                return res.json(redir);
+  
             }
         })
        console.log(req.body)
 })
 
-//@Route  GET api/users/login
+//@Route  POST api/users/login
 //@test   login user / returning jwt token
 //@access public
 router.post('/login',(req,res)=>{
@@ -79,9 +81,10 @@ router.post('/login',(req,res)=>{
     //Find user by email
     User.findOne({email})
         .then(user=>{
-            errors.email='User not found'
+            
             //check for user
-            if(!user) return res.status(404).json(errors)
+            if(!user) 
+                return res.status(404).json(errors.email='User not found')
 
             //check password
             bcrypt.compare(password,user.password)
@@ -96,14 +99,17 @@ router.post('/login',(req,res)=>{
                                 success:true,
                                 token:'Bearer '+ token
                             })
+                            
                         });
+                         let redir = { redirect: "/profile" };
+                         return res.json(redir);
                     }
-                    else{
-                        errors.password='Password incorrect'
-                        return res.status(400).json(errors)
+                    else{                        
+                        return res.status(400).json(errors.password='Password incorrect')
                     }
                 })
         })
+
 })
 
 //@Route  GET api/users/current

@@ -15,7 +15,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-	"build-product": "react-scripts build --mode production"
+    "build-product": "react-scripts build --mode production"
   },
   "eslintConfig": {
     "extends": "react-app"
