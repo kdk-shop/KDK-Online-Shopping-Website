@@ -11,10 +11,11 @@
     "react-scripts": "2.1.1"
   },
   "scripts": {
-    "start": "SET PORT=4850 && react-scripts start",
+    "start": "PORT=4850 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+	"build-product": "react-scripts build --mode production"
   },
   "eslintConfig": {
     "extends": "react-app"
