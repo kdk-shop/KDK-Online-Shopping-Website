@@ -17,7 +17,7 @@ const User=require('../../models/User');
 //@Route  GET api/users/test
 //@test   test users Route 
 //@access public
-// router.get('/test',(req,res)=>res.json({msg:'success'}));
+router.get('/test',(req,res)=>res.json({msg:'success'}));
 
 //@Route  POST api/users/register
 //@test   register user 
@@ -57,12 +57,10 @@ router.post('/register',(req,res)=>{
                         if(err) throw err;
                         newUser.password=hash;
                         newUser.save()
-                            .then(user=>res.json(user))
+                            .then(user=>res.json({user,redirect: "/login"}))
                             .catch(err=>console.log(err))
                     })
                 })
-                //let redir = { redirect: "/login" };
-                //return res.json(redir);
   
             }
         })
@@ -97,15 +95,13 @@ router.post('/login',(req,res)=>{
                        //create jwt payload
                        const payload ={id: user.id , name: user.name , avatar: user.avatar}
                        //sign token
-                        jwt.sign(payload,keys.secretOrKey , {expiresIn :3600},(err,token)=>{
+                        jwt.sign(payload,keys.secretOrKey , {expiresIn :300},(err,token)=>{
                             res.json({
                                 success:true,
                                 token: token,
                                 redirect: "/profile"
                             })
                         });
-                         // let redir = { redirect: "/profile" };
-                         // return res.json(redir);
                     }
                     else{                        
                         return res.status(401).json(errors.password='Password incorrect')
@@ -129,7 +125,7 @@ router.get('/profile',
   passport.authenticate('jwt',{session:false}),
   (req,res)=>{
     User.findById(req.user.id,(err,user) => {
-      if(err) return res.send(404,{error: err});
+      if(err) return res.status(400).json(err)
       else{
         res.json({
           name: user.name,
@@ -137,7 +133,7 @@ router.get('/profile',
           address: user.address,
           tel: user.phoneNumber
         })
-        console.log(res.body);
+       // console.log(res.body);
       }
     }) 
   })
@@ -152,16 +148,19 @@ router.post('/profile',
     if(!isValid){       
         return res.status(400).json(errors)
     }
+    console.log(typeof req.body.tel)
     let newUser={
       name: req.body.name,
       email: req.body.email,
       address: req.body.address,
       phoneNumber: req.body.tel
     }
+    //console.log(req.user.id)
     User.update({_id:req.user.id},{$set:newUser},{},(err,doc) => {
       
-      if(err) return res.send(500, {error: err});
-      return res.json(doc);
+      if(err) return res.status(400).json(err)
+      //console.log(doc)
+      return res.json({redirect:'/profile'});
     })
     
   })

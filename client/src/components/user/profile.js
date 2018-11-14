@@ -12,6 +12,7 @@ class profile extends Component {
         address:'',
         tel:'',
         errors:{},
+        success:''
     };
     this.onChange=this.onChange.bind(this);
     this.onSubmit=this.onSubmit.bind(this);
@@ -29,18 +30,35 @@ onSubmit(e){
         name:this.state.name,
         email:this.state.email,
         address:this.state.address,
-        tel:this.state.tel,
+        tel:parseInt(this.state.tel)
 
     }
     axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
     axios.post('/api/users/profile',updateUser)
          .then(res=>{
+
            if (res.data.redirect === '/profile') {
-             window.location = "/"
-           } else window.location = "/profile"
-           console.log(res.data)
+             this.setState({success:'Information has been changed successfully.',errors:{}})
+           }
          })
          .catch(err=>this.setState({errors:err.response.data}))
+}
+
+componentDidMount(){
+  axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+  axios.get('/api/users/profile')
+         .then(res=>{
+           this.setState({
+
+            name:res.data.name,
+            email:res.data.email,
+            address:res.data.address,
+            tel:res.data.tel,
+           })
+         })
+         .catch(err=>{
+           this.setState({errors:err.response.data,success:''})
+          })
 }
   render() {
     const {errors}=this.state;
@@ -67,17 +85,20 @@ onSubmit(e){
                 </div>
             
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Address" name="address" value={this.state.address} onChange={this.onChange} />
+              <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.address})} placeholder="Address" name="address" value={this.state.address} onChange={this.onChange} id='address' />
+              { errors.address && (<div className="invalid-feedback">{errors.address}</div>)}
             </div>
 
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Tel" name="tel" value={this.state.tel} onChange={this.onChange} />
+              <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.tel})} placeholder="Tel" name="tel" value={this.state.tel} onChange={this.onChange} />
+              {errors.tel && (<div className="invalid-feedback">{errors.tel}</div>)}
             </div>
 
             <input type="submit" className="btn btn-info mt-4" />{' '}
             <Link to="/" className="btn btn-light mt-4">Cancel</Link> 
-
           </form>
+          <br/>
+          <label style={{color:'green'}}>{this.state.success}</label>
         </div>
       </div>
     </div>

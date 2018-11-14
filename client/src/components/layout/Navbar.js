@@ -1,7 +1,31 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 
 class Navbar extends Component {
+
+  state = {
+    isLogin: false
+  }
+  componentDidMount(){
+    console.log(localStorage.getItem("jwt_token"))
+    if(localStorage.getItem("jwt_token")){
+      this.setState({isLogin:true})
+    }else{
+      this.setState({isLogin:false})
+    }
+  }
+
+  logout = (event)=>{
+    if(this.state.isLogin){
+      localStorage.removeItem("jwt_token")
+      axios.get('/api/users/logout')
+         .then(res=>{
+           this.setState({isLogin:false})
+         })
+         .catch(err=>console.log(err))
+    }
+  }
   render() {
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
@@ -19,10 +43,10 @@ class Navbar extends Component {
     
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/register">Sign Up</Link>
+                <Link className="nav-link" to={this.state.isLogin?"/profile":"/register"}>{this.state.isLogin?"Profile":"Sign Up"}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
+                <Link className="nav-link" onClick={this.logout} to={this.state.isLogin?"/":"/login"}>{this.state.isLogin?"Log Out":"Login"}</Link>
               </li>
             </ul>
           </div>

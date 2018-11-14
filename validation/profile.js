@@ -28,8 +28,8 @@ module.exports=function validateProfileInput(data){
     if(!validator.isLength(data.address,{min:1, max:199})){
         errors.address='Address must be between 1 and 200 characters!'
     }
-
-    if(!validator.isMobilePhone(data.tel)){
+  
+    if(!validator.isMobilePhone(data.tel.toString(),'fa-IR')){
         errors.tel='Phone number is invalid!'
     }
     return{
