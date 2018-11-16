@@ -17,19 +17,19 @@ module.exports=function validateProfileInput(data){
         errors.name='Name field is required!'
     }
 
-    if(validator.isEmpty(data.email)){
-        errors.email='Email field is required!'
-    }
-
     if(!validator.isEmail(data.email)){
         errors.email='Email is invalid!'
     }
     
-    if(!validator.isLength(data.address,{min:1, max:199})){
+    if(validator.isEmpty(data.email)){
+        errors.email='Email field is required!'
+    }
+
+    if(!validator.isEmpty(data.address) &&!validator.isLength(data.address,{min:1, max:199})){
         errors.address='Address must be between 1 and 200 characters!'
     }
   
-    if(!validator.isMobilePhone(data.tel.toString(),'fa-IR')){
+    if(!validator.isEmpty(data.tel.toString()) && !validator.isMobilePhone(data.tel.toString(),'fa-IR')){
         errors.tel='Phone number is invalid!'
     }
     return{

@@ -7,7 +7,7 @@ img {
   background: url('./img/showcase.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: 82.5vh;
   margin-top: -24px;
   margin-bottom: -50px;
 }
@@ -17,7 +17,7 @@ img {
 }
 
 .dark-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
   top: 0;
   left: 0;

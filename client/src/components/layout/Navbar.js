@@ -46,7 +46,7 @@ class Navbar extends Component {
                 <Link className="nav-link" to={this.state.isLogin?"/profile":"/register"}>{this.state.isLogin?"Profile":"Sign Up"}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" onClick={this.logout} to={this.state.isLogin?"/":"/login"}>{this.state.isLogin?"Log Out":"Login"}</Link>
+                <Link className="nav-link" onClick={this.logout} to={this.state.isLogin?"/":"/login"}>{this.state.isLogin?"Log Out":"Log In"}</Link>
               </li>
             </ul>
           </div>
