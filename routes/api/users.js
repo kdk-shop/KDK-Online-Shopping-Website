@@ -30,15 +30,12 @@ router.post('/register',(req,res)=>{
                 errors.email='Email already exists'           
                 return res.status(400).json(errors)
             }
-    
             else{
-
                 const avatar=gravatar.url(req.body.email,{
                     s:'200', //size
                     r:'pg', //Rating
                     d:'mm' //default
                 });
-
                 const newUser=new User({
                     name:req.body.name,
                     email:req.body.email,
@@ -47,7 +44,6 @@ router.post('/register',(req,res)=>{
                     address: '',
                     phoneNumber: null
                 });
-
                 bcrypt.genSalt(10,(err,salt)=>{
                     bcrypt.hash(newUser.password,salt,(err,hash)=>{
                         if(err) throw err;
@@ -57,7 +53,6 @@ router.post('/register',(req,res)=>{
                             .catch(err=>console.log(err))
                     })
                 })
-  
             }
         })
 })
@@ -73,7 +68,6 @@ router.post('/login',(req,res)=>{
     }
     const email=req.body.email;
     const password=req.body.password;
-
     //Find user by email
     User.findOne({email})
         .then(user=>{
@@ -82,7 +76,6 @@ router.post('/login',(req,res)=>{
                 errors.email='User not found'             
                 return res.status(404).json(errors)
             }
-
             //check password
             bcrypt.compare(password,user.password)
                 .then(isMatch=>{
@@ -110,7 +103,7 @@ router.post('/login',(req,res)=>{
 
 //@Route  GET api/users/profile
 //@test   get current user profile
-//@access public
+//@access private
 router.get('/profile',
   passport.authenticate('jwt',{session:false}),
   (req,res)=>{
@@ -134,7 +127,6 @@ router.post('/profile',
   passport.authenticate('jwt',{session:false}),
   (req,res)=>{
     const {errors,isValid}=validationProfileInput(req.body);
-    
     if(!isValid){       
         return res.status(400).json(errors)
     }
@@ -144,18 +136,15 @@ router.post('/profile',
       address: req.body.address,
       phoneNumber: req.body.tel
     }
-
     User.update({_id:req.user.id},{$set:newUser},{},(err,doc) => {
-      
       if(err) return res.status(400).json(err)
-
       return res.json({redirect:'/profile'});
     })
-    
   })
+
 //@Route  GET api/users/logout
 //@test   logout current user
-//@access public
+//@access private
 router.get('/logout', function(req, res){
   req.logout();
   return res.json({redirect:'/'});

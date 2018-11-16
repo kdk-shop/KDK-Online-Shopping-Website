@@ -8,7 +8,9 @@ const UserSchema=new Schema({
   name: {type: String , maxlength: 80},
   date: { type: Date, default: Date.now, index:true },
   phoneNumber: { type: Number },
-  address: {type: String, maxlength: 200}
+  address: {type: String, maxlength: 200},
+  purchaseHistory: [{type: Schema.Types.ObjectId, ref:"Purchase"}],
+  shoppingCart: {type: Schema.Types.ObjectId, ref:"Cart"}
 })
 
-module.exports=User=mongoose.model('users',UserSchema);
+module.exports = mongoose.model('User',UserSchema);
