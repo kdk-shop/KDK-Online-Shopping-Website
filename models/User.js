@@ -9,6 +9,11 @@ const UserSchema=new Schema({
   date: { type: Date, default: Date.now, index:true },
   phoneNumber: { type: Number },
   address: {type: String, maxlength: 200},
+  //Keep track of items user has rated in case it's needed in future sprints
+  rates: [{ 
+    product: {type: Schema.Types.ObjectId, ref:"Product"},
+    score:{type: Number, min:0, max:10, required: true}
+  }],
   purchaseHistory: [{type: Schema.Types.ObjectId, ref:"Purchase"}],
   shoppingCart: {type: Schema.Types.ObjectId, ref:"Cart"}
 })
