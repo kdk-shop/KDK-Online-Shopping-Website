@@ -7,9 +7,9 @@ const keys=require('../../config/keys');
 const passport=require('passport');
 
 //load validation
-const validationRegisterInput=require('../../validation/register')
-const validationLoginInput=require('../../validation/login')
-const validationProfileInput= require('../../validation/profile')
+const validationRegisterInput=require('../../validation/user/register')
+const validationLoginInput=require('../../validation/user/login')
+const validationProfileInput= require('../../validation/user/profile')
 
 //load user model
 const User=require('../../models/User');
@@ -88,7 +88,7 @@ router.post('/login',(req,res)=>{
                             res.json({
                                 success:true,
                                 token: token,
-                                redirect: '/profile'
+                                redirect: '/profile/'+user.name
                             })
                         });
                     }
@@ -101,6 +101,27 @@ router.post('/login',(req,res)=>{
 
 })
 
+//@Route  GET api/users/profile/:u_id
+//@test   get requested user profile
+//@access public
+router.get('/profile/:user_name',
+  (req,res)=>{
+    User.findOne({name:req.params.user_name},(err,user) => {
+      if(err){console.log("err"); return res.status(400).json(err);}
+      else{
+        if(!user)
+          return res.status(404).send("User not found!");
+        else{
+          res.json({
+          name: user.name,
+          email: user.email,
+          address: user.address,
+          tel: user.phoneNumber
+          })
+        }
+      }
+    }) 
+  })
 //@Route  GET api/users/profile
 //@test   get current user profile
 //@access private
@@ -119,7 +140,6 @@ router.get('/profile',
       }
     }) 
   })
-
 //@Route  POST api/users/profile
 //@test   update current user profile
 //@access private
