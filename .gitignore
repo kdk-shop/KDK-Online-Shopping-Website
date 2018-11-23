@@ -80,3 +80,5 @@ tags
 
 package-lock.json
 .tern-port
+.eslintrc.json
+out/
