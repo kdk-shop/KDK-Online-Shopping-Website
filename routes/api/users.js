@@ -5,12 +5,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
+const generator = require('generate-password');
+const nodemailer = require('nodemailer');
 
-//load validation
+//load validators
 const validationRegisterInput = require('../../validation/user/register')
 const validationLoginInput = require('../../validation/user/login')
 const validationProfileInput = require('../../validation/user/profile')
 const validationChangePasswordInput = require('../../validation/user/change_pwd')
+const validationResetPasswordInput = require('../../validation/user/reset_pwd')
 
 //load user model
 const User = require('../../models/User');
@@ -228,6 +231,69 @@ router.patch('/change_pwd',
           return res.json({
             redirect: '/profile'
           });
+        })
+      })
+    });
+  })
+
+//@Route  patch api/users/reset_pwd
+//@test   reset current user password
+//@access private
+router.patch('/reset_pwd',
+  (req, res) => {
+    const {
+      errors,
+      isValid
+    } = validationResetPasswordInput(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+    let raw_password = generator.generate({
+      length: 20,
+      numbers: true
+    })
+    let newUser = {
+      password: raw_password
+    }
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+        User.update({
+          email: req.body.email
+        }, {
+          $set: newUser
+        }, {}, (err, doc) => {
+          if (err) return res.status(500).json(err)
+          if (doc.n != 0) {
+            let transporter = nodemailer.createTransport({
+              host: 'smtp.gmail.com',
+              port: 465,
+              secure: true,
+              auth: {
+                user: 'kdkonlineshop@gmail.com',
+                pass: '123456test'
+              }
+            });
+            // setup email data with unicode symbols
+            let mailOptions = {
+              from: '"KDK Shop"<kdkonlineshop@gmail.com>', // sender address
+              to: 'khoshkholghdanial@gmail.com', // list of receivers
+              subject: 'Password reset', // Subject line
+              text: 'Dear user your password has been reset. Your new password is: ' + raw_password, // plain text body
+              html: '<p>Dear user your password has been reset. Your new password is: ' + raw_password + '</p>' // html body
+            };
+
+            // send mail with defined transport object
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                return console.log(error);
+              }
+              return res.status(303).json({
+                redirect: '/profile'
+              });
+            });
+          } else res.status(404).send("User not found!");
         })
       })
     });

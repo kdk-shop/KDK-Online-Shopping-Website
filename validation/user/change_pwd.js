@@ -1,7 +1,7 @@
 const validator=require('validator')
 const isEmpty=require('../is-empty')
 
-module.exports=function validationChangePasswordInput(data){
+module.exports=function validateChangePasswordInput(data){
 
     let errors={}
     data.password=!isEmpty(data.password)? data.password : ''
