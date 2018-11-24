@@ -1,9 +1,10 @@
 const express = require('express');
-const bodyParser=require('body-parser');
-const passport=require('passport');
+const bodyParser = require('body-parser');
+const passport = require('passport');
 
 const db = require('./db.js');
 const users = require('./routes/api/users');
+const products = require('./routes/api/products');
 
 const app = express();
 
@@ -21,11 +22,13 @@ app.use((req, res, next) => {
 });
 
 //body parser middleware
-app.use(bodyParser.urlencoded({extends:false}));
+app.use(bodyParser.urlencoded({
+  extends: false
+}));
 app.use(bodyParser.json());
 
 
-app.get('/',(req,res)=>res.send('Hello world'))
+app.get('/', (req, res) => res.send('Hello world'))
 
 //passport middleware
 app.use(passport.initialize());
@@ -34,5 +37,6 @@ require('./config/passport')(passport);
 
 //User Routes
 app.use('/api/users', users);
+app.use('/api/products', products);
 
 module.exports = app;

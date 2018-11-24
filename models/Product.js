@@ -20,7 +20,7 @@ const productSchema = new Schema({
     required: true,
     maxlength: 40
   },
-  imagePath: [String],
+  imagePaths: [String],
   tags: [{
     type: String,
     maxlength: 20
@@ -31,13 +31,11 @@ const productSchema = new Schema({
   },
   specification: Schema.Types.Mixed,
   available: Boolean,
-  technicalReview: String,
   rating: {
     score: {
       type: Number,
       min: 0,
-      max: 10,
-      required: true
+      max: 10
     },
     count: Number
   },
@@ -49,14 +47,12 @@ const productSchema = new Schema({
   userRates: [{
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+      ref: 'User'
     },
     score: {
       type: Number,
       min: 0,
-      max: 10,
-      required: true
+      max: 10
     }
   }],
   comments: [{
@@ -65,27 +61,16 @@ const productSchema = new Schema({
       ref: 'User',
       required: true
     },
-    creatorName: {
-      type: String,
-      maxlength: 40
-    },
     date: {
       type: Date,
       default: Date.now
     },
-    title: {
-      type: String,
-      maxlength: 40,
-      required: true
-    },
-    pros: [String],
-    cons: [String],
     review: {
       type: String,
       required: true,
       maxlength: 600
     },
-    recommended: Boolean
+    recommended: Number
   }]
 
 });
