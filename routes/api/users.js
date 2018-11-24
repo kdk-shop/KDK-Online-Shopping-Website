@@ -25,7 +25,7 @@ const nodemailer = require('nodemailer');
 const validationRegisterInput = require('../../validation/user/register')
 const validationLoginInput = require('../../validation/user/login')
 const validationProfileInput = require('../../validation/user/profile')
-const validationChangePasswordInput=require('../../validation/user/change_pwd')
+const validationChangePwdInput = require('../../validation/user/change_pwd')
 const validationResetPasswordInput = require('../../validation/user/reset_pwd')
 
 //load user model
@@ -55,13 +55,24 @@ router.post('/register', (req, res) => {
     return res.status(400).json(errors)
   }
   User.findOne({
-      email: req.body.email
+      $or: [{
+          email: req.body.email
+        },
+        {
+          name: req.body.name
+        }
+      ]
     })
     .then((user) => {
       if (user) {
-        errors.email = 'Email already exists'
+        if (user.email === req.body.email) {
+          errors.email = 'Email already exists'
+        }
+        if (user.name === req.body.name) {
+          errors.name = 'Username already exists'
+        }
 
-        return res.status(400).json(errors)
+        return res.status(409).json(errors)
       }
       const avatar = gravatar.url(req.body.email, {
         //size
@@ -286,7 +297,7 @@ router.patch(
     const {
       errors,
       isValid
-    } = validationChangePasswordInput(req.body);
+    } = validationChangePwdInput(req.body);
 
     if (!isValid) {
       return res.status(400).json(errors)
@@ -307,7 +318,7 @@ router.patch(
           $set: newUser
         }, {}, (err, doc) => {
           if (err) {
-            return res.status(400).json(err)
+            return res.status(500).json(err)
           }
 
           return res.json({
