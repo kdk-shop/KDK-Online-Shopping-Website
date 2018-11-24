@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -7,6 +8,8 @@ const users = require('./routes/api/users');
 const products = require('./routes/api/products');
 
 const app = express();
+
+app.use('/static', express.static(path.join(__dirname, 'statics')))
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
