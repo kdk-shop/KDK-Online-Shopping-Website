@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-  name: {
+  title: {
     type: String,
     unique: true,
-    required: true,
-    maxlength: 40
+    required: true
   },
   category: {
     type: String,
@@ -20,7 +19,7 @@ const productSchema = new Schema({
     required: true,
     maxlength: 40
   },
-  imagePaths: [String],
+  imageFiles: [String],
   tags: [{
     type: String,
     maxlength: 20
@@ -55,7 +54,7 @@ const productSchema = new Schema({
       max: 10
     }
   }],
-  comments: [{
+  reviews: [{
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -68,11 +67,13 @@ const productSchema = new Schema({
     review: {
       type: String,
       required: true,
-      maxlength: 600
+      maxlength: 1000
     },
-    recommended: Number
+    recommended: Boolean
   }]
 
 });
+
+productSchema.set('autoIndex', false);
 
 module.exports = mongoose.model('Product', productSchema);

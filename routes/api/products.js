@@ -28,7 +28,21 @@ const Product = require('../../models/Product');
 router.get('/:product_id', (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
     if (product) {
-      res.status(200).json(product)
+      const imageFiles = product.imageFiles;
+      let imagePaths = [];
+
+      for (let i = 0; i < imageFiles.length; i += 1) {
+        const url = req.protocol + "://" + req.get("host");
+        const imagePath = url + "/images/" + imageFiles[i];
+
+        imagePaths.push(imagePath);
+      }
+      let resProduct = JSON.parse(JSON.stringify(product));
+
+      resProduct.imagePaths = imagePaths;
+      delete resProduct.imageFiles;
+
+      res.status(200).json(resProduct)
     } else {
       res.status(404).json({
         message: "Product not found!"
