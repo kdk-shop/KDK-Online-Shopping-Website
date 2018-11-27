@@ -166,7 +166,7 @@ router.post('/login', (req, res) => {
               res.json({
                 success: true,
                 token,
-                redirect: `/profile/${user.name}`
+                redirect: '/profile'
               })
             });
           } else {
