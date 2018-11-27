@@ -16,8 +16,7 @@ const UserSchema = new Schema({
   },
   name: {
     type: String,
-    maxlength: 80,
-    index: true
+    maxlength: 80
   },
   date: {
     type: Date,
