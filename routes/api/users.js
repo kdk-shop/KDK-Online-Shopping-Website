@@ -98,11 +98,16 @@ router.post('/register', (req, res) => {
           }
           newUser.password = hash;
           newUser.save()
-            .then((user) => res.json({
+            .then((user) => res.status(201).json({
               user,
               redirect: '/login'
             }))
-            .catch((err) => console.log(err))
+            .catch((err) => {
+              console.log(err)
+              res.status(500).json({
+                message: "Server could not save user on db!"
+              })
+            })
         })
       })
     })
@@ -176,16 +181,14 @@ router.post('/login', (req, res) => {
 
 /**
  * Retrieve requested user profile
- *@route  {GET} /api/users/profile/:user_name
- *@routerparam {String} :user_name Requested user's name
+ *@route  {GET} /api/users/profile/:user_id
+ *@routerparam {String} :user_id Requested user's id
  *@name   Get requested user profile
  */
 router.get(
-  '/profile/:user_name',
+  '/profile/:user_id',
   (req, res) => {
-    User.findOne({
-      name: req.params.user_name
-    }, (err, user) => {
+    User.findById(req.param.user_id, (err, user) => {
       if (err) {
         console.log("err");
 
@@ -195,7 +198,7 @@ router.get(
         return res.status(404).send("User not found!");
       }
 
-      res.json({
+      return res.status(200).json({
         name: user.name,
         email: user.email,
         address: user.address,
