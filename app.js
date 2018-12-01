@@ -9,8 +9,6 @@ const products = require('./routes/api/products');
 
 const app = express();
 
-app.use('/images', express.static('/opt/kdk-shop/static/images/full'))
-
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -19,10 +17,13 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST"
+    "GET, POST, PUT, DELETE"
   );
   next();
 });
+
+app.use('/images', express.static('/opt/kdk-shop/static/images/full'))
+
 
 //body parser middleware
 app.use(bodyParser.urlencoded({
@@ -30,8 +31,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-
-app.get('/', (req, res) => res.send('Hello world'))
 
 //passport middleware
 app.use(passport.initialize());
@@ -41,5 +40,10 @@ require('./config/passport')(passport);
 //User Routes
 app.use('/api/users', users);
 app.use('/api/products', products);
+
+app.use(express.static(path.join(__dirname,'client', 'build')));
+app.get('/*', function (req, res) {
+   res.sendFile(path.join(__dirname, 'client','build', 'index.html'));
+ });
 
 module.exports = app;
