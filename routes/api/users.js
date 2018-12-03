@@ -373,7 +373,9 @@ router.patch(
             return res.status(500).json(err)
           }
           if (doc.n === 0) {
-            res.status(404).send("User not found!");
+            errors.email = 'User not found'
+            return res.status(404).json(errors)
+            
           } else {
             const transporter = nodemailer.createTransport({
               host: 'smtp.gmail.com',
@@ -402,7 +404,7 @@ router.patch(
               }
 
               return res.status(303).json({
-                redirect: '/profile'
+                redirect: '/login'
               });
             });
           }

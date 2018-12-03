@@ -8,6 +8,7 @@ import Register from '../src/components/user/register';
 import Login from '../src/components/user/login';
 import Profile from '../src/components/user/profile';
 import ChangePassword from '../src/components/user/changePassword';
+import RecoverPassword from '../src/components/user/recoverPassword';
 
 import './App.css';
 class App extends Component {
@@ -22,6 +23,7 @@ class App extends Component {
           <Route path="/login" component={Login}/>
           <Route path="/profile" component={Profile}/>
           <Route path="/change-password" component={ChangePassword}/>
+          <Route path="/recover-password" component={RecoverPassword}/>
         </div>
         <Footer/>
         </div>

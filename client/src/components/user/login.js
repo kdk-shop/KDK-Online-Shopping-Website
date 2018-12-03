@@ -54,7 +54,7 @@ import {Link} from 'react-router-dom'
                   <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.password})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
                   {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
-                <small><Link to="/">Forgot Password?</Link></small><br/>
+                <small><Link to="/recover-password">Forgot Password?</Link></small><br/>
                 <input type="submit" className="btn btn-info mt-4" />{' '}
                 <Link to="/" className="btn btn-danger mt-4">Cancel</Link> 
               </form>
