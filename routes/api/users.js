@@ -374,40 +374,41 @@ router.patch(
           }
           if (doc.n === 0) {
             errors.email = 'User not found'
+
             return res.status(404).json(errors)
-            
-          } else {
-            const transporter = nodemailer.createTransport({
-              host: 'smtp.gmail.com',
-              port: 465,
-              secure: true,
-              auth: {
-                user: 'kdkonlineshop@gmail.com',
-                pass: '123456test'
-              }
-            });
-            //setup email data with unicode symbols
-            const mailOptions = {
-              from: '"KDK Shop"<kdkonlineshop@gmail.com>',
-              to: 'khoshkholghdanial@gmail.com',
-              subject: 'Password reset',
-              text: `Dear user your password has been reset.
-              Your new password is: ${rawPassword}`,
-              html: `<p>Dear user your password has been reset. 
-              Your new password is: ${rawPassword}</p>`
-            };
 
-            //send mail with defined transport object
-            transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                return console.log(error);
-              }
-
-              return res.status(303).json({
-                redirect: '/login'
-              });
-            });
           }
+          const transporter = nodemailer.createTransport({
+            host: 'kdkshop.ir',
+            port: 25,
+            secure: true,
+            auth: {
+              user: 'support',
+              pass: 'support123456'
+            }
+          });
+          //setup email data with unicode symbols
+          const mailOptions = {
+            from: '"KDK Shop"<support@kdkshop.ir>',
+            to: req.body.email,
+            subject: 'Password Reset',
+            text: `Dear user your password has been reset.
+              Your new password is: ${rawPassword}`,
+            html: `<p>Dear user your password has been reset. 
+              Your new password is: ${rawPassword}</p>`
+          };
+
+          //send mail with defined transport object
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              return console.log(error);
+            }
+
+            return res.status(303).json({
+              redirect: '/login'
+            });
+          });
+
         })
       })
     });
