@@ -291,7 +291,7 @@ router.post(
  *which has to be atleast 6 chars long
  *@bodyparam {String} password2 Password confirmation
  */
-router.patch(
+router.post(
   '/change_pwd',
   passport.authenticate('jwt', {
     session: false

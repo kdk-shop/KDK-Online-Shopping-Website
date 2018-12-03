@@ -7,6 +7,7 @@ import Landing from '../src/components/layout/Landing';
 import Register from '../src/components/user/register';
 import Login from '../src/components/user/login';
 import Profile from '../src/components/user/profile';
+import ChangePassword from '../src/components/user/changePassword';
 
 import './App.css';
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
           <Route path="/register" component={Register}/>
           <Route path="/login" component={Login}/>
           <Route path="/profile" component={Profile}/>
+          <Route path="/change-password" component={ChangePassword}/>
         </div>
         <Footer/>
         </div>

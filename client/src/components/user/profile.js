@@ -96,7 +96,7 @@ componentWillMount(){
                 <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.tel})} placeholder="989XXXXXXXXX" name="tel" value={this.state.tel} onChange={this.onChange} />
                 {errors.tel && (<div className="invalid-feedback">{errors.tel}</div>)}
               </div>
-
+              <small><Link to="/change-password">Want to change your password?</Link></small><br/>
               <input type="submit" className="btn btn-info mt-4" />{' '}
               <Link to="/" className="btn btn-danger mt-4">Cancel</Link> 
             </form>
