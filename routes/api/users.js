@@ -379,13 +379,9 @@ router.patch(
 
           }
           const transporter = nodemailer.createTransport({
-            host: 'kdkshop.ir',
+            host: 'localhost',
             port: 25,
-            secure: true,
-            auth: {
-              user: 'support',
-              pass: 'support123456'
-            }
+            secure: false
           });
           //setup email data with unicode symbols
           const mailOptions = {
