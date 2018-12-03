@@ -19,7 +19,7 @@ const productSchema = new Schema({
     required: true,
     maxlength: 40
   },
-  imageFiles: [String],
+  imagePaths: [String],
   tags: [{
     type: String,
     maxlength: 20

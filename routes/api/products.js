@@ -33,18 +33,22 @@ router.get('', (req, res) => {
   let pageSize = Number(req.query.pagesize);
   let currentPage = Number(req.query.page);
   let search = req.query.search;
+
   console.log(search)
   let productQuery = Product.find();
   let fetchedProducts = [];
   //Default values
+
   if (isNaN(pageSize)) {
     pageSize = 10;
   }
   if (isNaN(currentPage)) {
     currentPage = 1;
   }
-  if(search){
-    productQuery = Product.find({title: new RegExp(search,'i')})
+  if (search) {
+    productQuery = Product.find({
+      title: new RegExp(search, 'i')
+    })
   }
   console.log(pageSize)
   if (pageSize < 1 || pageSize > 100) {
@@ -84,55 +88,68 @@ router.get('', (req, res) => {
 
 })
 
-router.put("/review/:product_id/:user_id",(req,res)=>{
+router.put("/review/:product_id/:user_id", (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
     let text = req.body.text;
     let recommended = req.body.recommended === 'true';
-    review = {creatorId:req.params.user_id,review:text,recommended:recommended};
+
+    let review = {
+      creatorId: req.params.user_id,
+      review: text,
+      recommended
+    };
+
     product.reviews.push(review);
     product.save()
-    .then((product) => res.status(201).json({
-      product:product
-    }))
-    .catch((err) => {
-      res.status(500).json({
-        message: "Server could not save product on db!"
+      .then((product) => res.status(201).json({
+        product
+      }))
+      .catch((err) => {
+        res.status(500).json({
+          message: "Server could not save product on db!"
+        })
       })
-    })
   });
 })
 
-router.put("/score/:product_id/:user_id",(req,res)=>{
+router.put("/score/:product_id/:user_id", (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
-    let score = parseInt(req.body.score);
-    
-    let rate = {userId:req.params.user_id,score:score};
+    let score = parseInt(req.body.score, 10);
+
+    let rate = {
+      userId: req.params.user_id,
+      score
+    };
+
     product.userRates.push(rate);
     product.save()
-    .then((product) => res.status(201).json({
-      product:product
-    }))
-    .catch((err) => {
-      res.status(500).json({err:err,
-        message: "Server could not save product on db!"
+      .then((product) => res.status(201).json({
+        product
+      }))
+      .catch((err) => {
+        res.status(500).json({
+          err,
+          message: "Server could not save product on db!"
+        })
       })
-    })
   });
 })
 
-router.get('/add',(req,res)=>{
+router.get('/add', (req, res) => {
   let newProduct = new Product({
     title: "N551ZW",
-    brand : "Asus",
+    brand: "Asus",
     category: "Laptop",
     price: "4000000"
   })
 
   newProduct.save()
-  .then((data)=>{
-    res.send({data:data})
-  })
-  .catch( err => console.log(err))
+    .then((data) => {
+      res.send({
+        data
+      })
+    })
+    .catch((err) => console.log(err))
 })
 
 /**
@@ -142,28 +159,24 @@ router.get('/add',(req,res)=>{
  */
 router.get('/:product_id', (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
-    if (product) {
-      const imageFiles = product.imageFiles;
-      let imagePaths = [];
-
-      for (let i = 0; i < imageFiles.length; i += 1) {
-        const url = req.protocol + "://" + req.get("host");
-        const imagePath = url + "/images/" + imageFiles[i];
-
-        imagePaths.push(imagePath);
+      if (product) {
+        res.status(200).json(product);
+      } else {
+        res.status(404).json({
+          error: {
+            message: "Product not found"
+          }
+        })
       }
-      let resProduct = JSON.parse(JSON.stringify(product));
-
-      resProduct.imagePaths = imagePaths;
-      delete resProduct.imageFiles;
-
-      res.status(200).json(resProduct)
-    } else {
-      res.status(404).json({
-        message: "Product not found!"
-      })
-    }
-  })
+    })
+    .catch((error) => {
+      res.status(400).json({
+        error: {
+          message: "Invalid object id format"
+        }
+      });
+    })
 })
+
 
 module.exports = router;
