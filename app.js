@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const childProcess = require('child_process');
 
 const db = require('./db.js');
 const users = require('./routes/api/users');
@@ -21,9 +22,8 @@ app.use((req, res, next) => {
   );
   next();
 });
-
+//Serve static images
 app.use('/images', express.static('/opt/kdk-shop/static/images/full'))
-
 
 //body parser middleware
 app.use(bodyParser.urlencoded({
@@ -31,6 +31,24 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+function deploy (res) {
+  childProcess.exec('/home/dark0ne/deploy.sh', (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+
+      return res.send(500);
+    }
+    res.send(200);
+  });
+}
+
+app.post("/webhooks/github", (req, res) => {
+  if (process.env.NODE_ENV === "PRODUCTION" &&
+    (/^.*tags\/v[0-9.]*$/).test(req.body.ref)) {
+    console.log("Deploying new version");
+    deploy(res);
+  }
+})
 
 //passport middleware
 app.use(passport.initialize());
@@ -41,9 +59,9 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/products', products);
 
-app.use(express.static(path.join(__dirname,'client', 'build')));
-app.get('/*', function (req, res) {
-   res.sendFile(path.join(__dirname, 'client','build', 'index.html'));
- });
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 module.exports = app;
