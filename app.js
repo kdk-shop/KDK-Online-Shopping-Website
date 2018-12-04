@@ -33,9 +33,11 @@ app.use(bodyParser.json());
 
 function deploy (res) {
   childProcess.exec('/home/dark0ne/deploy.sh', (err, stdout, stderr) => {
+    console.log(stdout);
+    console.log(stderr);
+
     if (err) {
       console.error(err);
-
       return res.send(500);
     }
     res.send(200);
