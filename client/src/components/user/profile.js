@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import classNames from 'classnames'
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+
+function TransitionUp(props) {
+  return <Slide {...props} direction="up" />;
+}
 
 class profile extends Component {
   constructor(){
@@ -12,7 +18,7 @@ class profile extends Component {
         address:'',
         tel:'',
         errors:{},
-        success:''
+        open:false
     };
     this.onChange=this.onChange.bind(this);
     this.onSubmit=this.onSubmit.bind(this);
@@ -36,11 +42,9 @@ onSubmit(e){
     axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
     axios.post('/api/users/profile',updateUser)
          .then(res=>{
-           
-             this.setState({success:'Information has been changed successfully.',errors:''})
-           
+             this.setState({open:true , errors:''})          
          })
-         .catch(err=>this.setState({errors:err.response.data,success:''}))
+         .catch(err=>this.setState({errors:err.response.data}))
 }
 
 componentWillMount(){
@@ -55,8 +59,16 @@ componentWillMount(){
            })
          })
          .catch(err=>{
-           this.setState({errors:err.response.data,success:''})
+           this.setState({errors:err.response.data})
           })
+}
+
+handleClose = () => {
+  this.setState({ open: false });
+};
+
+handleExit = ()=>{
+  window.location = "/"
 }
 
   render() {
@@ -105,6 +117,17 @@ componentWillMount(){
           </div>
         </div>
       </div>
+      <Snackbar
+          open={this.state.open}
+          onClose={this.handleClose}
+          transitionDuration={1500}
+          onEntered={this.handleExit}
+          TransitionComponent={TransitionUp}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Your Information has been updated successfuly</span>}
+        />
   </div>
     )
   }

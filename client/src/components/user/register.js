@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 import {Link} from 'react-router-dom'
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+
+function TransitionUp(props) {
+  return <Slide {...props} direction="up" />;
+}
 
  class register extends Component {
      constructor(){
@@ -11,6 +17,7 @@ import {Link} from 'react-router-dom'
              email:'',
              password:'',
              password2:'',
+             open:false,
              errors:{},
          };
          this.onChange=this.onChange.bind(this);
@@ -35,12 +42,18 @@ import {Link} from 'react-router-dom'
          //console.log(newUser)
          axios.post('/api/users/register',newUser)
               .then(res=>{
-                if (res.data.redirect === '/login') {
-                  window.location = "/login"
-                } else window.location = "/register"
+                this.setState({open:true})
               })
               .catch(err=>this.setState({errors:err.response.data}))
      }
+
+     handleClose = () => {
+      this.setState({ open: false });
+    };
+
+    handleExit = ()=>{
+      window.location = "/login"
+    }
   render() {
 
     const {errors}=this.state;
@@ -79,6 +92,17 @@ import {Link} from 'react-router-dom'
             </div>
           </div>
         </div>
+        <Snackbar
+          open={this.state.open}
+          onClose={this.handleClose}
+          transitionDuration={1500}
+          onEntered={this.handleExit}
+          TransitionComponent={TransitionUp}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">You have successfuly signed up in</span>}
+        />
       </div>
     )
   }

@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 import {Link} from 'react-router-dom'
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+
+function TransitionUp(props) {
+  return <Slide {...props} direction="up" />;
+}
 
  class login extends Component {
     constructor(){
@@ -9,7 +15,8 @@ import {Link} from 'react-router-dom'
         this.state={
             email:'',
             password:'',
-            errors:{},
+            open:false,
+            errors:{}
         };
         this.onChange=this.onChange.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
@@ -28,12 +35,20 @@ import {Link} from 'react-router-dom'
 
         axios.post('/api/users/login',user)
               .then(res=>{localStorage.setItem("jwt_token",res.data.token)
-                      if (res.data.redirect === '/profile') {
-                          window.location = "/profile"
-                      } else window.location = "/login"
+                      this.setState({open:true})
               })
               .catch(err=>this.setState({errors:err.response.data}))
     }
+
+     
+    handleClose = () => {
+      this.setState({ open: false });
+    };
+
+    handleExit = ()=>{
+      window.location = "/profile"
+    }
+    
   render() {
     const {errors}=this.state;
     return (
@@ -61,6 +76,17 @@ import {Link} from 'react-router-dom'
             </div>
           </div>
         </div>
+        <Snackbar
+          open={this.state.open}
+          onClose={this.handleClose}
+          transitionDuration={1500}
+          onEntered={this.handleExit}
+          TransitionComponent={TransitionUp}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">You have successfuly logged in</span>}
+        />
       </div>
     )
   }

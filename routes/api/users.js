@@ -401,7 +401,7 @@ router.patch(
             }
 
             return res.status(303).json({
-              redirect: '/login'
+              redirect:'/login'
             });
           });
 
