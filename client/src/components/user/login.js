@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import {Link} from 'react-router-dom'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import color from '@material-ui/core/colors/lightGreen';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -85,7 +86,7 @@ function TransitionUp(props) {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">You have successfuly logged in</span>}
+          message={<span id="message-id">You Have Successfuly Logged In</span>}
         />
       </div>
     )

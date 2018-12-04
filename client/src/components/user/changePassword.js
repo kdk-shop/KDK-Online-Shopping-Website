@@ -86,7 +86,7 @@ class changePassword extends Component {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Your password has changed succesfuly</span>}
+          message={<span id="message-id">Your Password Has Changed Succesfuly</span>}
         />
       </div>
     )

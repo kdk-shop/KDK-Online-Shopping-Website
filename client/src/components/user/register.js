@@ -101,7 +101,7 @@ function TransitionUp(props) {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">You have successfuly signed up in</span>}
+          message={<span id="message-id">You Save Successfuly Signed Up</span>}
         />
       </div>
     )

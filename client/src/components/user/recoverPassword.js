@@ -77,7 +77,7 @@ class recoverPassword extends Component {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Your new message has been sent to your email address</span>}
+          message={<span id="message-id">Your New Password Has Been Sent To Your Email Address</span>}
         />
             </div>
         )

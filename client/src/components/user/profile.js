@@ -126,7 +126,7 @@ handleExit = ()=>{
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Your Information has been updated successfuly</span>}
+          message={<span id="message-id">Your Information Has Updated Successfuly</span>}
         />
   </div>
     )

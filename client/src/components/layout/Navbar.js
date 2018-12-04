@@ -5,6 +5,12 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+
+function TransitionUp(props) {
+  return <Slide {...props} direction="up" />;
+}
 
 const styles = theme => ({
   root: {
@@ -70,7 +76,8 @@ const styles = theme => ({
 class Navbar extends Component {
 
   state = {
-    isLogin: false
+    isLogin: false,
+    open:false
   }
   componentDidMount(){
     console.log(localStorage.getItem("jwt_token"))
@@ -81,12 +88,20 @@ class Navbar extends Component {
     }
   }
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleExit = ()=>{
+    window.location = "/"
+  }
+
   logout = (event)=>{
     if(this.state.isLogin){
       localStorage.removeItem("jwt_token")
       axios.get('/api/users/logout')
          .then(res=>{
-           this.setState({isLogin:false})
+           this.setState({isLogin:false,open:true})
          })
          .catch(err=>console.log(err))
     }
@@ -134,6 +149,17 @@ class Navbar extends Component {
             </ul>
           </div>
         </div>
+        <Snackbar bodyStyle={{ backgroundColor: 'white', color: 'coral' }}
+          open={this.state.open}
+          onClose={this.handleClose}
+          transitionDuration={2000}
+          onEntered={this.handleExit}
+          TransitionComponent={TransitionUp}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Hope To See You Soon </span>}
+        />
       </nav>
     )
   }
