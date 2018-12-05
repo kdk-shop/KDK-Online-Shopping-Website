@@ -10,6 +10,7 @@ import SimpleGrow from './Grow';
 import classNames from 'classnames';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button'
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -22,12 +23,27 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
     margin: 'auto',
-    maxWidth: 500,
+    maxWidth: "60vw",
   },
  
 });
 
 function Comment(props) {
+
+  // const handleSend = ()=>{
+  //   axios.get("api/products/review/:product_id/:user_id")
+  //       .then(res=>{
+  //           console.log(res)
+  //           this.setState({
+  //              products:res.data.products,
+  //              maxProducts:res.data.maxProducts,
+  //              message:res.data.message
+  //           })
+  //       })
+  //       .catch(err=>{
+  //           this.setState({message:err.response.data.message})
+  //       })
+  // }
   const { classes } = props;
   return (
     <div className={classes.root}>
@@ -40,10 +56,28 @@ function Comment(props) {
                  Comments
                 </Typography>
               </Grid>
-               <Grid item xs>
+              {props.comments.map((x)=>{
+                return(
+                  <Grid item key={x.review} >
+                <TextField 
+                    disabled={true}
+                      id="filled-multiline-static"
+                      label={x.creatorId}
+                      multiline
+                      rows="4"
+                      defaultValue={x.review}
+                      className={classes.textField}
+                      margin="normal"
+                      variant="filled"
+                      />
+              </Grid>
+                )
+                
+              })}
+               {/* <Grid item >
                         <TextField
                     id="filled-multiline-static"
-                    label="Multiline"
+                    label="new comment"
                     multiline
                     rows="4"
                     defaultValue="Default Value"
@@ -51,12 +85,14 @@ function Comment(props) {
                     margin="normal"
                     variant="filled"
                     />
-            </Grid>
+            </Grid> */}
             </Grid>
            
           </Grid>
         </Grid>
-        
+        {/* <Button variant="contained" color="primary" >
+        Send
+      </Button> */}
       </Paper>
       
     </div>

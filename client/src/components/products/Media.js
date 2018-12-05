@@ -16,11 +16,11 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
     margin: 'auto',
-    maxWidth: 500,
+    maxWidth: "60vw",
   },
   image: {
-    
-    height: 200,
+    width:300,
+    height: 500,
   },
   img: {
     margin: 'auto',
@@ -33,7 +33,7 @@ const styles = theme => ({
 class ComplexGrid extends Component {
 
     state={
-        rate : 0
+        rate : this.props.rate
     }
      handleRate = (next,prv,name)=>{
         this.setState({rate:next})
@@ -46,17 +46,16 @@ class ComplexGrid extends Component {
         <Grid container spacing={16}>
           <Grid item>
             <ButtonBase className={classes.image}>
-              <img className={classes.img} alt="complex" src="https://xcdn.next.co.uk/common/Items/Default/Default/Publications/G67/shotview-315x472/2240/548-896s.jpg" />
+              <img className={classes.img} alt={this.props.title} src={this.props.image} />
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={16}>
               <Grid item xs>
                 <Typography gutterBottom variant="h5">
-                  Brand-Title
+                  {this.props.title}
                 </Typography>
-                <Typography gutterBottom>Full resolution 1920x1080 • JPEG</Typography>
-                <Typography color="textSecondary">ID: 1030114</Typography>
+                <Typography gutterBottom>{this.props.brand}</Typography>
               </Grid>
               <Grid item>
                  <ShoppingCart />
@@ -72,7 +71,7 @@ class ComplexGrid extends Component {
             
             </Grid>
             <Grid item>
-              <Typography variant="subtitle1">$19.00</Typography>
+              <Typography variant="subtitle1">${this.props.price}</Typography>
             </Grid>
           </Grid>
         </Grid>

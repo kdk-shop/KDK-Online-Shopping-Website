@@ -9,6 +9,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import {Link} from 'react-router-dom'
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -163,7 +164,9 @@ class Products extends Component{
             </div>
                 <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
                     {this.state.products.map((item)=>{
-                        return(<Grid key={item._id}item  xs={12} sm={6} md={4}>
+                        let link = '/product?id='+item._id
+                        return(<Grid item key={item._id}  xs={12} sm={6} md={4}>
+                            <Link to={link}>
                             <Card 
                             image={item.imagePaths[0]} 
                             brand={item.brand}
@@ -171,6 +174,8 @@ class Products extends Component{
                             title={item.title}
                             rate={item.rating} 
                             available={item.available} />
+                            </Link>
+                           
                         </Grid>)
                     })}
                 </Grid>

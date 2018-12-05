@@ -21,6 +21,15 @@ img {
   margin-top: -24px;
   margin-bottom: -50px;
 }
+.product {
+  position: relative;
+  /* background: url('./img/showcase.jpg') no-repeat; */
+  /* background-size: cover; */
+  background-position: center;
+  height: 82.5vh;
+  margin-top: -24px;
+  margin-bottom: -50px;
+}
 .landing-inner {
   padding-top: 80px;
 }

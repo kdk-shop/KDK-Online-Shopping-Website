@@ -4,17 +4,46 @@ import SwipeableTextMobileStepper from '../products/steper';
 import ComplexGrid from '../products/Media';
 import Comment from '../products/comment';
 import Grid from '@material-ui/core/Grid'
+import axios from 'axios'
+import Button from '@material-ui/core/Button';
 import '../../style.css';
 
 class Product extends Component {
+
+  state = {
+    product : null
+
+  }
+  componentWillMount(){
+    axios.get(`/api/products/${this.props.location.search.substr(4)}`)
+        .then(res=>{
+            console.log(res.data)
+            this.setState({product:res.data})
+        })
+        .catch(err=>{
+            // this.setState({message:err.response.data.message})
+        })
+  }
   render() {
+    console.log(this.props.location.search.substr(4))
+    if(this.state.product !== null){
+
+      console.log(this.state.product.reviews)
+    }
     return (
-      <div>
-         <h1>product page</h1>
-         <ComplexGrid/>
-         <br/>
-         <Comment/>
-      </div>
+        this.state.product === null?null:(<div>
+          <h1></h1>
+          <ComplexGrid
+          brand = {this.state.product.brand}
+          title = {this.state.product.title}
+          image = {this.state.product.imagePaths[0]}
+          price = {this.state.product.price}
+          />
+          <br/>
+          <Comment comments={this.state.product.reviews}/>
+          
+       </div>)
+      
         
         
     )
