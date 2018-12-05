@@ -31,7 +31,7 @@ class Landing extends Component {
             <div className="row">
               <div className="col-md-3 text-center"> </div>
                 <div className="col-md-6 text-center">
-                <SwipeableTextMobileStepper/>
+                {/* <SwipeableTextMobileStepper/> */}
               
                 </div>
                 <div className="col-md-3 text-center"> </div>
