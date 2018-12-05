@@ -38,6 +38,7 @@ class Product extends Component {
           title = {this.state.product.title}
           image = {this.state.product.imagePaths[0]}
           price = {this.state.product.price}
+          description= {this.state.product.description}
           />
           <br/>
           <Comment comments={this.state.product.reviews}/>

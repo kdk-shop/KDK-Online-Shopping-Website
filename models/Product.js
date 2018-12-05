@@ -70,7 +70,10 @@ const productSchema = new Schema({
       maxlength: 1000
     },
     recommended: Boolean
-  }]
+  }],
+  description: {
+    type: String,
+  },
 
 });
 

@@ -56,10 +56,12 @@ class ComplexGrid extends Component {
                   {this.props.title}
                 </Typography>
                 <Typography gutterBottom>{this.props.brand}</Typography>
+                <Typography gutterBottom>{this.props.description}</Typography>
               </Grid>
               <Grid item>
-                 <ShoppingCart />
-              </Grid>
+                 <ShoppingCart /> 
+              <Typography variant="h5"><strong>${this.props.price}</strong></Typography>
+            </Grid>
               <Grid item>
               <StarRating 
                 name='rate'
@@ -70,9 +72,7 @@ class ComplexGrid extends Component {
             </Grid>
             
             </Grid>
-            <Grid item>
-              <Typography variant="subtitle1">${this.props.price}</Typography>
-            </Grid>
+           
           </Grid>
         </Grid>
         

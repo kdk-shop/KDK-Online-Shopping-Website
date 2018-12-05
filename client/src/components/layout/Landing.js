@@ -24,20 +24,7 @@ class Landing extends Component {
         
         </div>
       </div>
-      <div className="temp">
-      s,d
-      </div>
-      <div className="section1">
-            <div className="row">
-              <div className="col-md-3 text-center"> </div>
-                <div className="col-md-6 text-center">
-                {/* <SwipeableTextMobileStepper/> */}
-              
-                </div>
-                <div className="col-md-3 text-center"> </div>
-              
-              </div>
-          </div> 
+     
       </div>
         
         
