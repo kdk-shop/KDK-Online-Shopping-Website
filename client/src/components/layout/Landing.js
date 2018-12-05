@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Wave,Random} from 'react-animated-text';
 import SwipeableTextMobileStepper from '../products/steper';
+
 import Grid from '@material-ui/core/Grid'
+import '../../style.css';
 
 class Landing extends Component {
   render() {
@@ -19,9 +21,23 @@ class Landing extends Component {
               </div>
             </div>           
           </div>
+        
         </div>
       </div>
-     
+      <div className="temp">
+      s,d
+      </div>
+      <div className="section1">
+            <div className="row">
+              <div className="col-md-3 text-center"> </div>
+                <div className="col-md-6 text-center">
+                <SwipeableTextMobileStepper/>
+              
+                </div>
+                <div className="col-md-3 text-center"> </div>
+              
+              </div>
+          </div> 
       </div>
         
         

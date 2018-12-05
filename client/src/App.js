@@ -10,6 +10,7 @@ import Profile from '../src/components/user/profile';
 import ChangePassword from '../src/components/user/changePassword';
 import RecoverPassword from '../src/components/user/recoverPassword';
 import Products from '../src/components/products/products';
+import Product from '../src/components/products/product';
 import './App.css';
 class App extends Component {
   render() {
@@ -25,6 +26,8 @@ class App extends Component {
           <Route path="/change-password" component={ChangePassword}/>
           <Route path="/recover-password" component={RecoverPassword}/>
           <Route path="/products" component={Products}/>
+          <Route path="/product" component={Product}/>
+
         </div>
         <Footer/>
         </div>
