@@ -34,7 +34,6 @@ router.get('', (req, res) => {
   let currentPage = Number(req.query.page);
   let search = req.query.search;
 
-  console.log(search)
   let productQuery = Product.find();
   let fetchedProducts = [];
   //Default values
@@ -50,6 +49,8 @@ router.get('', (req, res) => {
       title: new RegExp(search, 'i')
     })
   }
+
+  
   console.log(pageSize)
   if (pageSize < 1 || pageSize > 100) {
     return res.status(400).json({
@@ -81,7 +82,7 @@ router.get('', (req, res) => {
         })
       } else {
         res.status(404).json({
-          message: "Products not found!"
+          message: "Product not found!"
         });
       }
     });

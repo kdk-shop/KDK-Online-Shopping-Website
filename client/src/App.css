@@ -12,6 +12,15 @@ img {
   margin-bottom: -50px;
 }
 
+.register {
+  position: relative;
+  /* background: url('./img/showcase.jpg') no-repeat; */
+  /* background-size: cover; */
+  background-position: center;
+  height: 82.5vh;
+  margin-top: -24px;
+  margin-bottom: -50px;
+}
 .landing-inner {
   padding-top: 80px;
 }
@@ -25,15 +34,4 @@ img {
   height: 100%;
 }
 
-.card-form {
-  opacity: 0.9;
-}
 
-.latest-profiles-img {
-  width: 40px;
-  height: 40px;
-}
-
-.form-control::placeholder {
-  color: #bbb !important;
-}

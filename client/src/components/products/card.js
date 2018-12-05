@@ -33,6 +33,7 @@ const styles = {
 
   const MediaCard = (props) => {
     const { classes } = props;
+    console.log(props.available)
     const show = props.available;
     return (
         <Card className={classes.card}>
@@ -64,7 +65,7 @@ const styles = {
             renderStartIcon={()=><span><Star /></span>}
             starCount={5}
             value={props.rate} />
-            <Typography  style={{visibility: show?"visible":"hidden"}} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
+            <Typography  style={{visibility: show?"hidden":"visible"}} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
                 Not available
             </Typography>
         </CardActions>

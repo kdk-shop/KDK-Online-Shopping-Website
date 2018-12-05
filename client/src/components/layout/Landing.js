@@ -17,9 +17,7 @@ class Landing extends Component {
                 <p className="lead"> We simply aspire to provide high quality, well-designed essentials for the right price</p>
                 <hr />
               </div>
-            
-            </div>
-            
+            </div>           
           </div>
         </div>
       </div>
