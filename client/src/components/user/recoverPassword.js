@@ -38,7 +38,7 @@ class recoverPassword extends Component {
              })
              .catch(err=>this.setState({errors:err.response.data}))
     }
-    handleClose = () => {
+    hnandleClose = () => {
         this.setState({ open: false });
       };
   

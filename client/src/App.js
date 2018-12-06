@@ -12,6 +12,7 @@ import RecoverPassword from '../src/components/user/recoverPassword';
 import Products from '../src/components/products/products';
 import Product from '../src/components/products/product';
 import './App.css';
+
 class App extends Component {
   render() {
     return (

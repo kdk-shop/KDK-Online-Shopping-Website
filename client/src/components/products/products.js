@@ -11,6 +11,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import {Link} from 'react-router-dom'
 
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -75,7 +76,6 @@ const styles = theme => ({
     },
   });
 
-// import "bootstrap-less/bootstrap/pagination.less";
 class Products extends Component{
     constructor(){
         super();
@@ -166,7 +166,7 @@ class Products extends Component{
                     {this.state.products.map((item)=>{
                         let link = '/product?id='+item._id
                         return(<Grid item key={item._id}  xs={12} sm={6} md={4}>
-                            <Link to={link}>
+                            <Link to={link} style={{ textDecoration: 'none' }}>
                             <Card 
                             image={item.imagePaths[0]} 
                             brand={item.brand}
@@ -189,7 +189,7 @@ class Products extends Component{
                 onChange={this.handlePageChange}
                  />
 
-                 <Snackbar  bodyStyle={{ backgroundColor: 'green', color: 'red' }}
+                 <Snackbar 
                   open={this.state.open}
                   onClose={this.handleClose}
                   transitionDuration={1500}

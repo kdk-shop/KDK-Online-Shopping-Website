@@ -6,12 +6,10 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import Star from '@material-ui/icons/Star'
 import StarRating from 'react-star-rating-component';
-import color from '@material-ui/core/colors/deepOrange';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {

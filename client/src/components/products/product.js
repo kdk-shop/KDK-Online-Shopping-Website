@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import { Wave,Random} from 'react-animated-text';
-import SwipeableTextMobileStepper from '../products/steper';
 import ComplexGrid from '../products/Media';
 import Comment from '../products/comment';
-import Grid from '@material-ui/core/Grid'
 import axios from 'axios'
 import Button from '@material-ui/core/Button';
-import '../../style.css';
 
 class Product extends Component {
 

@@ -8,7 +8,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import StarRating from 'react-star-rating-component';
 import Star from '@material-ui/icons/Star';
-import SimpleGrow from './Grow';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,

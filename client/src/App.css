@@ -7,9 +7,9 @@ img {
   background: url('./img/showcase.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  height: 82.5vh;
+  height: 100vh;
   margin-top: -24px;
-  margin-bottom: -50px;
+  margin-bottom: -30px;
 }
 
 .register {
@@ -41,6 +41,15 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.section1{
+  margin-top: 10vh;
+  
+}
+.temp{
+  height: 10vh;
+  background-color: #343a40;
 }
 
 

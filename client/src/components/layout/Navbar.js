@@ -11,8 +11,6 @@ function TransitionUp(props) {
 }
 
 
-
-
 class Navbar extends Component {
 
   state = {

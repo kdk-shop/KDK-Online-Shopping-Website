@@ -400,7 +400,7 @@ router.patch(
               return console.log(error);
             }
 
-            return res.status(303).json({
+            return res.json({
               redirect:'/login'
             });
           });
