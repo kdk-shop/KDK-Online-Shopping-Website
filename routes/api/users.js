@@ -226,7 +226,7 @@ router.get(
         return res.status(500).json(err)
       }
 
-      res.json({
+      res.status(200).json({
         name: user.name,
         email: user.email,
         address: user.address,
@@ -276,7 +276,7 @@ router.post(
         return res.status(400).json(err)
       }
 
-      return res.json({
+      return res.status(200).json({
         redirect: '/profile'
       });
     })
@@ -324,7 +324,7 @@ router.post(
             return res.status(500).json(err)
           }
 
-          return res.json({
+          return res.status(200).json({
             redirect: '/profile'
           });
         })
@@ -394,17 +394,20 @@ router.patch(
               Your new password is: ${rawPassword}</p>`
           };
 
-          //send mail with defined transport object
+          //no need to send email when testing
+          if (process.env.NODE_ENV === 'TEST') {
+            return res.status(200).json({});
+          }
+          //otherwise send mail
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
               return console.log(error);
             }
 
-            return res.json({
-              redirect:'/login'
+            return res.status(200).json({
+              redirect: '/login'
             });
           });
-
         })
       })
     });
