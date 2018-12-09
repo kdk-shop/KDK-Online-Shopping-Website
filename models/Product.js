@@ -39,26 +39,15 @@ const productSchema = new Schema({
     count: Number
   },
 
-  /*
-   *Keep track of what score each user has given to product
-   * in case it's needed in future sprints
-   */
-  userRates: [{
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    score: {
-      type: Number,
-      min: 0,
-      max: 10
-    }
-  }],
   reviews: [{
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
+    },
+    creatorName: {
+      type:  String,
+      required: true,
     },
     date: {
       type: Date,
@@ -69,7 +58,12 @@ const productSchema = new Schema({
       required: true,
       maxlength: 1000
     },
-    recommended: Boolean
+    recommended: Boolean,
+    score: {
+      type: Number,
+      min: 0,
+      max: 10
+    }
   }],
   description: {
     type: String,

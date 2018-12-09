@@ -35,38 +35,35 @@ const styles = {
     const show = props.available;
     return (
         <Card className={classes.card}>
-        <CardActionArea>
-            <CardMedia
-            className={classes.media}
-            image={props.image}
-            title={props.title}
-            />
-            <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-                {props.brand} - {props.title}
-            </Typography>
-            
-            <Typography gutterBottom variant="subtitle1" component="h2">
-            <strong>${props.price}</strong>
-            </Typography>
-            
-            </CardContent>
-        </CardActionArea>
-        <CardActions>
-            
-            <Tooltip title="Buy">
-            <ShoppingCart />
-            </Tooltip>
-            <StarRating 
-            name='rate'
-            editing={false}
-            renderStartIcon={()=><span><Star /></span>}
-            starCount={5}
-            value={props.rate} />
-            <Typography  style={{visibility: show?"hidden":"visible"}} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
-                Not available
-            </Typography>
-        </CardActions>
+          <CardActionArea>
+              <CardMedia
+              className={classes.media}
+              image={props.image}
+              title={props.title}/>
+              <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                  {props.brand} - {props.title}
+              </Typography>
+              <Typography gutterBottom variant="subtitle1" component="h2">
+              <strong>${props.price}</strong>
+              </Typography>
+              </CardContent>
+          </CardActionArea>
+
+          <CardActions>
+              <Tooltip title="Buy">
+              <ShoppingCart/>
+              </Tooltip>
+              <StarRating 
+              name='rate'
+              editing={false}
+              renderStartIcon={()=><span><Star /></span>}
+              starCount={5}
+              value={props.rate} />
+              <Typography  style={{visibility: show?"hidden":"visible"}} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
+                  Not Available
+              </Typography>
+          </CardActions>
         </Card>
     );
 }

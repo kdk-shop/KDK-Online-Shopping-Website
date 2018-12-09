@@ -104,12 +104,12 @@ class Products extends Component{
       }
 
       handleSearch = (event)=>{
-        if (event.key == 'Enter') {
-          console.log(event.target.value)
+        if (event.key === 'Enter') {
+          // console.log(event.target.value)
           let text = event.target.value
           axios.get(`/api/products/?pagesize=12&page=1&search=${text}`)
           .then(res=>{
-              console.log(res)
+              // console.log(res)
               this.setState({
                  products:res.data.products,
                  maxProducts:res.data.maxProducts,
@@ -125,7 +125,7 @@ class Products extends Component{
         this.setState({page:pageNumber})
         axios.get(`/api/products/?pagesize=12&page=${pageNumber}`)
         .then(res=>{
-            console.log(res)
+            // console.log(res)
             this.setState({
                products:res.data.products,
                maxProducts:res.data.maxProducts,
@@ -145,7 +145,7 @@ class Products extends Component{
       }
     render(){
         const { classes } = this.props;
-        console.log(this.state.products.length)
+        // console.log(this.state.products.length)
         return(
             <div>
                 <div className={classes.grow} />

@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import { Wave,Random} from 'react-animated-text';
-import ComplexGrid from '../products/Media';
-import Comment from '../products/comment';
+import Media from '../products/Media';
+import Comments from '../products/comments';
 import axios from 'axios'
-import Button from '@material-ui/core/Button';
 
 class Product extends Component {
 
   state = {
     product : null
-
   }
   componentWillMount(){
     axios.get(`/api/products/${this.props.location.search.substr(4)}`)
@@ -22,28 +19,22 @@ class Product extends Component {
         })
   }
   render() {
-    console.log(this.props.location.search.substr(4))
-    if(this.state.product !== null){
-
-      console.log(this.state.product.reviews)
-    }
+   
     return (
-        this.state.product === null?null:(<div>
-          <h1></h1>
-          <ComplexGrid
+        this.state.product === null?null:(
+        <div>
+          <Media
           brand = {this.state.product.brand}
           title = {this.state.product.title}
           image = {this.state.product.imagePaths[0]}
           price = {this.state.product.price}
           description= {this.state.product.description}
+          reviews={this.state.product.reviews}
           />
           <br/>
-          <Comment comments={this.state.product.reviews}/>
-          
-       </div>)
-      
-        
-        
+          <Comments comments={this.state.product}/>
+       </div>
+       )
     )
   }
 }

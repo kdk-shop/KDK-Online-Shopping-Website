@@ -22,7 +22,7 @@ export default class slideshow extends Component {
       <div>
          <Zoom {...zoomOutProperties} >
         {
-          images.map((each, index) => <img key={index} style={{width: "100%"}} src={each} />)
+          images.map((each, index) => <img alt={index} key={index} style={{width: "100%"}} src={each} />)
         }
       </Zoom>
       </div>

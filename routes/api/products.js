@@ -89,17 +89,21 @@ router.get('', (req, res) => {
 
 })
 
+/**
+ * Put     product review and score
+ *@route  {Put} /api/products/review/:product_id/:user_id
+ */
 router.put("/review/:product_id/:user_id", (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
-    let text = req.body.text;
-    let recommended = req.body.recommended === 'true';
-
+    
+    let score = parseInt(req.body.score, 10);
     let review = {
       creatorId: req.params.user_id,
-      review: text,
-      recommended
+      creatorName:req.body.name,
+      review: req.body.text,
+      recommended:req.body.recommended,
+      score
     };
-
     product.reviews.push(review);
     product.save()
       .then((product) => res.status(201).json({
@@ -107,41 +111,23 @@ router.put("/review/:product_id/:user_id", (req, res) => {
       }))
       .catch((err) => {
         res.status(500).json({
-          message: "Server could not save product on db!"
+          message: "Server could not save review on db!"
         })
       })
   });
 })
 
-router.put("/score/:product_id/:user_id", (req, res) => {
-  Product.findById(req.params.product_id).then((product) => {
-    let score = parseInt(req.body.score, 10);
 
-    let rate = {
-      userId: req.params.user_id,
-      score
-    };
-
-    product.userRates.push(rate);
-    product.save()
-      .then((product) => res.status(201).json({
-        product
-      }))
-      .catch((err) => {
-        res.status(500).json({
-          err,
-          message: "Server could not save product on db!"
-        })
-      })
-  });
-})
-
+/**
+ * Get    add product for testing purpose 
+ *@route  {GET} /api/products/add
+ */
 router.get('/add', (req, res) => {
   let newProduct = new Product({
-    title: "N551ZW",
-    brand: "Asus",
-    category: "Laptop",
-    price: "4000000"
+    title: req.body.title,
+    brand: req.body.brand,
+    category: req.body.category,
+    price: req.body.price
   })
 
   newProduct.save()
