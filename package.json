@@ -4,7 +4,7 @@
   "description": "social netword for developers",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test /**/*.js",
+    "test": "mocha --exit test/**/*.js",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
