@@ -305,31 +305,48 @@ router.post(
     if (!isValid) {
       return res.status(400).json(errors)
     }
-    const newUser = {
-      password: req.body.password
-    }
+    User.findById(req.user.id, (err, user) => {
+      if (err) {
+        return res.status(500).json(err)
+      }
 
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) {
-          throw err;
-        }
-        newUser.password = hash;
-        User.update({
-          _id: req.user.id
-        }, {
-          $set: newUser
-        }, {}, (err, doc) => {
-          if (err) {
-            return res.status(500).json(err)
+      //check old password
+      bcrypt.compare(req.body.oldPassword, user.password)
+        .then((isMatch) => {
+          if (isMatch) {
+            const newUser = {
+              password: req.body.password
+            }
+
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(newUser.password, salt, (err, hash) => {
+                if (err) {
+                  throw err;
+                }
+                newUser.password = hash;
+                User.update({
+                  _id: req.user.id
+                }, {
+                  $set: newUser
+                }, {}, (err, doc) => {
+                  if (err) {
+                    return res.status(500).json(err)
+                  }
+
+                  return res.status(200).json({
+                    redirect: '/profile'
+                  });
+                })
+              })
+            });
           }
-
-          return res.status(200).json({
-            redirect: '/profile'
-          });
         })
-      })
+        .catch((err) => {
+          res.status(500).json(err);
+        });
+
     });
+
   }
 )
 
@@ -427,9 +444,12 @@ router.get('/logout', (req, res) => {
   });
 });
 
-router.get('/currentUser' ,
-  passport.authenticate('jwt',{session:false}),
-  (req,res)=>{
+router.get(
+  '/currentUser',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => {
     res.json(req.user)
   }
 )
