@@ -311,7 +311,7 @@ router.post(
       }
 
       //check old password
-      bcrypt.compare(req.body.oldPassword, user.password)
+      bcrypt.compare(req.body.currentPassword, user.password)
         .then((isMatch) => {
           if (isMatch) {
             const newUser = {
