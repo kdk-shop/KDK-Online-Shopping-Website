@@ -10,8 +10,8 @@ module.exports = function validateChangePasswordInput(data) {
   data.password = !isEmpty(data.password) ? data.password : ''
   data.password2 = !isEmpty(data.password2) ? data.password2 : ''
 
-  if (validator.isEmpty(data.oldPassword)) {
-    errors.password = 'Current password is required'
+  if (validator.isEmpty(data.currentPassword)) {
+    errors.currentPassword = 'Current password is required'
   }
 
   if (!validator.isLength(data.password, {

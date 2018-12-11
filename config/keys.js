@@ -1,6 +1,5 @@
 let URI;
 
-console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === "PRODUCTION") {
   URI = 'mongodb://expressApp:AvfwWKB5H3247yTAhPaA@localhost' +
     ':31000/kdk-shop?authSource=admin'
