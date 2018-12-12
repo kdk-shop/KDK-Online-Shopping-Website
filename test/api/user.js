@@ -302,7 +302,6 @@ describe('Users', () => {
         .set("Authorization", "Bearer " + jwt)
         .send({})
         .end((err, res) => {
-          console.log(res.body)
           res.should.have.status(400);
           res.should.be.json;
           res.body.should.be.a('object');

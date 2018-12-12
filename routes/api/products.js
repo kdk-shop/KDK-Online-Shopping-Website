@@ -29,7 +29,6 @@ const Product = require('../../models/Product');
  *@queryparam {Number} [page=1] Number of page
  */
 router.get('', (req, res) => {
-  console.log(req.query)
   let pageSize = Number(req.query.pagesize);
   let currentPage = Number(req.query.page);
   let search = req.query.search;
@@ -50,8 +49,6 @@ router.get('', (req, res) => {
     })
   }
 
-  
-  console.log(pageSize)
   if (pageSize < 1 || pageSize > 100) {
     return res.status(400).json({
       message: "Invalid page size!"
@@ -95,15 +92,16 @@ router.get('', (req, res) => {
  */
 router.put("/review/:product_id/:user_id", (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
-    
+
     let score = parseInt(req.body.score, 10);
     let review = {
       creatorId: req.params.user_id,
-      creatorName:req.body.name,
+      creatorName: req.body.name,
       review: req.body.text,
-      recommended:req.body.recommended,
+      recommended: req.body.recommended,
       score
     };
+
     product.reviews.push(review);
     product.save()
       .then((product) => res.status(201).json({
@@ -119,7 +117,7 @@ router.put("/review/:product_id/:user_id", (req, res) => {
 
 
 /**
- * Get    add product for testing purpose 
+ * Get    add product for testing purpose
  *@route  {GET} /api/products/add
  */
 router.get('/add', (req, res) => {
