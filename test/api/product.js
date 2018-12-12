@@ -40,14 +40,15 @@ describe('Products', () => {
             brand: "Misc.",
             imagePaths: ["test.jpg"],
             rating: {
-              score: 5,
-              count: 10
+              score: 4,
+              count: 1
             },
             reviews: [{
               creatorId: usr._id,
               creatorName: usr.name,
               review: "Test review",
-              recommended: true
+              recommended: true,
+              score: 4
             }]
           });
 
@@ -89,6 +90,10 @@ describe('Products', () => {
           testProduct.imagePaths.should.be.a('array');
           testProduct.imagePaths[0].should.eql('test.jpg');
           testProduct.should.have.property('brand', 'Misc.');
+
+          testProduct.rating.should.have.property("score",4);
+          testProduct.rating.should.have.property("count",1);
+
           testProduct.reviews.should.be.a('array');
           testProduct.reviews[0].should.have.property('creatorId');
           testProduct.reviews[0].should.have.property('creatorName', 'test');
@@ -114,6 +119,10 @@ describe('Products', () => {
           testProduct.imagePaths.should.be.a('array');
           testProduct.imagePaths[0].should.eql('test.jpg');
           testProduct.should.have.property('brand', 'Misc.');
+
+          testProduct.rating.should.have.property("score",4);
+          testProduct.rating.should.have.property("count",1);
+
           testProduct.reviews.should.be.a('array');
           testProduct.reviews[0].should.have.property('creatorId');
           testProduct.reviews[0].should.have.property('creatorName', 'test');
@@ -131,7 +140,7 @@ describe('Products', () => {
           name: "test",
           text: "Test review 2",
           recommended: false,
-          score: 9
+          score: 2
         })
         .end((err, res) => {
           res.should.have.status(201);
@@ -141,6 +150,10 @@ describe('Products', () => {
           testProduct.should.be.a('object');
           testProduct.should.have.property('title', 'Test product');
           testProduct.reviews.should.be.a('array');
+
+          testProduct.rating.should.have.property("score",3);
+          testProduct.rating.should.have.property("count",2);
+
           let testReview = testProduct.reviews[1];
 
           testReview.should.have.property('creatorId');

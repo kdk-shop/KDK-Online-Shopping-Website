@@ -46,8 +46,8 @@ const productSchema = new Schema({
       required: true
     },
     creatorName: {
-      type:  String,
-      required: true,
+      type: String,
+      required: true
     },
     date: {
       type: Date,
@@ -62,12 +62,12 @@ const productSchema = new Schema({
     score: {
       type: Number,
       min: 0,
-      max: 10
+      max: 5
     }
   }],
   description: {
-    type: String,
-  },
+    type: String
+  }
 
 });
 

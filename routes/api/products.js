@@ -102,39 +102,25 @@ router.put("/review/:product_id/:user_id", (req, res) => {
       score
     };
 
+    let currentScore = product.rating.score;
+    let currentCount = product.rating.count;
+    let totalScore = currentScore * currentCount;
+
+    product.rating.count = currentCount + 1;
+    product.rating.score = (totalScore + score) / product.rating.count;
+
     product.reviews.push(review);
     product.save()
       .then((product) => res.status(201).json({
         product
       }))
       .catch((err) => {
+        console.error(err);
         res.status(500).json({
           message: "Server could not save review on db!"
         })
       })
   });
-})
-
-
-/**
- * Get    add product for testing purpose
- *@route  {GET} /api/products/add
- */
-router.get('/add', (req, res) => {
-  let newProduct = new Product({
-    title: req.body.title,
-    brand: req.body.brand,
-    category: req.body.category,
-    price: req.body.price
-  })
-
-  newProduct.save()
-    .then((data) => {
-      res.send({
-        data
-      })
-    })
-    .catch((err) => console.log(err))
 })
 
 /**
