@@ -103,9 +103,9 @@ router.post('/register', (req, res) => {
               redirect: '/login'
             }))
             .catch((err) => {
-              console.log(err)
+              console.error(err)
               res.status(500).json({
-                message: "Server could not save user on db!"
+                message: "Server could not save user on database!"
               })
             })
         })
@@ -190,7 +190,7 @@ router.get(
   (req, res) => {
     User.findById(req.param.user_id, (err, user) => {
       if (err) {
-        console.log("err");
+        console.error(err);
 
         return res.status(400).json(err);
       }
@@ -418,7 +418,7 @@ router.patch(
           //otherwise send mail
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-              return console.log(error);
+              return console.error(error);
             }
 
             return res.status(200).json({
