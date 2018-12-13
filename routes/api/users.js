@@ -105,7 +105,7 @@ router.post('/register', (req, res) => {
             .catch((err) => {
               console.error(err)
               res.status(500).json({
-                message: "Server could not save user on database!"
+                message: "Server could not save user on database"
               })
             })
         })
@@ -195,7 +195,7 @@ router.get(
         return res.status(400).json(err);
       }
       if (!user) {
-        return res.status(404).send("User not found!");
+        return res.status(404).json({message:"User not found"});
       }
 
       return res.status(200).json({

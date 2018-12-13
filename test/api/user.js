@@ -88,7 +88,6 @@ describe('Users', () => {
             res.should.have.status(400);
             res.should.be.json;
             res.body.should.be.a('object');
-            jwt = res.body.token;
             res.body.should.have.property("email", "Email field is required");
             res.body.should.have.property(
               "password",

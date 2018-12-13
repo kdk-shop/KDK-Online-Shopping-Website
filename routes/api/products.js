@@ -17,6 +17,10 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+//load validators
+const validateProductInfo =
+  require('../../validation/product/validateProductInfo.js')
+
 //load product model
 const Product = require('../../models/Product');
 
@@ -33,58 +37,168 @@ router.get('', (req, res) => {
   let currentPage = Number(req.query.page);
   let search = req.query.search;
 
-  let productQuery = Product.find();
-  let fetchedProducts = [];
+  let queryParams = {};
   //Default values
 
+  const defaultPageSize = 12;
+  const defaultPage = 1;
+
   if (isNaN(pageSize)) {
-    pageSize = 10;
+    pageSize = defaultPageSize;
   }
   if (isNaN(currentPage)) {
-    currentPage = 1;
+    currentPage = defaultPage;
   }
   if (search) {
-    productQuery = Product.find({
+    queryParams = {
       title: new RegExp(search, 'i')
-    })
+    }
   }
 
   if (pageSize < 1 || pageSize > 100) {
-    return res.status(400).json({
-      message: "Invalid page size!"
-    })
+    pageSize = defualtPageSize;
   }
   if (currentPage < 1) {
-    return res.status(400).json({
-      message: "Invalid page request!"
-    })
+    page = defaultPage;
   }
 
-  productQuery.skip(pageSize * (currentPage - 1))
+  return Product.count(queryParams).then((count) => Product.find(queryParams)
+    .skip(pageSize * (currentPage - 1))
     .limit(pageSize)
-    .sort('-title');
-
-  return productQuery
+    .sort('-title')
     .then((documents) => {
-      fetchedProducts = documents;
+      res.status(200).json({
+        message: "Page fetched successfuly",
+        maxProducts: count,
+        products: documents
+      });
+    }));
+});
 
-      return Product.countDocuments()
-    })
-    .then((count) => {
-      if (fetchedProducts.length > 0) {
-        res.status(200).json({
-          message: "Page fetched successfuly!",
-          maxProducts: count,
-          products: fetchedProducts
-        })
-      } else {
-        res.status(404).json({
-          message: "Product not found!"
-        });
-      }
+/**
+ * POST     create new product
+ *@route  {POST} /api/products/create/
+ */
+router.post("/create/", (req, res) => {
+  const {
+    errors,
+    isValid
+  } = validateProductInfo(req.body);
+  //check validation
+
+  if (!isValid) {
+    return res.status(400).json(errors)
+  }
+  Product.findOne({
+    title: req.body.title
+  }, (err, product) => {
+    if (product) {
+
+      return res.status(409).json({
+        title: 'Product with this title already exists'
+      });
+    }
+
+    const newProduct = new Product({
+      title: req.body.title,
+      price: req.body.price,
+      description: req.body.description,
+      category: req.body.category,
+      brand: req.body.brand,
+
+      available: false,
+      imagePaths: [],
+      rating: {
+        score: 0,
+        count: 0
+      },
+      reviews: []
+
     });
 
-})
+    return newProduct.save().then((product) => res.status(201).json(product))
+      .catch((err) => {
+        console.error(err);
+
+        return res.status(500).json({
+          message: "Server could not save product on database"
+        })
+      });
+  });
+
+});
+
+/**
+ * PUT     update existing product
+ *@route  {PUT} /api/products/update/:product_id
+ */
+router.put("/update/:product_id", (req, res) => {
+  const {
+    errors,
+    isValid
+  } = validateProductInfo(req.body);
+  //check validation
+
+  if (!isValid) {
+    return res.status(400).json(errors)
+  }
+  const updatedProduct = {
+    title: req.body.title,
+    price: req.body.price,
+    description: req.body.description,
+    category: req.body.category,
+    brand: req.body.brand
+  };
+
+  Product.findOneAndUpdate({
+      _id: req.params.product_id
+    }, {
+      "$set": req.body
+    }, {},
+    (err, doc) => {
+      if (doc === null) {
+        return res.status(404).json({
+          message: "Product not found!"
+        })
+      }
+      if (err) {
+        return res.status(500).json({
+          message: "Could not update product!"
+        });
+      }
+
+      Product.findById(
+        req.params.product_id,
+        (err, product) => res.status(200).json(product)
+      );
+    }
+  )
+});
+
+/**
+ * DELETE     delete existing product
+ *@route  {DELETE} /api/products/delete/:product_id
+ */
+router.delete("/delete/:product_id", (req, res) => {
+  Product.findOneAndDelete({
+    _id: req.params.product_id
+  }, (err, product) => {
+    if (product === null) {
+      return res.status(404).json({
+        message: "Product not found"
+      })
+    }
+    if (err) {
+      console.error(err);
+
+      return res.status(500).json({
+        message: "Could not delete product from database"
+      })
+    }
+
+    return res.status(200).json(product)
+  });
+});
 
 /**
  * Put     product review and score
@@ -117,7 +231,7 @@ router.put("/review/:product_id/:user_id", (req, res) => {
       .catch((err) => {
         console.error(err);
         res.status(500).json({
-          message: "Server could not save review on db!"
+          message: "Server could not save review on db"
         })
       })
   });
@@ -140,11 +254,10 @@ router.get('/:product_id', (req, res) => {
         })
       }
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.error(err)
       res.status(400).json({
-        error: {
-          message: "Invalid object id format"
-        }
+        message: "Invalid object id format"
       });
     })
 })
