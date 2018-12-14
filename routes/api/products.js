@@ -46,13 +46,21 @@ let upload = multer({
  *@name   Get Products
  *@queryparam {Number} [pagesize=10] Number of products to return
  *@queryparam {Number} [page=1] Number of page
+ *@queryparam {String} [title] String to search for in titles
+ *@queryparam {String} [category] Cateogry to search for
+ *@queryparam {String} [brand] Brand to search for
+ *@queryparam {Number} [minPrice] Minimum product price
+ *@queryparam {Number} [maxPrice] Maximum product price
+ *@queryparam {Boolean} [available]
+ *@queryparam {Number} [minScore] Minimum rating score
+ *@queryparam {String} [sortBy=title] Specify which field to sort by
  */
 router.get('', (req, res) => {
   let pageSize = Number(req.query.pagesize);
   let currentPage = Number(req.query.page);
-  let search = req.query.search;
+  let sortBy = 'title'
 
-  let queryParams = {};
+  let queryParams = [];
   //Default values
 
   const defaultPageSize = 12;
@@ -64,30 +72,83 @@ router.get('', (req, res) => {
   if (isNaN(currentPage)) {
     currentPage = defaultPage;
   }
-  if (search) {
-    queryParams = {
-      title: new RegExp(search, 'i')
-    }
+  //Set up query parameters
+  if (req.query.title) {
+    queryParams.push({
+      'title': new RegExp(req.query.title, 'i')
+    });
+  }
+
+  if (req.query.category) {
+    queryParams.push({
+      'category': req.query.category
+    });
+  }
+
+  if (req.query.brand) {
+    queryParams.push({
+      'brand': req.query.brand
+    });
+  }
+
+  if (req.query.minPrice) {
+    queryParams.push({
+      'price': {
+        '$gte': req.query.minPrice
+      }
+    });
+  }
+
+  if (req.query.maxPrice) {
+    queryParams.push({
+      'price': {
+        '$lte': req.query.maxPrice
+      }
+    });
+  }
+
+  if (req.query.available) {
+    queryParams.push({
+      'available': req.query.available
+    });
+  }
+
+  if (req.query.minScore) {
+    queryParams.push({
+      'rating.score': {
+        '$gte': req.query.minScore
+      }
+    });
+  }
+
+  if (req.query.sortBy) {
+    sortBy = req.query.sortBy;
   }
 
   if (pageSize < 1 || pageSize > 100) {
     pageSize = defualtPageSize;
   }
+
   if (currentPage < 1) {
     page = defaultPage;
   }
 
-  return Product.count(queryParams).then((count) => Product.find(queryParams)
-    .skip(pageSize * (currentPage - 1))
-    .limit(pageSize)
-    .sort('-title')
-    .then((documents) => {
-      res.status(200).json({
-        message: "Page fetched successfuly",
-        maxProducts: count,
-        products: documents
-      });
-    }));
+  const queryString = queryParams.length === 0 ? {} : {
+    '$and': queryParams
+  };
+
+  return Product.countDocuments(queryString)
+    .then((count) => Product.find(queryString)
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize)
+      .sort(sortBy)
+      .then((documents) => {
+        res.status(200).json({
+          message: "Page fetched successfuly",
+          maxProducts: count,
+          products: documents
+        });
+      }));
 });
 
 /**
