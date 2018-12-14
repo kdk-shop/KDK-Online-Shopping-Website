@@ -15,7 +15,7 @@ describe('Users', () => {
   //Make sure users collection is empty except for test user before each test
 
   beforeEach((done) => {
-    User.remove({}, (err) => {
+    User.deleteMany({}, (err) => {
       let testUser = new User({
         name: "test",
         email: "test@example.com",
@@ -32,7 +32,7 @@ describe('Users', () => {
   });
   //Again make sure users collection is empty after tests
   afterEach((done) => {
-    User.remove({}, (err) => {
+    User.deleteMany({}, (err) => {
       done();
     });
   });

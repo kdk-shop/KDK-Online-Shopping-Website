@@ -267,7 +267,7 @@ router.post(
       phoneNumber: req.body.tel
     }
 
-    User.update({
+    User.updateOne({
       _id: req.user.id
     }, {
       $set: newUser
@@ -324,7 +324,7 @@ router.post(
                   throw err;
                 }
                 newUser.password = hash;
-                User.update({
+                User.updateOne({
                   _id: req.user.id
                 }, {
                   $set: newUser
@@ -381,7 +381,7 @@ router.patch(
           throw err;
         }
         newUser.password = hash;
-        User.update({
+        User.updateOne({
           email: req.body.email
         }, {
           $set: newUser
