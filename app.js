@@ -8,11 +8,12 @@ const morgan = require('morgan');
 const db = require('./db.js');
 const users = require('./routes/api/users');
 const products = require('./routes/api/products');
+const staticsPath = require('./config/storage').staticsPath;
 
 const app = express();
 
 //log using morgan
-if (process.env.NODE_ENV !== "PRODUCTION"){
+if (process.env.NODE_ENV !== "PRODUCTION") {
   app.use(morgan('dev'));
 }
 //Set CORS headers
@@ -29,21 +30,25 @@ app.use((req, res, next) => {
   next();
 });
 //Serve static images
-app.use('/images', express.static('/opt/kdk-shop/static/images/full'))
+app.use('/images', express.static(path.join(staticsPath, 'images', 'full')));
 
 //body parser middleware
 app.use(bodyParser.urlencoded({
-  extends: false
+  extended: false,
+  limit:'5mb'
 }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit:'5mb'
+}));
 
 //run deply script and return response for github
-function deploy (res) {
+function deploy(res) {
   childProcess.exec('/home/dark0ne/deploy.sh', (err, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);
     if (err) {
       console.error(err);
+
       return res.send(500);
     }
     res.send(200);

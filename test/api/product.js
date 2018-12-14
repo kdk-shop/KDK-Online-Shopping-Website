@@ -1,15 +1,19 @@
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'TEST';
 
-let mongoose = require("mongoose");
-let Product = require('../../models/Product');
-let User = require('../../models/User');
+const mongoose = require("mongoose");
+const Product = require('../../models/Product');
+const User = require('../../models/User');
 
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../../server');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../../server');
+const should = chai.should();
+
+//utility dependencies
+const fs = require('fs');
+const path = require('path');
 
 chai.use(chaiHttp);
 describe('Products', () => {
@@ -135,13 +139,13 @@ describe('Products', () => {
     it('it should create a new product', (done) => {
       chai.request(server)
         .post('/api/products/create/')
-        .send({
-          title: 'New product',
-          price: 1.5,
-          description: 'New description',
-          category: 'Test',
-          brand: 'Misc.'
-        })
+        .field('title','New product')
+        .field('price','1.5')
+        .field('description','New description')
+        .field('category','Test')
+        .field('brand','Misc.')
+        .attach('image', fs.readFileSync(path.join(__dirname, '..',
+          'files','test-image.jpg')), 'test-image.png')
         .end((err, res) => {
           res.should.have.status(201);
           res.should.be.json;
@@ -152,8 +156,10 @@ describe('Products', () => {
           testProduct.should.have.property('price', 1.5);
           testProduct.should.have.property('description', 'New description');
           testProduct.should.have.property('category', 'Test');
-          testProduct.imagePaths.should.be.a('array');
           testProduct.should.have.property('brand', 'Misc.');
+
+          testProduct.imagePaths.should.be.a('array');
+          testProduct.imagePaths.length.should.equal(1);
 
           testProduct.rating.should.have.property("score", 0);
           testProduct.rating.should.have.property("count", 0);

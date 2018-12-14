@@ -16,6 +16,9 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
+const multer = require('multer');
+const staticsPath = require('../../config/storage').staticsPath;
+const path = require('path');
 
 //load validators
 const validateProductInfo =
@@ -24,6 +27,18 @@ const validateProductInfo =
 //load product model
 const Product = require('../../models/Product');
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(staticsPath, 'images', 'full'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname)
+  }
+});
+
+let upload = multer({
+  storage
+});
 
 /**
  * Get paginated product information
@@ -79,7 +94,7 @@ router.get('', (req, res) => {
  * POST     create new product
  *@route  {POST} /api/products/create/
  */
-router.post("/create/", (req, res) => {
+router.post("/create/", upload.single('image'), (req, res) => {
   const {
     errors,
     isValid
@@ -107,7 +122,9 @@ router.post("/create/", (req, res) => {
       brand: req.body.brand,
 
       available: false,
-      imagePaths: [],
+      imagePaths: req.file === undefined ? [] : [
+        'http://95.216.119.91:4950/images/' + req.file.filename
+      ],
       rating: {
         score: 0,
         count: 0
