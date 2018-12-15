@@ -5,6 +5,6 @@ env:
 - NODE_ENV=TEST
 
 before_script:
-  - sudo mongod --port 31000 --fork --logpath /tmp/mongodb.log
+  - sudo mongod --port 31000 --logpath /tmp/mongodb.log
   - bash -c "while true; do mongo --quiet --port 31000 --eval 'if (!db.stats().ok) { quit(1) }' || { sleep 2; continue; } && break; done;"
   - mongo admin --port 31000 --eval 'db.createUser({user:"mochRunner",pwd:"EgT3TXebM7VC7dFg",roles:["readWrite"]});'
