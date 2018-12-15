@@ -184,7 +184,7 @@ router.post("/create/", upload.single('image'), (req, res) => {
 
       available: false,
       imagePaths: req.file === undefined ? [] : [
-        'http://95.216.119.91:4950/images/' + req.file.filename
+        'http://kdkshop.ir/images/' + req.file.filename
       ],
       rating: {
         score: 0,
