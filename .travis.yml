@@ -4,8 +4,6 @@ node_js:
 env:
 - NODE_ENV=TEST
 
-services:
-  - mongodb
 before_script:
   - openssl rand -base64 741 | sudo tee /etc/mongodb.authkey
   - sudo chown mongodb  /etc/mongodb.authkey
@@ -14,6 +12,6 @@ before_script:
   - echo "logpath = /tmp/mongodb.log" | sudo tee -a /etc/mongodb.conf
   - echo "port = 31000" | sudo tee -a /etc/mongodb.conf
   - sudo cat /etc/mongodb.conf
-  - sudo service mongod start || { cat /var/log/mongodb/mongodb.log; exit 1; }
+  - sudo service mongod start || { cat /tmp/mongodb.log; exit 1; }
   - bash -c "while true; do mongo --quiet --port 31000 --eval 'if (!db.stats().ok) { quit(1) }' || { sleep 2; continue; } && break; done;"
   - mongo admin --port 31000 --eval 'db.createUser({user:"mochRunner",pwd:"EgT3TXebM7VC7dFg",roles:["readWrite"]});'
