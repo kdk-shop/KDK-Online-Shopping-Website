@@ -1,5 +1,7 @@
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'TEST';
+if (process.env.NODE_ENV !== 'TRAVIS') {
+  process.env.NODE_ENV = 'TEST';
+}
 
 let mongoose = require("mongoose");
 let User = require('../../models/User');
