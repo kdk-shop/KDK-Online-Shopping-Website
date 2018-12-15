@@ -117,7 +117,7 @@ describe('Products', () => {
         .field('category', 'Test')
         .field('brand', 'Misc.')
         .attach('image', fs.readFileSync(path.join(__dirname, '..',
-          'files', 'test-image.jpg')), 'test-image.png')
+          'files', 'test-image.jpg')), 'test-image.jpg')
         .end((err, res) => {
           res.should.have.status(201);
           res.should.be.json;

@@ -411,8 +411,8 @@ router.patch(
               Your new password is: ${rawPassword}</p>`
           };
 
-          //no need to send email when testing
-          if (process.env.NODE_ENV === 'TEST') {
+          //no need to send email when not on production server
+          if (process.env.NODE_ENV !== 'PRODUCTION') {
             return res.status(200).json({});
           }
           //otherwise send mail
