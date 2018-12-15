@@ -3,4 +3,9 @@ node_js:
 - "node"
 env:
 - NODE_ENV=TEST
+services:
+- mongodb
 
+before_script:
+  - sleep 10
+  - mongo admin --eval 'db.createUser({user:"mochRunner",pwd:"EgT3TXebM7VC7dFg",roles:["readWrite"]});'
