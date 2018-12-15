@@ -4,6 +4,8 @@ node_js:
 env:
 - NODE_ENV=TEST
 
+services:
+  - mongodb
 before_script:
   - openssl rand -base64 741 | sudo tee /etc/mongodb.authkey
   - sudo chown mongodb  /etc/mongodb.authkey
