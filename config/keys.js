@@ -6,6 +6,9 @@ if (process.env.NODE_ENV === "PRODUCTION") {
 } else if (process.env.NODE_ENV === "TEST") {
   URI = "mongodb://mochaRunner:EgT3TXebM7VC7dFg@localhost:" +
     "31000/kdk-test?authSource=admin"
+} else if (process.env.NODE_ENV === "DEV") {
+  URI = "mongodb://expressApp:AvfwWKB5H3247yTAhPaA@kdkshop.ir:" +
+    "31000/kdk-shop?authSource=admin"
 } else if (process.env.NODE_ENV === "TRAVIS") {
   URI = "mongodb://localhost/kdk-test"
 } else {
