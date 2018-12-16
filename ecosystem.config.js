@@ -31,7 +31,7 @@ module.exports = {
       // eg: placing configurations in the shared dir etc
       "post-setup": "ls -la",
       // pre-deploy action
-      "pre-deploy":"git pull",
+      "pre-deploy":"git pull --force",
       // "pre-deploy-local": "echo 'This is a local executed command'",
       // post-deploy action
       "post-deploy": "npm install && cd client && npm install &&"+
