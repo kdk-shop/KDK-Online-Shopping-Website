@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --exit test/**/*.js",
-    "start":"NODE_ENV='DEV' node server.js",
+    "start": "NODE_ENV='DEV' node server.js",
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",
