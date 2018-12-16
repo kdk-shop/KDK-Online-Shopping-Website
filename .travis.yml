@@ -1,7 +1,18 @@
 language: node_js
-node_js: 
-- "node"
+node_js:
+- node
 env:
 - NODE_ENV=TRAVIS
 services:
-  - mongodb
+- mongodb
+before_install:
+- openssl aes-256-cbc -K $encrypted_8fcb2d31701c_key -iv $encrypted_8fcb2d31701c_iv
+  -in deploy_key.enc -out ./deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ./deploy_key
+- echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- ssh-add ./deploy_key
+after_success:
+  - npm install pm2 -g
+  - pm2 deploy ecosystem.config.js production update
+  - pm2 deploy ecosystem.config.js production exec "pm2 reload all"
