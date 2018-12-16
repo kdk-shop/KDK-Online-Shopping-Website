@@ -11,7 +11,7 @@ module.exports = {
     production: {
       user: "node",
       // SSH key path, default to $HOME/.ssh
-      key: "~/.ssh/deploy_key",
+      key: "./deploy_key",
       // SSH user
       user: "root",
       // SSH host
