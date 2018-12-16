@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <img alt="Logo" src="https://github.com/kdk-shop/KDK-Online-Shopping-Website/raw/master/media/logo.jpg" />
+  <img alt="Logo" src="https://github.com/kdk-shop/KDK-Online-Shopping-Website/raw/master/media/logo.jpg" width="250"/>
   <br><br>
 </p>
 <h2 align="center"> KDK Shop </h2>
