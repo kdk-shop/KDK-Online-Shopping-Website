@@ -13,6 +13,6 @@ before_install:
 - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - ssh-add ./deploy_key
 after_success:
-  - npm install pm2 -g
-  - pm2 deploy ecosystem.config.js production update
-  - pm2 deploy ecosystem.config.js production exec "pm2 reload all"
+- npm install pm2 -g
+- pm2 deploy ecosystem.config.js production update
+- pm2 deploy ecosystem.config.js production exec "pm2 reload all"
