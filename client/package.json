@@ -15,7 +15,8 @@
     "react-scripts": "2.1.1",
     "react-slideshow-image": "^1.0.8",
     "react-star-rating-component": "^1.4.1",
-    "react-swipeable-views": "^0.13.0"
+    "react-swipeable-views": "^0.13.0",
+    "webpack": "4.19.1"
   },
   "scripts": {
     "start": " react-scripts start",
