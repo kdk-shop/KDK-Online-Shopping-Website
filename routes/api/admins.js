@@ -68,4 +68,75 @@ router.post('/login', (req, res) => {
         })
     })
 })
+
+router.post(
+  '/change_pwd',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => {
+    const {
+      errors,
+      isValid
+    } = validationChangePwdInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+    Admin.findById(req.user.id, (err, user) => {
+      if (err) {
+        console.error(err);
+
+        return res.status(500).json(err);
+      }
+
+      //check old password
+      bcrypt.compare(req.body.currentPassword, user.password)
+        .then((isMatch) => {
+          if (isMatch) {
+            const newUser = {
+              password: req.body.password
+            }
+
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(newUser.password, salt, (err, hash) => {
+                if (err) {
+                  throw err;
+                }
+                newUser.password = hash;
+                Admin.updateOne({
+                  _id: req.user.id
+                }, {
+                  $set: newUser
+                }, {}, (err, doc) => {
+                  if (err) {
+                    console.error(err);
+
+                    return res.status(500).json(err);
+                  }
+
+                  return res.status(200).json({
+                    redirect: '/profile'
+                  });
+                })
+              })
+            });
+          } else {
+            return res.status(401).json({
+              errors: {
+                currentPassword: "Current password is incorrect"
+              }
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).json(err);
+        });
+
+    });
+
+  }
+)
+
 module.exports = router;

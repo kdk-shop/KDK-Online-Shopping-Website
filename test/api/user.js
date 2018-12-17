@@ -292,7 +292,7 @@ describe('Users', () => {
       chai.request(server)
         .post('/api/users/change_pwd')
         .send({
-          currentpassword: "123456",
+          currentPassword: "123456",
           password: "492123",
           password2: "492123"
         })
@@ -326,5 +326,23 @@ describe('Users', () => {
           done();
         });
     });
+
+    it('it should not change user password with' +
+      'wrong current password', (done) => {
+        chai.request(server)
+          .post('/api/users/change_pwd')
+          .set("Authorization", "Bearer " + jwebtoken)
+          .send({
+            currentPassword: "1235543",
+            password: "492123",
+            password2: "492123"
+          })
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.errors.should.have.property('currentPassword',
+              'Current password is incorrect');
+            done();
+          });
+      });
   });
 });

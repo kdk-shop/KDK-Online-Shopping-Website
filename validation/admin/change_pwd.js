@@ -15,10 +15,10 @@ module.exports = function validateChangePasswordInput(data) {
   }
 
   if (!validator.isLength(data.password, {
-      min: 6,
-      max: 30
+      min: 5,
+      max: 32
     })) {
-    errors.password = 'Password must be at least 6 characters'
+    errors.password = 'Password must be between 5 and 32 characters'
   }
 
   if (validator.isEmpty(data.password)) {

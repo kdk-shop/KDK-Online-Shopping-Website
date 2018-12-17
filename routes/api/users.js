@@ -195,7 +195,9 @@ router.get(
         return res.status(400).json(err);
       }
       if (!user) {
-        return res.status(404).json({message:"User not found"});
+        return res.status(404).json({
+          message: "User not found"
+        });
       }
 
       return res.status(200).json({
@@ -307,7 +309,9 @@ router.post(
     }
     User.findById(req.user.id, (err, user) => {
       if (err) {
-        return res.status(500).json(err)
+        console.error(err);
+
+        return res.status(500).json(err);
       }
 
       //check old password
@@ -330,7 +334,9 @@ router.post(
                   $set: newUser
                 }, {}, (err, doc) => {
                   if (err) {
-                    return res.status(500).json(err)
+                    console.error(err);
+
+                    return res.status(500).json(err);
                   }
 
                   return res.status(200).json({
@@ -339,9 +345,16 @@ router.post(
                 })
               })
             });
+          } else {
+            return res.status(401).json({
+              errors: {
+                currentPassword: "Current password is incorrect"
+              }
+            });
           }
         })
         .catch((err) => {
+          console.error(err);
           res.status(500).json(err);
         });
 

@@ -1,7 +1,7 @@
 {
-  "name": "devconnector",
-  "version": "1.0.0",
-  "description": "social netword for developers",
+  "name": "KDKExpressApp",
+  "version": "1.2.1",
+  "description": "KDK shop express server-side app",
   "main": "server.js",
   "scripts": {
     "test": "mocha --exit test/**/*.js",
