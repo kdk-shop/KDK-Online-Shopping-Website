@@ -11,6 +11,8 @@ import ChangePassword from '../src/components/user/changePassword';
 import RecoverPassword from '../src/components/user/recoverPassword';
 import Products from '../src/components/products/products';
 import Product from '../src/components/products/product';
+import AdminLogin from '../src/components/admin/login';
+
 import './App.css';
 
 class App extends Component {
@@ -28,7 +30,8 @@ class App extends Component {
           <Route path="/recover-password" component={RecoverPassword}/>
           <Route path="/products" component={Products}/>
           <Route path="/product" component={Product}/>
-
+          <Route path="/admin/login" component={AdminLogin}/>
+          
         </div>
         <Footer/>
         </div>
