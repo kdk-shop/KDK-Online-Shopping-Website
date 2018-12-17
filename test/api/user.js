@@ -218,8 +218,7 @@ describe('Users', () => {
     beforeEach((done) => {
       const payload = {
         id: userId,
-        name: 'test',
-        accessLevel: "User"
+        name: 'test'
       };
 
       jwt.sign(payload, keys.secretOrKey, {

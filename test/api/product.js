@@ -6,12 +6,15 @@ if (process.env.NODE_ENV !== 'TRAVIS') {
 const mongoose = require("mongoose");
 const Product = require('../../models/Product');
 const User = require('../../models/User');
+const Admin = require('../../models/Admin');
 
 //Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../../server');
 const should = chai.should();
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
 
 //utility dependencies
 const fs = require('fs');
@@ -77,7 +80,32 @@ describe('Products', () => {
   /*
    * Register test user
    */
-  describe('Product valid CRUD operations', () => {
+  describe('Product admin CRUD operations', () => {
+    let jwebtoken;
+
+    beforeEach((done) => {
+      Admin.deleteMany({}, (err) => {
+        let testAdmin = new Admin({
+          name: "admin",
+          password: "$2a$10$U2axE8DVGi2m/BAt4RDFZeMG" +
+            "t0OPSkRf8T0oec5KFVIBy5Y4fGBUa"
+        });
+
+        testAdmin.save((err, admin) => {
+          const payload = {
+            id: admin._id,
+            name: 'admin'
+          };
+
+          jwt.sign(payload, keys.secretOrKey, {
+            expiresIn: '1d'
+          }, (err, token) => {
+            jwebtoken = token;
+            done();
+          });
+        });
+      });
+    });
 
     it('it should retrieve an existing product', (done) => {
       chai.request(server)
@@ -111,6 +139,7 @@ describe('Products', () => {
     it('it should create a new product', (done) => {
       chai.request(server)
         .post('/api/products/create/')
+        .set("Authorization", "Bearer " + jwebtoken)
         .field('title', 'New product')
         .field('price', '1.5')
         .field('description', 'New description')
@@ -145,6 +174,7 @@ describe('Products', () => {
     it('it should update an existing product', (done) => {
       chai.request(server)
         .put('/api/products/update/' + testProductId)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({
           title: 'Updated product',
           price: 3,
@@ -180,6 +210,7 @@ describe('Products', () => {
     it('it should delete an existing product', (done) => {
       chai.request(server)
         .delete('/api/products/delete/' + testProductId)
+        .set("Authorization", "Bearer " + jwebtoken)
         .end((err, res) => {
           res.should.have.status(200);
           res.should.be.json;
@@ -190,9 +221,6 @@ describe('Products', () => {
           done();
         });
     });
-  });
-
-  describe('Product Invalid CRUD operations', () => {
 
     it('it should not retrieve a non-existent product', (done) => {
       chai.request(server)
@@ -206,6 +234,7 @@ describe('Products', () => {
     it('it should not create a new product with empty fields', (done) => {
       chai.request(server)
         .post('/api/products/create/')
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({})
         .end((err, res) => {
           res.should.have.status(400);
@@ -224,6 +253,7 @@ describe('Products', () => {
       (done) => {
         chai.request(server)
           .post('/api/products/create/')
+          .set("Authorization", "Bearer " + jwebtoken)
           .send({
             title: 'Test product',
             price: 1.5,
@@ -246,6 +276,7 @@ describe('Products', () => {
     it('it should not update a product with empty fields', (done) => {
       chai.request(server)
         .put('/api/products/update/' + testProductId)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({})
         .end((err, res) => {
           res.should.have.status(400);
@@ -263,6 +294,7 @@ describe('Products', () => {
     it('it should not update a non-existent product', (done) => {
       chai.request(server)
         .put('/api/products/update/5c12dce373b0ec340612f359')
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({
           title: 'Updated product',
           price: 3,
@@ -280,15 +312,60 @@ describe('Products', () => {
     it('it should not delete a non-existent product', (done) => {
       chai.request(server)
         .delete('/api/products/delete/5c12dce373b0ec340612f359')
+        .set("Authorization", "Bearer " + jwebtoken)
         .end((err, res) => {
           res.should.have.status(404);
           res.should.be.json;
           done();
         });
     });
+
+    it('it should not create a new ' +
+      'product without admin privilages', (done) => {
+        chai.request(server)
+          .post('/api/products/create/')
+          .field('title', 'New product')
+          .field('price', '1.5')
+          .field('description', 'New description')
+          .field('category', 'Test')
+          .field('brand', 'Misc.')
+          .attach('image', fs.readFileSync(path.join(__dirname, '..',
+            'files', 'test-image.jpg')), 'test-image.jpg')
+          .end((err, res) => {
+            res.should.have.status(401);
+            done();
+          });
+      });
+
+    it('it should not update an existing' +
+      ' product without admin privilages', (done) => {
+        chai.request(server)
+          .put('/api/products/update/' + testProductId)
+          .send({
+            title: 'Updated product',
+            price: 3,
+            description: 'Updated description',
+            category: 'Updated',
+            brand: 'Updated Misc.'
+          })
+          .end((err, res) => {
+            res.should.have.status(401);
+            done();
+          });
+      });
+
+    it('it should not delete an existing' +
+      'product without admin privilages', (done) => {
+        chai.request(server)
+          .delete('/api/products/delete/' + testProductId)
+          .end((err, res) => {
+            res.should.have.status(401);
+            done();
+          });
+      });
   });
 
-  describe('Product review valid CRUD operations', () => {
+  describe('Product review CRUD operations', () => {
     it("it should add a review to a product", (done) => {
       chai.request(server)
         .put('/api/products/review/' + testProductId + '/' + testUserId)

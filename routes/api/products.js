@@ -155,128 +155,162 @@ router.get('', (req, res) => {
  * POST     create new product
  *@route  {POST} /api/products/create/
  */
-router.post("/create/", upload.single('image'), (req, res) => {
-  const {
-    errors,
-    isValid
-  } = validateProductInfo(req.body);
-  //check validation
+router.post("/create/",
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  upload.single('image'),
+  (req, res) => {
 
-  if (!isValid) {
-    return res.status(400).json(errors)
-  }
-  Product.findOne({
-    title: req.body.title
-  }, (err, product) => {
-    if (product) {
-
-      return res.status(409).json({
-        title: 'Product with this title already exists'
+    if (req.user.accessLevel !== 'Admin') {
+      return res.status(401).json({
+        message: "You do not have privilages for this action"
       });
     }
 
-    const newProduct = new Product({
-      title: req.body.title,
-      price: req.body.price,
-      description: req.body.description,
-      category: req.body.category,
-      brand: req.body.brand,
+    const {
+      errors,
+      isValid
+    } = validateProductInfo(req.body);
+    //check validation
 
-      available: false,
-      imagePaths: req.file === undefined ? [] : [
-        'http://kdkshop.ir/images/' + req.file.filename
-      ],
-      rating: {
-        score: 0,
-        count: 0
-      },
-      reviews: []
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+    Product.findOne({
+      title: req.body.title
+    }, (err, product) => {
+      if (product) {
 
+        return res.status(409).json({
+          title: 'Product with this title already exists'
+        });
+      }
+
+      const newProduct = new Product({
+        title: req.body.title,
+        price: req.body.price,
+        description: req.body.description,
+        category: req.body.category,
+        brand: req.body.brand,
+
+        available: false,
+        imagePaths: req.file === undefined ? [] : [
+          'http://kdkshop.ir/images/' + req.file.filename
+        ],
+        rating: {
+          score: 0,
+          count: 0
+        },
+        reviews: []
+
+      });
+
+      return newProduct.save().then((product) => res.status(201).json(product))
+        .catch((err) => {
+          console.error(err);
+
+          return res.status(500).json({
+            message: "Server could not save product on database"
+          })
+        });
     });
 
-    return newProduct.save().then((product) => res.status(201).json(product))
-      .catch((err) => {
-        console.error(err);
-
-        return res.status(500).json({
-          message: "Server could not save product on database"
-        })
-      });
   });
-
-});
 
 /**
  * PUT     update existing product
  *@route  {PUT} /api/products/update/:product_id
  */
-router.put("/update/:product_id", (req, res) => {
-  const {
-    errors,
-    isValid
-  } = validateProductInfo(req.body);
-  //check validation
+router.put("/update/:product_id",
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => {
 
-  if (!isValid) {
-    return res.status(400).json(errors)
-  }
-  const updatedProduct = {
-    title: req.body.title,
-    price: req.body.price,
-    description: req.body.description,
-    category: req.body.category,
-    brand: req.body.brand
-  };
-
-  Product.findOneAndUpdate({
-      _id: req.params.product_id
-    }, {
-      "$set": req.body
-    }, {},
-    (err, doc) => {
-      if (doc === null) {
-        return res.status(404).json({
-          message: "Product not found!"
-        })
-      }
-      if (err) {
-        return res.status(500).json({
-          message: "Could not update product!"
-        });
-      }
-
-      Product.findById(
-        req.params.product_id,
-        (err, product) => res.status(200).json(product)
-      );
+    if (req.user.accessLevel !== 'Admin') {
+      return res.status(401).json({
+        message: "You do not have privilages for this action"
+      });
     }
-  )
-});
+
+    const {
+      errors,
+      isValid
+    } = validateProductInfo(req.body);
+    //check validation
+
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+    const updatedProduct = {
+      title: req.body.title,
+      price: req.body.price,
+      description: req.body.description,
+      category: req.body.category,
+      brand: req.body.brand
+    };
+
+    Product.findOneAndUpdate({
+        _id: req.params.product_id
+      }, {
+        "$set": req.body
+      }, {},
+      (err, doc) => {
+        if (doc === null) {
+          return res.status(404).json({
+            message: "Product not found!"
+          })
+        }
+        if (err) {
+          return res.status(500).json({
+            message: "Could not update product!"
+          });
+        }
+
+        Product.findById(
+          req.params.product_id,
+          (err, product) => res.status(200).json(product)
+        );
+      }
+    )
+  });
 
 /**
  * DELETE     delete existing product
  *@route  {DELETE} /api/products/delete/:product_id
  */
-router.delete("/delete/:product_id", (req, res) => {
-  Product.findOneAndDelete({
-    _id: req.params.product_id
-  }, (err, product) => {
-    if (product === null) {
-      return res.status(404).json({
-        message: "Product not found"
-      })
-    }
-    if (err) {
-      console.error(err);
+router.delete("/delete/:product_id",
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => {
 
-      return res.status(500).json({
-        message: "Could not delete product from database"
-      })
+    if (req.user.accessLevel !== 'Admin') {
+      return res.status(401).json({
+        message: "You do not have privilages for this action"
+      });
     }
 
-    return res.status(200).json(product)
+    Product.findOneAndDelete({
+      _id: req.params.product_id
+    }, (err, product) => {
+      if (product === null) {
+        return res.status(404).json({
+          message: "Product not found"
+        })
+      }
+      if (err) {
+        console.error(err);
+
+        return res.status(500).json({
+          message: "Could not delete product from database"
+        })
+      }
+
+      return res.status(200).json(product)
+    });
   });
-});
 
 /**
  * Put     product review and score
