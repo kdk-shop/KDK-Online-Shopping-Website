@@ -3,18 +3,21 @@ if (process.env.NODE_ENV !== 'TRAVIS') {
   process.env.NODE_ENV = 'TEST';
 }
 
-let mongoose = require("mongoose");
-let User = require('../../models/User');
+const mongoose = require("mongoose");
+const User = require('../../models/User');
 
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../../server');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../../server');
+const should = chai.should();
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
 
 chai.use(chaiHttp);
 describe('Users', () => {
   //Make sure users collection is empty except for test user before each test
+  let userId;
 
   beforeEach((done) => {
     User.deleteMany({}, (err) => {
@@ -27,7 +30,8 @@ describe('Users', () => {
         phoneNumber: 989120000000
       });
 
-      testUser.save((err) => {
+      testUser.save((err, user) => {
+        userId = user._id;
         done();
       })
     });
@@ -209,24 +213,25 @@ describe('Users', () => {
   });
 
   describe('User profile', () => {
-    let jwt;
+    let jwebtoken;
 
     beforeEach((done) => {
-      chai.request(server)
-        .post('/api/users/login')
-        .send({
-          email: "test@example.com",
-          password: "123456"
-        })
-        .end((err, res) => {
-          jwt = res.body.token;
-          done();
-        });
+      const payload = {
+        id: userId,
+        name: 'test'
+      };
+
+      jwt.sign(payload, keys.secretOrKey, {
+        expiresIn: '1d'
+      }, (err, token) => {
+        jwebtoken = token;
+        done();
+      });
     });
     it('it should update user profile', (done) => {
       chai.request(server)
         .post('/api/users/profile')
-        .set("Authorization", "Bearer " + jwt)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({
           name: "Test2",
           email: "test2@example.com",
@@ -242,7 +247,7 @@ describe('Users', () => {
     it('it should retrieve user profile', (done) => {
       chai.request(server)
         .get('/api/users/profile')
-        .set("Authorization", "Bearer " + jwt)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send()
         .end((err, res) => {
           res.should.have.status(200);
@@ -259,7 +264,7 @@ describe('Users', () => {
     it('it should change user password', (done) => {
       chai.request(server)
         .post('/api/users/change_pwd')
-        .set("Authorization", "Bearer " + jwt)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({
           currentPassword: "123456",
           password: "654321",
@@ -300,7 +305,7 @@ describe('Users', () => {
     it('it should not change user password with empty fields', (done) => {
       chai.request(server)
         .post('/api/users/change_pwd')
-        .set("Authorization", "Bearer " + jwt)
+        .set("Authorization", "Bearer " + jwebtoken)
         .send({})
         .end((err, res) => {
           res.should.have.status(400);

@@ -85,3 +85,5 @@ out/
 client/build
 static
 deploy_key
+tags.lock
+tags.temp
