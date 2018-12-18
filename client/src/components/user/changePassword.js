@@ -15,6 +15,7 @@ class changePassword extends Component {
         this.state={
             password:'',
             password2:'',
+            currentPassword:'',
             open:false,
             errors:{}
         };
@@ -31,7 +32,8 @@ class changePassword extends Component {
 
         const newPassword={
             password:this.state.password,
-            password2:this.state.password2
+            password2:this.state.password2,
+            currentPassword:this.state.currentPassword
         }
 
         axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
@@ -59,6 +61,12 @@ class changePassword extends Component {
                     <h1 className="display-4 text-center">Change Password</h1>
                     <p className="lead text-center">Change Your Current Password</p>
                     <form noValidate  onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                                <label>Current Password</label>
+                                <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.currentPassword})} 
+                                placeholder="Current Password" name="currentPassword"value={this.state.currentPassword} onChange={this.onChange} />
+                                {errors.currentPassword && (<div className="invalid-feedback">{errors.currentPassword}</div>)}
+                        </div>
                         <div className="form-group">
                             <label>New Password</label>
                             <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.password})} 
