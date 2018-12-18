@@ -162,12 +162,6 @@ router.post("/create/",
   upload.single('image'),
   (req, res) => {
 
-    if (req.user.accessLevel !== 'Admin') {
-      return res.status(401).json({
-        message: "You do not have privilages for this action"
-      });
-    }
-
     const {
       errors,
       isValid
@@ -228,12 +222,6 @@ router.put("/update/:product_id",
   }),
   (req, res) => {
 
-    if (req.user.accessLevel !== 'Admin') {
-      return res.status(401).json({
-        message: "You do not have privilages for this action"
-      });
-    }
-
     const {
       errors,
       isValid
@@ -254,17 +242,19 @@ router.put("/update/:product_id",
     Product.findOneAndUpdate({
         _id: req.params.product_id
       }, {
-        "$set": req.body
+        "$set": updatedProduct
       }, {},
       (err, doc) => {
         if (doc === null) {
           return res.status(404).json({
-            message: "Product not found!"
+            message: "Product not found"
           })
         }
         if (err) {
+          console.error(err);
+
           return res.status(500).json({
-            message: "Could not update product!"
+            message: "Could not update product in database"
           });
         }
 
@@ -285,12 +275,6 @@ router.delete("/delete/:product_id",
     session: false
   }),
   (req, res) => {
-
-    if (req.user.accessLevel !== 'Admin') {
-      return res.status(401).json({
-        message: "You do not have privilages for this action"
-      });
-    }
 
     Product.findOneAndDelete({
       _id: req.params.product_id
