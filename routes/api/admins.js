@@ -71,7 +71,7 @@ router.post('/login', (req, res) => {
 
 router.post(
   '/change_pwd',
-  passport.authenticate('jwt', {
+  passport.authenticate('admin-auth', {
     session: false
   }),
   (req, res) => {

@@ -156,7 +156,7 @@ router.get('', (req, res) => {
  *@route  {POST} /api/products/create/
  */
 router.post("/create/",
-  passport.authenticate('jwt', {
+  passport.authenticate('admin-auth', {
     session: false
   }),
   upload.single('image'),
@@ -223,7 +223,7 @@ router.post("/create/",
  *@route  {PUT} /api/products/update/:product_id
  */
 router.put("/update/:product_id",
-  passport.authenticate('jwt', {
+  passport.authenticate('admin-auth', {
     session: false
   }),
   (req, res) => {
@@ -281,7 +281,7 @@ router.put("/update/:product_id",
  *@route  {DELETE} /api/products/delete/:product_id
  */
 router.delete("/delete/:product_id",
-  passport.authenticate('jwt', {
+  passport.authenticate('admin-auth', {
     session: false
   }),
   (req, res) => {

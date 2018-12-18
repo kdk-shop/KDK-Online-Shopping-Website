@@ -219,7 +219,7 @@ router.get(
  */
 router.get(
   '/profile',
-  passport.authenticate('jwt', {
+  passport.authenticate('user-auth', {
     session: false
   }),
   (req, res) => {
@@ -250,7 +250,7 @@ router.get(
  */
 router.post(
   '/profile',
-  passport.authenticate('jwt', {
+  passport.authenticate('user-auth', {
     session: false
   }),
   (req, res) => {
@@ -295,7 +295,7 @@ router.post(
  */
 router.post(
   '/change_pwd',
-  passport.authenticate('jwt', {
+  passport.authenticate('user-auth', {
     session: false
   }),
   (req, res) => {
@@ -459,7 +459,7 @@ router.get('/logout', (req, res) => {
 
 router.get(
   '/currentUser',
-  passport.authenticate('jwt', {
+  passport.authenticate('user-auth', {
     session: false
   }),
   (req, res) => {

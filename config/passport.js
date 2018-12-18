@@ -13,26 +13,28 @@ opts.secretOrKey = keys.secretOrKey;
 
 module.exports = (passport) => {
 
-  passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
+  passport.use('user-auth', new JwtStrategy(opts, (jwtPayload, done) => {
     //console.log(jwtPayload);
     User.findById(jwtPayload.id)
       .then((user) => {
         if (user) {
-          user.accessLevel = "User";
-
           return done(null, user)
         }
-        Admin.findById(jwtPayload.id)
-          .then((admin) => {
-            if (admin) {
-              admin.accessLevel = "Admin";
 
-              return done(null, admin)
-            }
+        return done(null, false);
+      })
+      .catch((err) => console.log(err))
+  }))
 
-            return done(null, false);
-          })
-          .catch((err) => console.log(err))
+  passport.use('admin-auth', new JwtStrategy(opts, (jwtPayload, done) => {
+    //console.log(jwtPayload);
+    Admin.findById(jwtPayload.id)
+      .then((admin) => {
+        if (admin) {
+          return done(null, admin)
+        }
+
+        return done(null, false);
       })
       .catch((err) => console.log(err))
   }))

@@ -9,6 +9,8 @@ const db = require('./db.js');
 const users = require('./routes/api/users');
 const products = require('./routes/api/products');
 const admins = require('./routes/api/admins');
+const storages = require('./routes/api/storages');
+
 const staticsPath = require('./config/storage').staticsPath;
 
 const app = express();
@@ -52,6 +54,7 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/products', products);
 app.use('/api/admins', admins);
+app.use('/api/storage', storages);
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.get('/*', (req, res) => {
