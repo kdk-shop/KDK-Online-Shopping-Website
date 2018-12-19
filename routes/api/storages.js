@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+const inventories = require('./inventories');
 //load validators
 const validateStorageInfo =
   require('../../validation/storage/validateStorageInfo');
@@ -11,12 +12,16 @@ const validateStorageInfo =
 const Storage = require('../../models/Storage');
 const Inventory = require('../../models/Inventory');
 
-router.get('', (req, res) => {
+router.get('',
+  passport.authenticate('admin-auth', {
+    session: false
+  }),
+  (req, res) => {
   let pageSize = Number(req.query.pagesize);
   let currentPage = Number(req.query.page);
   let sortBy = 'name'
 
-  const defaultPageSize = 12;
+  const defaultPageSize = 10;
   const defaultPage = 1;
 
   if (isNaN(pageSize)) {
@@ -27,7 +32,7 @@ router.get('', (req, res) => {
   }
 
   return Storage.countDocuments()
-    .then((count) => Product.find()
+    .then((count) => Storage.find()
       .skip(pageSize * (currentPage - 1))
       .limit(pageSize)
       .sort(sortBy)
@@ -61,7 +66,9 @@ router.post("/create/",
       if (storage) {
 
         return res.status(409).json({
-          title: 'Storage with this name already exists'
+          errors: {
+            name: 'Storage with this name already exists'
+          }
         });
       }
 
@@ -113,7 +120,7 @@ router.put("/update/:storage_id",
     const {
       errors,
       isValid
-    } = validateProductInfo(req.body);
+    } = validateStorageInfo(req.body);
     //check validation
 
     if (!isValid) {
@@ -130,7 +137,7 @@ router.put("/update/:storage_id",
     Storage.findOneAndUpdate({
         _id: req.params.storage_id
       }, {
-        "$set": updatedProducte
+        "$set": updatedProduct
       }, {},
       (err, doc) => {
         if (doc === null) {
@@ -196,7 +203,8 @@ router.delete("/delete/:storage_id",
     });
   });
 
-//TODO: populate inventory before returning response
+router.use('/:storage_id/inventory', inventories);
+
 router.get('/:storage_id', (req, res) => {
   Storage.findById(req.params.storage_id).then((storage) => {
       if (storage) {
