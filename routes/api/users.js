@@ -31,6 +31,12 @@ const validationResetPasswordInput = require('../../validation/user/reset_pwd')
 //load user model
 const User = require('../../models/User');
 
+//load dependable routes
+const carts = require('./carts.js');
+
+//Redirect user cart routes to carts.js
+router.use('/cart',carts);
+
 /**
  * Register new user
  *@route  {POST} /api/users/register
@@ -88,7 +94,8 @@ router.post('/register', (req, res) => {
         avatar,
         password: req.body.password,
         address: '',
-        phoneNumber: null
+        phoneNumber: null,
+        shoppingCart: []
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -466,6 +473,5 @@ router.get(
     res.json(req.user)
   }
 )
-
 
 module.exports = router;

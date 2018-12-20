@@ -65,6 +65,8 @@ describe('Users', () => {
           res.body.user.should.have.property("email", "test2@example.com");
           res.body.user.should.have.property("password");
           res.body.user.should.have.property("date");
+          res.body.user.should.have.property("shoppingCart");
+
           done();
         });
     });

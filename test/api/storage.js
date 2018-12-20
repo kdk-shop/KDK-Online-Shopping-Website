@@ -17,10 +17,6 @@ const should = chai.should();
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 
-//utility dependencies
-const fs = require('fs');
-const path = require('path');
-
 chai.use(chaiHttp);
 describe('Storages', () => {
   let testStorageId;

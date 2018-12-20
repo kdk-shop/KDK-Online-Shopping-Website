@@ -18,7 +18,7 @@ router.get('/:storage_id/',
   (req, res) => {
     let pageSize = Number(req.query.pagesize);
     let currentPage = Number(req.query.page);
-    let sortBy = 'title'
+    let sortBy = 'title';
 
     const defaultPageSize = 10;
     const defaultPage = 1;
@@ -26,6 +26,7 @@ router.get('/:storage_id/',
     if (isNaN(pageSize)) {
       pageSize = defaultPageSize;
     }
+
     if (isNaN(currentPage)) {
       currentPage = defaultPage;
     }
