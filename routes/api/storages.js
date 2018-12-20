@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
-const inventories = require('./inventories');
 //load validators
 const validateStorageInfo =
   require('../../validation/storage/validateStorageInfo');
@@ -202,8 +201,6 @@ router.delete("/delete/:storage_id",
       });
     });
   });
-
-router.use('/:storage_id/inventory', inventories);
 
 router.get('/:storage_id', (req, res) => {
   Storage.findById(req.params.storage_id).then((storage) => {

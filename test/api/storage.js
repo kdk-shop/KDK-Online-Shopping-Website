@@ -115,15 +115,14 @@ describe('Storages', () => {
         .get('/api/storages/')
         .set("Authorization", "Bearer " + jwebtoken)
         .end((err, res) => {
-          console.log(res.body)
           res.should.have.status(200);
           res.should.be.json;
           let testStorages = res.body.storages;
 
           testStorages.should.be.a('array');
           testStorages[0].should.be.a('object');
-          testStorages[0].should.have.property('name','Test storage');
-          testStorages[0].should.have.property('address','Test address');
+          testStorages[0].should.have.property('name', 'Test storage');
+          testStorages[0].should.have.property('address', 'Test address');
           testStorages[0].should.have.property('inventory');
 
           done();

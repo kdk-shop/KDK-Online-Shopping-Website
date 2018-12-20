@@ -56,6 +56,7 @@ app.use('/api/users', users);
 app.use('/api/products', products);
 app.use('/api/admins', admins);
 app.use('/api/storages', storages);
+app.use('/api/inventories', inventories);
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.get('/*', (req, res) => {
