@@ -13,6 +13,7 @@ import Slide from '@material-ui/core/Slide'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -87,47 +88,55 @@ class addStorage extends Component {
                 </Typography>
                 </Toolbar>
             </AppBar>
-          <Tooltip title="Back">
-            <Link to="/admin/panel/storages">
-                 <Fab color="primary" aria-label="Add" className={classes.fab}>
-                     <ArrowBack />
-                </Fab>
-             </Link> 
-          </Tooltip>
-          <h1 className="display-4 text-center">Add Storage</h1>
-          <hr/>
-            <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
-                <TextField
-                label="Name"
-                className={classes.textField}
-                value={this.state.name}
-                margin="normal"
-                variant="outlined"
-                onChange={this.onChange}
-                error={this.state.errors.name}
-                helperText={this.state.errors.name === "" ? ' ' :this.state.errors.name }
-                name="name"
-                />
-                <TextField
-                label="Addres"
-                className={classes.textField}
-                margin="normal"
-                variant="outlined"
-                value={this.state.address}
-                onChange={this.onChange}
-                error={this.state.errors.address}
-                helperText={this.state.errors.address === "" ? ' ' :this.state.errors.address }
-                name="address"
-                />
+            <Tooltip title="Back">
+              <Link to="/admin/panel/storages">
+                  <Fab color="primary" aria-label="Add" className={classes.fab}>
+                      <ArrowBack />
+                  </Fab>
+              </Link> 
+            </Tooltip>
+            <h1 className="display-4 text-center">Add Storage</h1>
+            <hr/>
+            <div className="col-md-8 m-auto">
+              <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+              <Grid item xs={12}>
+                  <TextField
+                  fullWidth
+                  label="Name"
+                  className={classes.textField}
+                  value={this.state.name}
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.onChange}
+                  error={this.state.errors.name}
+                  helperText={this.state.errors.name === "" ? ' ' :this.state.errors.name }
+                  name="name"
+                  />
+                  <TextField
+                  fullWidth
+                  label="Addres"
+                  className={classes.textField}
+                  margin="normal"
+                  variant="outlined"
+                  value={this.state.address}
+                  onChange={this.onChange}
+                  error={this.state.errors.address}
+                  helperText={this.state.errors.address === "" ? ' ' :this.state.errors.address }
+                  name="address"
+                  />
+                </Grid>
                 <hr/>
-                <Button variant="contained" color="primary" className={classes.button} type="submit">
-                    Add 
-                </Button>
-            
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
-                    Cancel
-                </Button>
+                <Grid item xs={12} sm={6}>
+                  <Button variant="contained" color="primary" className={classes.button} type="submit">
+                      Add 
+                  </Button>
+              
+                  <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
+                      Cancel
+                  </Button>
+                </Grid>
           </form>
+          </div>
           <Snackbar
           open={this.state.open}
           onClose={this.handleClose}

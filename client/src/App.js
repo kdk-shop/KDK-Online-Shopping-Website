@@ -17,6 +17,7 @@ import Storages from '../src/components/admin/storages';
 import AdminChangePAssword from '../src/components/admin/changePassword';
 import Storage from '../src/components/admin/storage';
 import AddStorage from '../src/components/admin/addStorage';
+import EditStorage from '../src/components/admin/editStorage';
 import AddProducts from '../src/components/admin/addProducts';
 
 
@@ -43,6 +44,7 @@ class App extends Component {
           <Route path="/admin/panel/change-password" component={AdminChangePAssword}/>
           <Route path="/admin/panel/storage" component={Storage}/>
           <Route path="/admin/panel/storages/add-storage" component={AddStorage}/>
+          <Route path="/admin/panel/storages/edit" component={EditStorage}/>
           <Route path="/admin/panel/addProducts" component={AddProducts}/>
           
         </div>
