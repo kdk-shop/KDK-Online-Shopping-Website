@@ -1,9 +1,31 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import classNames from 'classnames'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  button: {
+      margin: theme.spacing.unit,
+    },
+});
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -70,9 +92,11 @@ handleClose = () => {
 handleExit = ()=>{
   window.location = "/"
 }
-
+onClick=()=>{
+  window.location="/"
+}
   render() {
-    const {errors}=this.state;
+    const { classes } = this.props;
     return (
     <div className="create-profile ">
       <div className="container">
@@ -82,35 +106,69 @@ handleExit = ()=>{
             <h1 className="display-4 text-center">Edit Your Profile</h1>
             <p className="lead text-center">Let's get some information to make your profile stand out</p>
 
-            <form noValidate onSubmit={this.onSubmit}>
-
-              <div className="form-group">
-                <label>Name</label> 
-                <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
-                {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-              </div>
-          
-              <div className="form-group">
-                <label>Email Address</label> 
-                <input type="email" className={classNames('form-control form-control-lg',{'is-invalid':errors.email})} placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
-                {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                <small className="form-text text-muted">This site uses <a href="https://en.gravatar.com/" target="_blank">Gravatar</a> so if you want a profile image, use a Gravatar email</small>
-              </div>
+            <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+            <Grid item xs={12}>
+              <TextField
+              fullWidth
+              label="Full Name"
+              className={classes.textField}
+              value={this.state.name}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="name"
+              error={this.state.errors.name}
+              helperText={this.state.errors.name === "" ? ' ' :this.state.errors.name }
+            />
+              <TextField
+              fullWidth
+              label="Email Address"
+              className={classes.textField}
+              value={this.state.email}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="email"
+              error={this.state.errors.email}
+              helperText={this.state.errors.email === "" ? ' ' :this.state.errors.email }
+            />
+              <TextField
+              fullWidth
+              label="Address"
+              className={classes.textField}
+              value={this.state.address}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="address"
+              error={this.state.errors.address}
+              helperText={this.state.errors.address === "" ? ' ' :this.state.errors.address }
+            />
+              <TextField
+              fullWidth
+              label="Tel number"
+              className={classes.textField}
+              placeholder="989XXXXXXXXX"
+              value={this.state.tel}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="tel"
+              error={this.state.errors.tel}
+              helperText={this.state.errors.tel === "" ? ' ' :this.state.errors.tel }
+            />
               
-              <div className="form-group">
-                <label>Addres</label> 
-                <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.address})} placeholder="Address" name="address" value={this.state.address} onChange={this.onChange} id='address' />
-                { errors.address && (<div className="invalid-feedback">{errors.address}</div>)}
-              </div>
-
-              <div className="form-group">
-                <label>Mobile Phone</label> 
-                <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.tel})} placeholder="989XXXXXXXXX" name="tel" value={this.state.tel} onChange={this.onChange} />
-                {errors.tel && (<div className="invalid-feedback">{errors.tel}</div>)}
-              </div>
-              <small><Link to="/change-password">Want to change your password?</Link></small><br/>
-              <input type="submit" className="btn btn-info mt-4" />{' '}
-              <Link to="/" className="btn btn-danger mt-4">Cancel</Link> 
+              <Typography><Link to="/change-password">Want to change your password?</Link></Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+              <Button variant="contained" color="primary" className={classes.button} type="submit">
+                    Submit 
+                </Button>
+            
+                <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
+                    Cancel
+                </Button>
+                </Grid>
             </form>
             <br/>
             <label style={{color:'green'}}>{this.state.success}</label>
@@ -133,4 +191,8 @@ handleExit = ()=>{
   }
 }
 
-export default profile;
+profile.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(profile);

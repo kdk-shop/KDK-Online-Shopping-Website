@@ -49,7 +49,7 @@ class Navbar extends Component {
   render() {
     
     return (
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
+        <nav className="navbar navbar-expand-sm navbar-dark  mb-4" style={{ background: '#2b2f35' }}>
         <div className="container">
           <Link className="navbar-brand" to="/">Home</Link>
           <Link className="navbar-brand" to="/products">Products</Link>
@@ -78,7 +78,7 @@ class Navbar extends Component {
             </ul>
           </div>
         </div>
-        <Snackbar bodyStyle={{ backgroundColor: 'white', color: 'coral' }}
+        <Snackbar 
           open={this.state.open}
           onClose={this.handleClose}
           transitionDuration={2000}

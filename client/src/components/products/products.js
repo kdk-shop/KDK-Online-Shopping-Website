@@ -10,7 +10,8 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import {Link} from 'react-router-dom'
-
+import LinearProgress from '@material-ui/core/LinearProgress';
+import PropTypes from 'prop-types';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -31,6 +32,12 @@ const styles = theme => ({
       display: 'none',
       [theme.breakpoints.up('sm')]: {
         display: 'block',
+      },
+      linearColorPrimary: {
+        backgroundColor: '#b2dfdb',
+      },
+      linearBarColorPrimary: {
+        backgroundColor: '#00695c',
       },
     },
     search: {
@@ -84,7 +91,8 @@ class Products extends Component{
             maxProducts:'',
             message:'',
             page:1,
-            open:false
+            open:false,
+            loading:true
         };
       }
 
@@ -102,7 +110,9 @@ class Products extends Component{
                 this.setState({message:err.response.data.message})
             })
       }
-
+      componentDidMount() {
+        setTimeout(() => this.setState({ loading: false }));
+    }
       handleSearch = (event)=>{
         if (event.key === 'Enter') {
           // console.log(event.target.value)
@@ -145,10 +155,15 @@ class Products extends Component{
       }
     render(){
         const { classes } = this.props;
-        // console.log(this.state.products.length)
         return(
             <div>
-                <div className={classes.grow} />
+              {this.state.loading? <LinearProgress
+                classes={{
+                  colorPrimary: classes.linearColorPrimary,
+                  barColorPrimary: classes.linearBarColorPrimary,
+                }}
+              />:''}
+                {/* <div className={classes.grow} /> */}
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
                 <SearchIcon />
@@ -206,4 +221,7 @@ class Products extends Component{
         )
     }
 }
+Products.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 export default withStyles(styles)(Products);

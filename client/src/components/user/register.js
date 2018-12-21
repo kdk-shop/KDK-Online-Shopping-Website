@@ -1,9 +1,33 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
-import {Link} from 'react-router-dom'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  button: {
+      margin: theme.spacing.unit,
+    },
+});
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -19,11 +43,15 @@ function TransitionUp(props) {
              password2:'',
              open:false,
              errors:{},
+             showPassword: false
          };
          this.onChange=this.onChange.bind(this);
          this.onSubmit=this.onSubmit.bind(this);
      }
      
+     handleClickShowPassword = () => {
+      this.setState(state => ({ showPassword: !state.showPassword }));
+    };
 
      onChange(e){
          this.setState({[e.target.name]:e.target.value})
@@ -54,9 +82,12 @@ function TransitionUp(props) {
     handleExit = ()=>{
       window.location = "/login"
     }
+    onClick=()=>{
+      window.location="/"
+  }
   render() {
 
-    const {errors}=this.state;
+    const { classes } = this.props;
     return (
         <div className="register">
         <div className="container">
@@ -64,30 +95,88 @@ function TransitionUp(props) {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your account</p>
-              <form noValidate onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <label>Name</label> 
-                  <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
-                  {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-                </div>
-                <div className="form-group">
-                  <label>Email Address</label> 
-                  <input type="email" className={classNames('form-control form-control-lg',{'is-invalid':errors.email})} placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
-                  {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                  <small className="form-text text-muted">This site uses <a href="https://en.gravatar.com/" target="_blank">Gravatar</a> so if you want a profile image, use a Gravatar email</small>
-                </div>
-                <div className="form-group">
-                  <label>Password</label> 
-                  <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.password})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange}  />
-                  {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                </div>
-                <div className="form-group">
-                  <label>Confirmation</label> 
-                  <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.password2})} placeholder="Confirm Password" name="password2" value={this.state.password2} onChange={this.onChange} />
-                  {errors.password2 && (<div className="invalid-feedback">{errors.password2}</div>)}
-                </div>
-                <input type="submit" className="btn btn-info mt-4" />{' '}
-                <Link to="/" className="btn btn-danger mt-4">Cancel</Link>
+              <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+              <TextField
+              fullWidth
+              label="Full Name"
+              className={classes.textField}
+              value={this.state.name}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="name"
+              error={this.state.errors.name}
+              helperText={this.state.errors.name === "" ? ' ' :this.state.errors.name }
+            />
+              <TextField
+              fullWidth
+              label="Email Address"
+              className={classes.textField}
+              value={this.state.email}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="email"
+              error={this.state.errors.email}
+              helperText={this.state.errors.email === "" ? ' ' :this.state.errors.email }
+            />
+              <TextField
+              fullWidth
+              label="Password"
+              type={this.state.showPassword ? 'text' : 'password'}
+               className={classNames(classes.margin, classes.textField)}
+              value={this.state.password}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment variant="filled" position="end">
+                    <IconButton
+                      aria-label="Toggle password visibility"
+                      onClick={this.handleClickShowPassword}
+                    >
+                      {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              error={this.state.errors.password}
+              helperText={this.state.errors.password === "" ? ' ' :this.state.errors.password }
+            />
+          <TextField
+             fullWidth
+              label="Confirm Password"
+              type={this.state.showPassword ? 'text' : 'password'}
+               className={classNames(classes.margin, classes.textField)}
+              value={this.state.password2}
+              margin="normal"
+              variant="outlined"
+              onChange={this.onChange}
+              name="password2"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment variant="filled" position="end">
+                    <IconButton
+                      aria-label="Toggle password visibility"
+                      onClick={this.handleClickShowPassword}
+                    >
+                      {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              error={this.state.errors.password2}
+              helperText={this.state.errors.password2 === "" ? ' ' :this.state.errors.password2 }
+            />
+             <Button variant="contained" color="primary" className={classes.button} type="submit">
+                    SignUp 
+                </Button>
+            
+                <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
+                    Cancel
+                </Button>
               </form>
             </div>
           </div>
@@ -108,4 +197,8 @@ function TransitionUp(props) {
   }
 }
 
-export default register;
+register.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(register);

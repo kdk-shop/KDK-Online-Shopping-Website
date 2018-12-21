@@ -4,6 +4,33 @@ import classNames from 'classnames'
 import {Link} from 'react-router-dom'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  button: {
+      margin: theme.spacing.unit,
+    },
+});
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -16,11 +43,17 @@ function TransitionUp(props) {
             name:'',
             password:'',
             open:false,
-            errors:{}
+            errors:{},
+            showPassword: false
         };
         this.onChange=this.onChange.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
     }
+
+    handleClickShowPassword = () => {
+      this.setState(state => ({ showPassword: !state.showPassword }));
+    };
+
     onChange(e){
         this.setState({[e.target.name]:e.target.value})
     }
@@ -40,7 +73,9 @@ function TransitionUp(props) {
               })
               .catch(err=>this.setState({errors:err.response.data}))
     }
-
+    onClick=()=>{
+      window.location="/"
+    } 
      
     handleClose = () => {
       this.setState({ open: false });
@@ -51,29 +86,66 @@ function TransitionUp(props) {
     }
     
   render() {
-    const {errors}=this.state;
+    const { classes } = this.props;
     return (
-        <div className="login">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Administrator Log In</h1>
-              <p className="lead text-center">Sign in to your account</p>
-              <form noValidate onSubmit={this.onSubmit}>
-                <div className="form-group">
-                   <label>Name</label>
-                  <input type="text" className={classNames('form-control form-control-lg',{'is-invalid':errors.name})}  placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
-                  {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input type="password" className={classNames('form-control form-control-lg',{'is-invalid':errors.password})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
-                  {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                </div>
-                {/* <small><Link to="/recover-password">Forgot Password?</Link></small><br/> */}
-                <input type="submit" className="btn btn-info mt-4" />{' '}
-                <Link to="/" className="btn btn-danger mt-4">Cancel</Link> 
-              </form>
+      <div className="login">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Log In</h1>
+            <p className="lead text-center">Sign in to your account</p>
+
+            <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+            <Grid item xs={12}>
+            <TextField
+            fullWidth
+            label="Name"
+            className={classes.textField}
+            value={this.state.name}
+            margin="normal"
+            variant="outlined"
+            onChange={this.onChange}
+            name="name"
+            error={this.state.errors.name}
+            helperText={this.state.errors.name === "" ? ' ' :this.state.errors.name }
+          />
+            <TextField
+            fullWidth
+            label="Password"
+            type={this.state.showPassword ? 'text' : 'password'}
+             className={classNames(classes.margin, classes.textField)}
+            value={this.state.password}
+            margin="normal"
+            variant="outlined"
+            onChange={this.onChange}
+            name="password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment variant="filled" position="end">
+                  <IconButton
+                    aria-label="Toggle password visibility"
+                    onClick={this.handleClickShowPassword}
+                  >
+                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            error={this.state.errors.password}
+            helperText={this.state.errors.password === "" ? ' ' :this.state.errors.password }
+          />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+              <Button variant="contained" color="primary" className={classes.button} type="submit">
+                  LogIn 
+              </Button>
+          
+              <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
+                  Cancel
+              </Button>
+              </Grid>
+            </form>
+
             </div>
           </div>
         </div>
@@ -93,4 +165,8 @@ function TransitionUp(props) {
   }
 }
 
-export default login;
+login.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(login);

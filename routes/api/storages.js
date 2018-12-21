@@ -108,9 +108,9 @@ router.post("/create/",
 
 /**
  * PUT     update existing storage
- *@route  {PUT} /api/storages/update/:storage_id
+ *@route  {POST} /api/storages/update/:storage_id
  */
-router.put("/update/:storage_id",
+router.post("/update/:storage_id",
   passport.authenticate('admin-auth', {
     session: false
   }),

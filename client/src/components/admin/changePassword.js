@@ -46,6 +46,7 @@ class changePassword extends Component {
             showCurrentPassword: false,
             showPassword: false,
             showPassword2: false,
+
         };
         this.onChange=this.onChange.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
@@ -66,7 +67,7 @@ class changePassword extends Component {
     }
 
     onClick=()=>{
-        window.location="/"
+        window.location="/admin/panel"
     } 
 
     onSubmit(e){
@@ -90,7 +91,7 @@ class changePassword extends Component {
       };
   
       handleExit = ()=>{
-        window.location = "/profile"
+        window.location = "/admin/panel"
       }
   render() {
     const { classes } = this.props;

@@ -15,7 +15,7 @@ class Landing extends Component {
                 <h1 className="display-3 mb-4">KDK Online Shopping Store</h1>
                 <h6 className="lead">
                   <Wave text="We simply aspire to provide high quality, well-designed essentials for the right price" 
-                      speed={16}
+                      speed={40}
                       effect="verticalFadeIn"
                       effectDirection="left"
                       iterations={1}

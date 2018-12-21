@@ -31,7 +31,7 @@ const styles = {
 
   const MediaCard = (props) => {
     const { classes } = props;
-    console.log(props.available)
+    // console.log(props.available)
     const show = props.available;
     return (
         <Card className={classes.card}>

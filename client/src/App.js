@@ -12,6 +12,13 @@ import RecoverPassword from '../src/components/user/recoverPassword';
 import Products from '../src/components/products/products';
 import Product from '../src/components/products/product';
 import AdminLogin from '../src/components/admin/login';
+import Panel from '../src/components/admin/panel';
+import Storages from '../src/components/admin/storages';
+import AdminChangePAssword from '../src/components/admin/changePassword';
+import Storage from '../src/components/admin/storage';
+import AddStorage from '../src/components/admin/addStorage';
+import AddProducts from '../src/components/admin/addProducts';
+
 
 import './App.css';
 
@@ -31,6 +38,12 @@ class App extends Component {
           <Route path="/products" component={Products}/>
           <Route path="/product" component={Product}/>
           <Route path="/admin/login" component={AdminLogin}/>
+          <Route exact path="/admin/panel" component={Panel}/>
+          <Route exact path="/admin/panel/storages" component={Storages}/>
+          <Route path="/admin/panel/change-password" component={AdminChangePAssword}/>
+          <Route path="/admin/panel/storage" component={Storage}/>
+          <Route path="/admin/panel/storages/add-storage" component={AddStorage}/>
+          <Route path="/admin/panel/addProducts" component={AddProducts}/>
           
         </div>
         <Footer/>
