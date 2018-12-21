@@ -149,7 +149,7 @@ describe('Storages', () => {
 
     it('it should update an existing storage', (done) => {
       chai.request(server)
-        .put('/api/storages/update/' + testStorageId)
+        .post('/api/storages/update/' + testStorageId)
         .set("Authorization", "Bearer " + jwebtoken)
         .send({
           name: 'Test storage 2',
@@ -213,7 +213,7 @@ describe('Storages', () => {
 
     it('it should not update a non-existent storage', (done) => {
       chai.request(server)
-        .put('/api/storages/update/5c12dce373b0ec340612f359')
+        .post('/api/storages/update/5c12dce373b0ec340612f359')
         .set("Authorization", "Bearer " + jwebtoken)
         .send({
           name: 'Updated name'
@@ -253,7 +253,7 @@ describe('Storages', () => {
     it('it should not update an existing' +
       ' storage without admin privilages', (done) => {
         chai.request(server)
-          .put('/api/storages/update/' + testStorageId)
+          .post('/api/storages/update/' + testStorageId)
           .send({
             name: 'Updated storage'
           })

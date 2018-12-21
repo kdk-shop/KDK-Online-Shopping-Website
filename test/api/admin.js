@@ -125,7 +125,7 @@ describe('Admins', () => {
     });
 
     it('it should not change admin password with' +
-      'wrong current password', (done) => {
+      ' wrong current password', (done) => {
         chai.request(server)
           .post('/api/admins/change_pwd')
           .set("Authorization", "Bearer " + jwebtoken)
@@ -136,7 +136,7 @@ describe('Admins', () => {
           })
           .end((err, res) => {
             res.should.have.status(401);
-            res.body.errors.should.have.property('currentPassword',
+            res.body.should.have.property('currentPassword',
               'Current password is incorrect');
             done();
           });

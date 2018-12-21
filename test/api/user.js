@@ -329,7 +329,7 @@ describe('Users', () => {
         });
     });
 
-    it('it should not change user password with' +
+    it('it should not change user password with ' +
       'wrong current password', (done) => {
         chai.request(server)
           .post('/api/users/change_pwd')
@@ -341,7 +341,7 @@ describe('Users', () => {
           })
           .end((err, res) => {
             res.should.have.status(401);
-            res.body.errors.should.have.property('currentPassword',
+            res.body.should.have.property('currentPassword',
               'Current password is incorrect');
             done();
           });
