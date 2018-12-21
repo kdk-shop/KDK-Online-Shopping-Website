@@ -83,15 +83,20 @@ class changePassword extends Component {
         }
 
         axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
-        axios.post('/api/users/change_pwd',newPassword)
+        axios.post('/api/admins/change_pwd',newPassword)
              .then(res=>{
-                this.setState({open:true})
+                this.setState({open:true,errors:{}})
              })
-             .catch(err=>this.setState({errors:err.response.data}))
+             .catch(
+                 err=>this.setState({errors:err.response.data})
+                 )
+                 
+
     }
+
     handleClose = () => {
         this.setState({ open: false });
-      };
+      }
   
       handleExit = ()=>{
         window.location = "/admin/panel"

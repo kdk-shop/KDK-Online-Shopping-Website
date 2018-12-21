@@ -82,7 +82,7 @@ class changePassword extends Component {
         axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
         axios.post('/api/users/change_pwd',newPassword)
              .then(res=>{
-                this.setState({open:true})
+                this.setState({open:true,errors:{}})
              })
              .catch(err=>this.setState({errors:err.response.data}))
     }
@@ -128,6 +128,7 @@ class changePassword extends Component {
                         error={this.state.errors.currentPassword}
                         helperText={this.state.errors.currentPassword === "" ? ' ' :this.state.errors.currentPassword }
                     />
+                    {console.log(this.state.errors.currentPassword)}
                     <TextField
                         fullWidth
                         label="New Password"

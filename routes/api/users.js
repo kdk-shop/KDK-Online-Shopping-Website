@@ -353,11 +353,8 @@ router.post(
               })
             });
           } else {
-            return res.status(401).json({
-              errors: {
-                currentPassword: "Current password is incorrect"
-              }
-            });
+            errors.currentPassword="Current password is incorrect"
+            return res.status(401).json(errors)
           }
         })
         .catch((err) => {
