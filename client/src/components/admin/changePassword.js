@@ -12,6 +12,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     container: {
@@ -97,6 +100,12 @@ class changePassword extends Component {
     const { classes } = this.props;
     return (
       <div className="changePassword">
+       <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                </Typography>
+                </Toolbar>
+            </AppBar>
         <div className="container">
             <div className="row">
                 <div className="col-md-8 m-auto">

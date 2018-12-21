@@ -10,6 +10,9 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   fab: {
@@ -64,6 +67,13 @@ const styles = theme => ({
     const { classes } = this.props;
     return (
       <div>
+        <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    
+                </Typography>
+                </Toolbar>
+            </AppBar>
         <Tooltip title="Back">
        <Link to="/admin/panel">
        <Fab color="primary" aria-label="Add" className={classes.fab}>

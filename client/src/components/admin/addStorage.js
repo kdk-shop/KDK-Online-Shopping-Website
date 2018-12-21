@@ -10,6 +10,9 @@ import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -77,6 +80,13 @@ class addStorage extends Component {
     const { classes } = this.props;
     return (
       <div>
+         <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    
+                </Typography>
+                </Toolbar>
+            </AppBar>
           <Tooltip title="Back">
             <Link to="/admin/panel/storages">
                  <Fab color="primary" aria-label="Add" className={classes.fab}>

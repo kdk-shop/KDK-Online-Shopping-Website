@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+
 const styles = theme => ({
     container: {
       display: 'flex',
@@ -95,7 +96,7 @@ class changePassword extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className="changePassword">
+        <div className="changePassword">
         <div className="container">
             <div className="row">
                 <div className="col-md-8 m-auto">

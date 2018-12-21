@@ -14,6 +14,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = theme => ({
   container: {
@@ -89,6 +91,13 @@ function TransitionUp(props) {
     const { classes } = this.props;
     return (
       <div className="login">
+      <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    
+                </Typography>
+                </Toolbar>
+            </AppBar>
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
