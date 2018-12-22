@@ -41,7 +41,8 @@ const styles = theme => ({
       maxStorages:'',
       message:'',
       page:1,
-      open:false
+      open:false,
+      deleted_id:null
     }
    }
    
@@ -77,6 +78,22 @@ const styles = theme => ({
     })
   }
 
+  handleDelete=()=>{
+    axios.delete(`/api/storages/delete/${this.state.deleted_id}`)
+    .then(()=>{
+      window.location ='/admin/panel/storages'
+    })
+    this.setState({ open: false,deleted_id: null });
+  
+  }
+
+  handleClickOpen = (id) => {
+    this.setState({ open: true,deleted_id: id});
+  };
+
+  handleClose = () => {
+    this.setState({ open: false,deleted_id: null });
+  };
 
   render() {
     const { classes } = this.props;
@@ -110,7 +127,7 @@ const styles = theme => ({
                     let link = '/admin/panel/storages/storage?id='+item._id
                     let editlink = '/admin/panel/storages/edit?id='+item._id
                     return(<Grid item key={item._id}  xs={6} >
-                        
+
                             <List >
                               <ListItem>
                               <Link to={link} style={{ textDecoration: 'none' }}>
@@ -128,7 +145,7 @@ const styles = theme => ({
                                     </Tooltip>
                                   </Link>
                                   <Tooltip title="Delete" >
-                                  <IconButton>
+                                  <IconButton onClick={()=>this.handleClickOpen(item._id)}>
                                     <DeleteIcon />
                                   </IconButton>
                                   </Tooltip>
@@ -139,7 +156,24 @@ const styles = theme => ({
                     </Grid>)
                 })}
             </Grid>
-
+            <div>
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{"Are you sure to delete?"}</DialogTitle>
+              <DialogActions>
+                <Button onClick={this.handleDelete} color="primary">
+                  Yes
+                </Button>
+                <Button onClick={this.handleClose} color="primary" autoFocus>
+                  No
+                </Button>
+              </DialogActions>
+            </Dialog>
+            </div>
         <Pagination
         style={{visibility:(this.state.storages.length === 0?"hidden":"visible")}}
         activePage={this.state.page}
