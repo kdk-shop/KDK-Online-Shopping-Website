@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
-import {Link} from 'react-router-dom'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import { withStyles } from '@material-ui/core/styles'
@@ -104,7 +103,7 @@ function TransitionUp(props) {
             <h1 className="display-4 text-center">Log In</h1>
             <p className="lead text-center">Sign in to your account</p>
 
-            <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+            <form className={classes.container} noValidate onSubmit={this.onSubmit}>
             <Grid item xs={12}>
             <TextField
             fullWidth

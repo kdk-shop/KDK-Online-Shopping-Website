@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
@@ -102,7 +101,7 @@ class changePassword extends Component {
                 <div className="col-md-8 m-auto">
                     <h1 className="display-4 text-center">Change Password</h1>
                     <p className="lead text-center">Change Your Current Password</p>
-                    <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+                    <form className={classes.container} noValidate  onSubmit={this.onSubmit}>
                     <TextField
                         fullWidth
                         label="Current Password"

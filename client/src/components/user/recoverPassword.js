@@ -1,18 +1,11 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
     container: {
@@ -89,7 +82,7 @@ class recoverPassword extends Component {
                     <div className="col-md-8 m-auto">
                         <h1 className="display-4 text-center">Reset Password</h1>
                         <p className="lead text-center">Please enter your email address to request a password reset</p>
-                        <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+                        <form className={classes.container} noValidate  onSubmit={this.onSubmit}>
                         <TextField
                             fullWidth
                             label="Email Address"

@@ -93,7 +93,7 @@ function TransitionUp(props) {
               <h1 className="display-4 text-center">Log In</h1>
               <p className="lead text-center">Sign in to your account</p>
 
-              <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+              <form className={classes.container} noValidate  onSubmit={this.onSubmit}>
               <Grid item xs={12}>
               <TextField
               fullWidth

@@ -43,7 +43,8 @@ function TransitionUp(props) {
              password2:'',
              open:false,
              errors:{},
-             showPassword: false
+             showPassword: false,
+             showPassword2: false
          };
          this.onChange=this.onChange.bind(this);
          this.onSubmit=this.onSubmit.bind(this);
@@ -51,6 +52,9 @@ function TransitionUp(props) {
      
      handleClickShowPassword = () => {
       this.setState(state => ({ showPassword: !state.showPassword }));
+    };
+     handleClickShowPassword2 = () => {
+      this.setState(state => ({ showPassword2: !state.showPassword2 }));
     };
 
      onChange(e){
@@ -95,7 +99,7 @@ function TransitionUp(props) {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your account</p>
-              <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+              <form className={classes.container} noValidate onSubmit={this.onSubmit}>
               <TextField
               fullWidth
               label="Full Name"
@@ -148,7 +152,7 @@ function TransitionUp(props) {
           <TextField
              fullWidth
               label="Confirm Password"
-              type={this.state.showPassword ? 'text' : 'password'}
+              type={this.state.showPassword2 ? 'text' : 'password'}
                className={classNames(classes.margin, classes.textField)}
               value={this.state.password2}
               margin="normal"
@@ -160,9 +164,9 @@ function TransitionUp(props) {
                   <InputAdornment variant="filled" position="end">
                     <IconButton
                       aria-label="Toggle password visibility"
-                      onClick={this.handleClickShowPassword}
+                      onClick={this.handleClickShowPassword2}
                     >
-                      {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                      {this.state.showPassword2 ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),

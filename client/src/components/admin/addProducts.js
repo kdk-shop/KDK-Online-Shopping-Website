@@ -24,7 +24,7 @@ const styles = theme => ({
 class addProducts extends Component {
     constructor(){
         super();
-        this. state = {
+        this.state = {
             title: '',
             price: '',
             description: '',
@@ -65,7 +65,6 @@ class addProducts extends Component {
     
     
       render() {
-        const {errors}=this.state;
         const { classes } = this.props;
         return (
           <div>
@@ -115,7 +114,7 @@ class addProducts extends Component {
             onChange={this.handleSwitch('checkedB')}
             value="checkedB"
             color="primary"
-            value={this.state.available}
+            // value={this.state.available}
             />
             </Tooltip>
 

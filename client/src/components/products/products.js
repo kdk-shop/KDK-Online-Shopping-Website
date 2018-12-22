@@ -114,12 +114,13 @@ class Products extends Component{
         setTimeout(() => this.setState({ loading: false }));
     }
       handleSearch = (event)=>{
+        console.log('dsgsgs')
         if (event.key === 'Enter') {
           // console.log(event.target.value)
           let text = event.target.value
-          axios.get(`/api/products/?pagesize=12&page=1&search=${text}`)
+          axios.get(`/api/products/?pagesize=12&page=1&title=${text}`)
           .then(res=>{
-              // console.log(res)
+              console.log(res)
               this.setState({
                  products:res.data.products,
                  maxProducts:res.data.maxProducts,
@@ -187,7 +188,7 @@ class Products extends Component{
                             brand={item.brand}
                             price={item.price}
                             title={item.title}
-                            rate={item.rating} 
+                            rate={parseInt(item.rating)} 
                             available={item.available} />
                             </Link>
                            

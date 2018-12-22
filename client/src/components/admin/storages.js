@@ -20,8 +20,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import Edit from '@material-ui/icons/Edit';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -124,7 +122,7 @@ const styles = theme => ({
             <hr/>
             <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
                 {this.state.storages.map((item)=>{
-                    let link = '/admin/panel/storages/storage?id='+item._id
+                    let link = '/admin/panel/storage?id='+item._id
                     let editlink = '/admin/panel/storages/edit?id='+item._id
                     return(<Grid item key={item._id}  xs={6} >
 

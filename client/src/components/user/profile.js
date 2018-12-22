@@ -106,7 +106,7 @@ onClick=()=>{
             <h1 className="display-4 text-center">Edit Your Profile</h1>
             <p className="lead text-center">Let's get some information to make your profile stand out</p>
 
-            <form className={classes.container} noValidate autoComplete="off" onSubmit={this.onSubmit}>
+            <form className={classes.container} noValidate  onSubmit={this.onSubmit}>
             <Grid item xs={12}>
               <TextField
               fullWidth
