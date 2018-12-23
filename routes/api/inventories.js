@@ -9,6 +9,7 @@ const passport = require('passport');
 const Storage = require('../../models/Storage');
 const Inventory = require('../../models/Inventory');
 const Product = require('../../models/Product');
+const Update = require('../../models/Update');
 
 //Retrieve list of products in inventory
 router.get('/:storage_id/',
@@ -131,31 +132,25 @@ router.post('/:storage_id/',
                         });
                       }
 
-                      //update product availability
-                      if (!product.available) {
-                        product.available = true;
-                        product.save((err, prod) => {
-                          if (err) {
-                            console.error(err);
 
-                            return res.status(500).json({
-                              message: "Could not update product" +
-                                " availability on database"
-                            });
-                          }
-
-                          return res.status(201).json({
-                            message: "Product added to inventory",
-                            inventory: doc
-                          });
-                        });
-                      } else {
-
-                        return res.status(201).json({
+                      Update.findOneAndUpdate({
+                          productId: req.body.productId
+                        }, {
+                          'productId': req.body.productId
+                        }, {
+                          upsert: true
+                        }).then((prod) => res.status(201).json({
                           message: "Product added to inventory",
                           inventory: doc
-                        });
-                      }
+                        }))
+                        .catch((err) => {
+                          console.error(err);
+
+                          return res.status(500).json({
+                            message: 'Could not queue product ' +
+                              'availability update on database'
+                          });
+                        })
 
                     });
                   } else {
@@ -329,49 +324,24 @@ router.delete('/:storage_id/',
                     });
                   }
 
-                  Inventory.findOne({
-                      products: {
-                        '$elemMatch': {
-                          product: req.body.productId
-                        }
-                      }
-                    }).then((invContProd) => {
-                      if (invContProd) {
-
-                        return res.status(200).json({
-                          messaage: 'Deleted product from inventory',
-                          inventory: doc
-                        });
-                      }
-                      Product.findOneAndUpdate({
-                          _id: req.body.productId
-                        }, {
-                          'available': false
-                        }).then((prod) => res.status(200).json({
-                          messaage: 'Deleted product from inventory',
-                          inventory: doc
-                        }))
-                        .catch((err) => {
-                          console.error(err);
-
-                          return res.status(500).json({
-                            message: 'Could not update product ' +
-                              'availibility on database'
-                          });
-                        });
-                    })
+                  Update.findOneAndUpdate({
+                      productId: req.body.productId
+                    }, {
+                      'productId': req.body.productId
+                    }, {
+                      upsert: true
+                    }).then((prod) => res.status(200).json({
+                      messaage: 'Deleted product from inventory',
+                      inventory: doc
+                    }))
                     .catch((err) => {
                       console.error(err);
 
                       return res.status(500).json({
-                        message: 'Could not look for inventories containing' +
-                          ' specified product in database'
+                        message: 'Could not queue product ' +
+                          'availability update on database'
                       });
-                    });
-                });
-              } else {
-                return res.status(404).json({
-                  message: 'Product not found in inventory'
+                    })
                 });
               }
             })
@@ -379,7 +349,8 @@ router.delete('/:storage_id/',
               console.error(err);
 
               return res.status(500).json({
-                message: "Could not look up for inventory in database"
+                message: 'Could not look for inventories containing' +
+                  ' specified product in database'
               });
             });
         } else {

@@ -5,10 +5,12 @@ if (process.env.NODE_ENV !== 'TRAVIS') {
 
 const mongoose = require("mongoose");
 const assert = require("assert");
+
 const Storage = require('../../models/Storage');
 const Inventory = require('../../models/Inventory');
 const Product = require('../../models/Product');
 const Admin = require('../../models/Admin');
+const Update = require('../../models/Update');
 
 //Require the dev-dependencies
 const chai = require('chai');
@@ -31,12 +33,17 @@ describe('Storages', () => {
 
   beforeEach((done) => {
     //Make sure users collection is empty except for test user
+    Update.deleteMany({}, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+
     Product.deleteMany({}, (err) => {
       let testProduct = {
         title: "Test product",
         price: 1.0,
         description: "Test description",
-        available: true,
         category: "Test",
         brand: "Misc.",
         imagePaths: ["test.jpg"],
@@ -102,11 +109,14 @@ describe('Storages', () => {
   });
   //Again make sure users collection is empty after tests
 
+
   afterEach((done) => {
     Product.deleteMany({}, (err) => {
       Inventory.deleteMany({}, (err) => {
         Storage.deleteMany({}, (err) => {
-          done();
+          Update.deleteMany({}, (err) => {
+            done();
+          });
         });
       });
     });
@@ -185,15 +195,14 @@ describe('Storages', () => {
             String(newProductId));
           products[indexOfTarget].should.have.property('qty', 2);
 
-          Product.findOne({
-              _id: newProductId
-            }).then((product) => {
-              assert(product.available);
-              done();
-            })
-            .catch((err) => {
-              throw err;
-            });
+          Update.findOne({
+            productId: newProductId
+          }).then((doc) => {
+            if (doc === null) {
+              throw new Error("Product not queued for availability update")
+            }
+            done();
+          });
         });
     });
 
@@ -237,15 +246,15 @@ describe('Storages', () => {
           }
           assert(indexOfTarget === -1);
 
-          Product.findOne({
-              _id: testProductId
-            }).then((product) => {
-              assert(!product.available);
-              done();
-            })
-            .catch((err) => {
-              throw err;
-            });
+          Update.findOne({
+            productId: newProductId
+          }).then((err, doc) => {
+            if (doc === null) {
+              throw new Error("Product not queued for availability update")
+            }
+            done();
+          });
+
         });
     });
 
@@ -281,7 +290,7 @@ describe('Storages', () => {
 
     it('it should not add a non-existent product to an inventory', (done) => {
       chai.request(server)
-        .post('/api/inventories/'+testStorageId)
+        .post('/api/inventories/' + testStorageId)
         .set("Authorization", "Bearer " + jwebtoken)
         .send({
           productId: '5c12dce373b0ec340612f359',
@@ -298,7 +307,7 @@ describe('Storages', () => {
     it('it should not add a product with incorrect' +
       ' quantity to an inventory', (done) => {
         chai.request(server)
-          .post('/api/inventories/'+testStorageId)
+          .post('/api/inventories/' + testStorageId)
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: newProductId,

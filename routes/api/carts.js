@@ -10,6 +10,8 @@ const validateStorageInfo =
 
 const User = require('../../models/User');
 const Product = require('../../models/Product');
+const Inventory = require('../../models/Inventory');
+const Update = require('../../models/Update');
 
 router.get('',
   passport.authenticate('user-auth', {
@@ -252,6 +254,143 @@ router.delete('',
           message: 'Could not look for user in database'
         });
       });
+  });
+
+//Purchase products in user cart and update inventories
+router.post('/checkout',
+  passport.authenticate('user-auth', {
+    session: false
+  }),
+  (req, res) => {
+
+    User.findOne({
+      _id: req.user.id
+    }).then((user) => {
+      let productQueries = [];
+      let productsInCart = [];
+      let promises = [];
+      let inventoriesToUpdate = {};
+
+      if (user.shoppingCart.length === 0) {
+        return res.status(400).json({
+          message: "No items in user cart"
+        });
+      }
+      //Construct quries for checking each item in inventory
+      for (let i = 0; i < user.shoppingCart.length; i += 1) {
+        productQueries.push(Inventory.findOne({
+          products: {
+            '$elemMatch': {
+              product: user.shoppingCart[i].product,
+              qty: {
+                '$gte': user.shoppingCart[i].qty
+              }
+            }
+          }
+        }));
+
+        productsInCart.push({
+          product: user.shoppingCart[i].product,
+          qty: user.shoppingCart[i].qty
+        });
+      }
+
+      //Check if all items exist in inventories
+      Promise.all(productQueries).then(async (inventories) => {
+        for (let i = 0; i < inventories.length; i += 1) {
+          if (inventories[i] === null) {
+            return res.status(404).json({
+              message: "No inventory found with requested product and quantity"
+            });
+          }
+        }
+
+        //Update inventories and product availabilities
+
+        for (let k = 0; k < productsInCart.length; k += 1) {
+          let item = productsInCart[k];
+
+          try {
+            let inventory = await Inventory.findOne({
+              products: {
+                '$elemMatch': {
+                  product: item.product,
+                  qty: {
+                    '$gte': item.qty
+                  }
+                }
+              }
+            }).exec();
+            let currentInventory = inventory.products;
+            let targetProduct = null;
+            let indexOfTarget = -1;
+
+            if (inventoriesToUpdate[inventory._id] !== undefined) {
+              currentInventory = inventoriesToUpdate[inventory._id];
+            }
+            for (let i = 0; i < currentInventory.length; i += 1) {
+              if (String(currentInventory[i].product) ===
+                String(item.product)) {
+                targetProduct = currentInventory[i];
+                indexOfTarget = i;
+                break;
+              }
+            }
+
+            if (targetProduct.qty - item.qty > 0) {
+              targetProduct.qty -= item.qty;
+            } else {
+              currentInventory.splice(indexOfTarget, 1);
+              promises.push(Update.findOneAndUpdate({
+                productId: targetProduct.product
+              }, {
+                'productId': targetProduct.product
+              }, {
+                upsert: true
+              }).exec());
+            }
+            //Queue up inventory update
+            if (inventoriesToUpdate[inventory._id] === undefined) {
+              inventoriesToUpdate[String(inventory._id)] = currentInventory;
+            }
+            //Last round of loop: update users and inventories here
+            if (k === productsInCart.length - 1) {
+              for (let key in inventoriesToUpdate) {
+                if (inventoriesToUpdate.hasOwnProperty(key)) {
+                  //Update inventory
+                  promises.push(Inventory.findOneAndUpdate({
+                    _id: key
+                  }, {
+                    products: inventoriesToUpdate[key]
+                  }).exec());
+                }
+              }
+              user.shoppingCart = [];
+              promises.push(user.save())
+
+              Promise.all(promises).then((promiseReturn) => {
+                res.status(200).json({
+                  message: 'Items purchased successfuly',
+                  user
+                })
+              }, (err) => {
+                console.error(err);
+
+                return res.status(500).json({
+                  message: 'Could not save user on database'
+                });
+              });
+            }
+          } catch (err) {
+            console.error(err);
+
+            return rest.status(500).json({
+              message: 'Could not query inventories on database'
+            });
+          }
+        }
+      });
+    });
   });
 
 module.exports = router;
