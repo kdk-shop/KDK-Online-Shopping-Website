@@ -11,6 +11,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Storage from '@material-ui/icons/Storage';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ListIcon from '@material-ui/icons/List';
 import Logout from '@material-ui/icons/PowerSettingsNew';
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
@@ -70,6 +71,10 @@ class panel extends Component {
          })
          .catch(err=>console.log(err))
   }
+
+  onClickProductList = ()=>{
+    window.location = '/admin/panel/inventory/product-list'
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -96,6 +101,12 @@ class panel extends Component {
                 <Storage />
               </ListItemIcon>
               <ListItemText primary='Storages' />
+            </ListItem>
+            <ListItem button onClick={this.onClickProductList}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary='Product' />
             </ListItem>
             <Divider />
             <ListItem button onClick={this.onClickChangePassword}>

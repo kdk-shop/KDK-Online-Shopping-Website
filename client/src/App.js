@@ -18,8 +18,8 @@ import AdminChangePAssword from '../src/components/admin/changePassword';
 import Storage from '../src/components/admin/storage';
 import AddStorage from '../src/components/admin/addStorage';
 import EditStorage from '../src/components/admin/editStorage';
-import AddProducts from '../src/components/admin/addProducts';
-
+import ProductInformation from '../src/components/admin/productInformation';
+import ProductList from '../src/components/admin/productList';
 
 import './App.css';
 
@@ -45,8 +45,9 @@ class App extends Component {
           <Route path="/admin/panel/storage" component={Storage}/>
           <Route path="/admin/panel/storages/add-storage" component={AddStorage}/>
           <Route path="/admin/panel/storages/edit" component={EditStorage}/>
-          <Route path="/admin/panel/addProducts" component={AddProducts}/>
-          
+          <Route path='/admin/panel/inventory/add-product' component={ProductInformation} />
+          <Route path='/admin/panel/inventory/edit-product' component={ProductInformation} />
+          <Route path='/admin/panel/inventory/product-list' component={ProductList} />
         </div>
         <Footer/>
         </div>

@@ -127,13 +127,11 @@ const styles = theme => ({
                     return(<Grid item key={item._id}  xs={6} >
 
                             <List >
-                              <ListItem>
-                              <Link to={link} style={{ textDecoration: 'none' }}>
+                                <ListItem component="a" href={link} style={{ textDecoration: 'none' }}>
                                 <ListItemText>
                                     <Typography>{item.name}</Typography>
                                     <Typography>{item.address}</Typography>
                                 </ListItemText>
-                                </Link>
                                 <ListItemSecondaryAction>
                                   <Link to={editlink} >
                                     <Tooltip title="Edit">
