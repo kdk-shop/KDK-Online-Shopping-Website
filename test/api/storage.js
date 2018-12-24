@@ -3,9 +3,11 @@ if (process.env.NODE_ENV !== 'TRAVIS') {
   process.env.NODE_ENV = 'TEST';
 }
 
+const assert = require("assert");
 const mongoose = require("mongoose");
 const Storage = require('../../models/Storage');
 const Inventory = require('../../models/Inventory');
+const Update = require('../../models/Update');
 const Product = require('../../models/Product');
 const Admin = require('../../models/Admin');
 
@@ -20,6 +22,7 @@ const keys = require('../../config/keys');
 chai.use(chaiHttp);
 describe('Storages', () => {
   let testStorageId;
+  let testProductId;
 
   beforeEach((done) => {
     //Make sure users collection is empty except for test user
@@ -39,6 +42,7 @@ describe('Storages', () => {
 
       testProduct.save((err, product) => {
         Inventory.deleteMany({}, (err) => {
+          testProductId = product._id;
           let testInventory = new Inventory({
             products: [{
               product: product._id,
@@ -56,7 +60,9 @@ describe('Storages', () => {
 
               testStorage.save((err, storage) => {
                 testStorageId = storage._id;
-                done();
+                Update.deleteMany({}, (err) => {
+                  done();
+                });
               });
             });
           });
@@ -70,7 +76,9 @@ describe('Storages', () => {
     Product.deleteMany({}, (err) => {
       Inventory.deleteMany({}, (err) => {
         Storage.deleteMany({}, (err) => {
-          done();
+          Update.deleteMany({}, (err) => {
+            done();
+          });
         });
       });
     });
@@ -176,11 +184,22 @@ describe('Storages', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.should.be.json;
-          let testStorage = res.body;
+          let testStorage = res.body.storage;
 
           testStorage.should.be.a('object');
           testStorage.should.have.property('name', 'Test storage');
-          done();
+
+          Inventory.find({}).then((inventory) => {
+            if (inventory.length !== 0) {
+              throw new Error('it should delete inventory from database');
+            }
+
+            Update.find({}).then((update) => {
+              assert(update.length === 1);
+              assert(String(update[0].productId) === String(testProductId));
+              done();
+            });
+          });
         });
     });
 

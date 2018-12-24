@@ -10,39 +10,40 @@ const validateStorageInfo =
 
 const Storage = require('../../models/Storage');
 const Inventory = require('../../models/Inventory');
+const Update = require('../../models/Update');
 
 router.get('',
   passport.authenticate('admin-auth', {
     session: false
   }),
   (req, res) => {
-  let pageSize = Number(req.query.pagesize);
-  let currentPage = Number(req.query.page);
-  let sortBy = 'name'
+    let pageSize = Number(req.query.pagesize);
+    let currentPage = Number(req.query.page);
+    let sortBy = 'name'
 
-  const defaultPageSize = 10;
-  const defaultPage = 1;
+    const defaultPageSize = 10;
+    const defaultPage = 1;
 
-  if (isNaN(pageSize)) {
-    pageSize = defaultPageSize;
-  }
-  if (isNaN(currentPage)) {
-    currentPage = defaultPage;
-  }
+    if (isNaN(pageSize)) {
+      pageSize = defaultPageSize;
+    }
+    if (isNaN(currentPage)) {
+      currentPage = defaultPage;
+    }
 
-  return Storage.countDocuments()
-    .then((count) => Storage.find()
-      .skip(pageSize * (currentPage - 1))
-      .limit(pageSize)
-      .sort(sortBy)
-      .then((documents) => {
-        res.status(200).json({
-          message: "Page fetched successfuly",
-          maxStorages: count,
-          storages: documents
-        });
-      }));
-});
+    return Storage.countDocuments()
+      .then((count) => Storage.find()
+        .skip(pageSize * (currentPage - 1))
+        .limit(pageSize)
+        .sort(sortBy)
+        .then((documents) => {
+          res.status(200).json({
+            message: "Page fetched successfuly",
+            maxStorages: count,
+            storages: documents
+          });
+        }));
+  });
 
 router.post("/create/",
   passport.authenticate('admin-auth', {
@@ -197,7 +198,31 @@ router.delete("/delete/:storage_id",
           })
         }
 
-        return res.status(200).json(storage)
+        let products = inventory.products;
+        let promises = [];
+
+        for (let i = 0; i < products.length; i += 1) {
+          promises.push(Update.findOneAndUpdate({
+            productId: products[0].product
+          }, {
+            'productId': products[0].product
+          }, {
+            upsert: true
+          }).exec())
+        }
+        try {
+          Promise.all(promises).then(() => res.status(200).json({
+            message: 'Storage deleted from inventory',
+            storage
+          }))
+        } catch (error) {
+          console.error(error);
+
+          return res.status(500).json({
+            message: 'Could not queue product ' +
+              'availability update on database'
+          });
+        }
       });
     });
   });
