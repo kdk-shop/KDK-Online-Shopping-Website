@@ -151,6 +151,66 @@ router.get('', (req, res) => {
       }));
 });
 
+router.get('/recent', (req, res) => {
+  let count = Number(req.query.count);
+  let sortBy = '-date'
+
+  const defaultCount = 10;
+
+  if (isNaN(count)) {
+    count = defaultCount;
+  }
+
+  return Product.find({})
+    .sort(sortBy)
+    .limit(count)
+    .then((documents) => {
+      res.status(200).json({
+        message: "Page fetched successfuly",
+        products: documents
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+
+      return res.status(500).json({
+        message: 'Could not query database'
+      });
+    });
+});
+
+router.get('/amazing', (req, res) => {
+  let count = Number(req.query.count);
+  let sortBy = '-date'
+
+  const defaultCount = 10;
+
+  if (isNaN(count)) {
+    count = defaultCount;
+  }
+
+  return Product.find({
+      discountedPrice: {
+        '$exists': true
+      }
+    })
+    .sort(sortBy)
+    .limit(count)
+    .then((documents) => {
+      res.status(200).json({
+        message: "Page fetched successfuly",
+        products: documents
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+
+      return res.status(500).json({
+        message: 'Could not query database'
+      });
+    });
+});
+
 /**
  * POST     create new product
  *@route  {POST} /api/products/create/

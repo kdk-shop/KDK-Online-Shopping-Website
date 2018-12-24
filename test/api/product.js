@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'TRAVIS') {
   process.env.NODE_ENV = 'TEST';
 }
 
+const assert = require("assert");
 const mongoose = require("mongoose");
 const Product = require('../../models/Product');
 const User = require('../../models/User');
@@ -70,14 +71,16 @@ describe('Products', () => {
     });
   });
   //Again make sure users collection is empty after tests
-
-  afterEach((done) => {
-    User.deleteMany({}, (err) => {
-      done();
-    });
-  });
-
   /*
+   * afterEach((done) => {
+   * User.deleteMany({}, (err) => {
+   * Product.deleteMany({}, (err) => {
+   * done();
+   * });
+   * });
+   * });
+   *
+   * /*
    * Register test user
    */
   describe('Product admin CRUD operations', () => {
@@ -413,6 +416,7 @@ describe('Products', () => {
             category: "Test" + i % 2,
             brand: "Misc." + i % 3,
             imagePaths: ["test.jpg"],
+            'date': new Date('2015-03-2' + (5 - i)),
             available: i % 2 === 0,
 
             rating: {
@@ -421,6 +425,9 @@ describe('Products', () => {
             }
           });
 
+          if (i % 2 === 1) {
+            newProduct.discountedPrice = 2 * i + 1;
+          }
           products.push(newProduct);
         }
         Product.insertMany(products, (err, docs) => {
@@ -453,6 +460,36 @@ describe('Products', () => {
           testProduct.rating.should.have.property("score", 1);
           testProduct.rating.should.have.property("count", 1);
 
+          done();
+        });
+    });
+
+    it('it should retrieve recent products', (done) => {
+      chai.request(server)
+        .get('/api/products/recent')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.products.should.be.a('array');
+
+          for (let i = 0; i < res.body.products.length - 1; i += 1) {
+            assert(res.body.products[i].date <= res.body.products[i + 1])
+          }
+          done();
+        });
+    });
+
+    it('it should retrieve discounted products', (done) => {
+      chai.request(server)
+        .get('/api/products/amazing')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.products.should.be.a('array');
+
+          for (let i = 0; i < res.body.products.length; i += 1) {
+            assert(res.body.products[i].discountedPrice !== undefined)
+          }
           done();
         });
     });

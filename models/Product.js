@@ -28,19 +28,29 @@ const productSchema = new Schema({
     type: Number,
     index: true
   },
-  specification: Schema.Types.Mixed,
+  //Optional field for discounted items
+  discountedPrice: {
+    type: Number
+  },
+
   available: Boolean,
+
   rating: {
     score: {
       type: Number,
       min: 0,
       max: 5,
-      default:0
+      default: 0
     },
     count: {
       type: Number,
       default: 0
     }
+  },
+
+  date: {
+    type: Date,
+    default: Date.now
   },
 
   reviews: [{
