@@ -27,6 +27,7 @@ const validateProductInfo =
 //load product model
 const Product = require('../../models/Product');
 
+//Setup multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(staticsPath, 'images', 'full'));
@@ -39,6 +40,24 @@ const storage = multer.diskStorage({
 let upload = multer({
   storage
 });
+
+//Helper functions
+function updateProducts(res) {
+  childProcess.exec('/root/update_products.py', (err, stdout, stderr) => {
+    console.log(stdout);
+    console.log(stderr);
+    if (err) {
+      console.error(err);
+
+      return res.status(500).json({
+        message: "Could not update products availability"
+      });
+    }
+    res.status(200).json({
+      message: "Products updated succesfully"
+    });
+  });
+}
 
 /**
  * Get paginated product information
@@ -392,6 +411,15 @@ router.put("/review/:product_id/:user_id", (req, res) => {
       })
   });
 })
+
+router.post('/product_availability', passport.authenticate('admin-auth', {
+  session: false
+}), (req, res) => {
+  if (process.env.NODE_ENV === "PRODUCTION") {
+    console.log("Calling update products availability script");
+    updateProducts(res);
+  }
+});
 
 /**
  * Get product information
