@@ -34,7 +34,8 @@ router.get('',
 
     User.findOne({
         _id: req.user.id
-      }).then((user) => {
+      }).populate('shoppingCart.product')
+      .then((user) => {
         if (user) {
           return res.status(200).json({
             message: 'Cart fetched successfully',

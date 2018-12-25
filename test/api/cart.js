@@ -147,7 +147,9 @@ describe('Carts', () => {
             testCart.should.be.a('array');
             testCart.length.should.eql(1);
             testCart[0].should.be.a('object');
-            testCart[0].should.have.property('product', String(testProductId));
+            testCart[0].should.have.property('product');
+            testCart[0].product.should.have.property('title',
+              'Test product');
             testCart[0].should.have.property('qty', 1);
 
             done();
