@@ -86,7 +86,7 @@ router.post('/:storage_id/',
     if (qty === undefined || qty < 1) {
       return res.status(400).json({
         errors: {
-          qty: "Enter valid quantity (>= 1)"
+          'qty': "Enter valid quantity (>= 1)"
         }
       });
     }
@@ -134,7 +134,7 @@ router.post('/:storage_id/',
 
 
                       Update.findOneAndUpdate({
-                          productId: req.body.productId
+                          'productId': req.body.productId
                         }, {
                           'productId': req.body.productId
                         }, {

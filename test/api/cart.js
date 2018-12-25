@@ -37,6 +37,7 @@ describe('Carts', () => {
         description: "Test description",
         category: "Test",
         brand: "Misc.",
+        available: true,
         imagePaths: ["test.jpg"],
         rating: {
           score: 4,
@@ -50,6 +51,7 @@ describe('Carts', () => {
         description: "Test description",
         category: "Test",
         brand: "Misc.",
+        available: false,
         imagePaths: ["test.jpg"],
         rating: {
           score: 4,
@@ -63,6 +65,7 @@ describe('Carts', () => {
         description: "New description",
         category: "Test",
         brand: "Misc.",
+        available: true,
         imagePaths: ["test.jpg"],
         rating: {
           score: 4,
@@ -219,6 +222,24 @@ describe('Carts', () => {
 
             testCart.should.be.a('array');
             testCart.length.should.eql(0);
+
+            done();
+          });
+      });
+
+    it('it should not add an unavailable product to user cart',
+      (done) => {
+        chai.request(server)
+          .post('/api/users/cart')
+          .set("Authorization", "Bearer " + jwebtoken)
+          .send({
+            productId: testProduct2Id,
+            qty: 2
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.should.be.json;
+            res.body.message.should.eql('Product not available');
 
             done();
           });

@@ -58,6 +58,11 @@ router.get('',
       });
   });
 
+//Add product to users cart
+//body params: 
+//productId: added product's id
+//qty: quantity of requested product 
+
 router.post('',
   passport.authenticate('user-auth', {
     session: false
@@ -97,22 +102,37 @@ router.post('',
             })
           }
 
-          cart.push({
-            product: req.body.productId,
-            qty
-          });
-          user.save((err, doc) => {
-            if (err) {
-              console.error(err);
-
-              return res.status(500).json({
-                message: 'Could not save product in user cart'
+          Product.findOne({
+            _id: req.body.productId
+          }).then((product) => {
+            if (product === undefined || product.available !== true) {
+              return res.status(400).json({
+                message: 'Product not available'
               });
             }
+            cart.push({
+              product: req.body.productId,
+              qty
+            });
+            user.save((err, doc) => {
+              if (err) {
+                console.error(err);
 
-            return res.status(201).json({
-              message: 'Product added to user cart',
-              user: doc
+                return res.status(500).json({
+                  message: 'Could not save product in user cart'
+                });
+              }
+
+              return res.status(201).json({
+                message: 'Product added to user cart',
+                user: doc
+              });
+            });
+          }).catch((err) => {
+            console.error(err);
+
+            return res.status(500).json({
+              message: 'Could not query product on database'
             });
           });
         } else {
