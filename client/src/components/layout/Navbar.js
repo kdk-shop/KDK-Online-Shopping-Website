@@ -1,22 +1,56 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-
-
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Badge from '@material-ui/core/Badge';
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
+const styles = theme => ({
+ 
+  badge: {
+    top: 1,
+    right: -15,
+    // The border color match the background color.
+    border: `2px solid ${
+      theme.palette.type === 'dark' ? '#2b2f35' : '#2b2f35'
+    }`,
+  },
+  icon:{
+    color:'#b9bfc9'
+  }
+});
 
 class Navbar extends Component {
 
   state = {
     isLogin: false,
-    open:false
+    open:false,
+    cart:[],
   }
+
+  componentWillMount(){
+    axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+    
+    axios.get(`/api/carts/`)
+    .then(res=>{
+      console.log(res.data)
+      this.setState({
+          cart:res.data.cart,
+      })
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
   componentDidMount(){
     console.log(localStorage.getItem("jwt_token"))
     if(localStorage.getItem("jwt_token")){
@@ -44,10 +78,12 @@ class Navbar extends Component {
          .catch(err=>console.log(err))
     }
   }
-
+  onClick=()=>{
+    window.location="/cart"
+  }
   
   render() {
-    
+    const { classes } = this.props;
     return (
         <nav className="navbar navbar-expand-sm navbar-dark  mb-4" style={{ background: '#2b2f35' }}>
         <div className="container">
@@ -74,6 +110,13 @@ class Navbar extends Component {
               <li className="nav-item">
                 <Link className="nav-link" onClick={this.logout} to={this.state.isLogin?"/":"/login"}>{this.state.isLogin?"Log Out":"Log In"}</Link>
               </li>
+              {this.state.isLogin? <li className="nav-item">
+              <IconButton aria-label="Cart" onClick={this.onClick} style={{outline: 'none'}}>
+                <Badge badgeContent={this.state.cart.length} color="primary" classes={{ badge: classes.badge }}>
+                  <ShoppingCartIcon className={ classes.icon }/>
+                </Badge>
+              </IconButton>
+              </li>:''}
              
             </ul>
           </div>
@@ -94,5 +137,8 @@ class Navbar extends Component {
   }
 }
 
+Navbar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-export default Navbar;
+export default withStyles(styles)(Navbar);

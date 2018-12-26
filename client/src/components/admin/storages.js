@@ -77,6 +77,7 @@ const styles = theme => ({
   }
 
   handleDelete=()=>{
+    axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
     axios.delete(`/api/storages/delete/${this.state.deleted_id}`)
     .then(()=>{
       window.location ='/admin/panel/storages'

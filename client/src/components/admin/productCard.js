@@ -102,7 +102,7 @@ class ProductCard extends Component {
 
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Tooltip title="Delete" >
+                                    <Tooltip title="Delete" onClick={() => this.props.handleDelete(this.state.id,)} >
                                         <IconButton >
                                             <DeleteIcon />
                                         </IconButton>

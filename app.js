@@ -11,6 +11,7 @@ const products = require('./routes/api/products');
 const admins = require('./routes/api/admins');
 const storages = require('./routes/api/storages');
 const inventories = require('./routes/api/inventories');
+const carts = require('./routes/api/carts');
 
 const staticsPath = require('./config/storage').staticsPath;
 
@@ -57,6 +58,7 @@ app.use('/api/products', products);
 app.use('/api/admins', admins);
 app.use('/api/storages', storages);
 app.use('/api/inventories', inventories);
+app.use('/api/carts', carts);
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.get('/*', (req, res) => {

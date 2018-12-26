@@ -124,7 +124,7 @@ router.post('',
               }
 
               return res.status(201).json({
-                message: 'Product added to user cart',
+                message: 'Product added to your cart',
                 user: doc
               });
             });

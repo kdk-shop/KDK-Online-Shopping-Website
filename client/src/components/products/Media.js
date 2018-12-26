@@ -11,6 +11,14 @@ import {Star,Favorite} from '@material-ui/icons';
 import Badge from '@material-ui/core/Badge';
 import red from '@material-ui/core/colors/red';
 import Tooltip from '@material-ui/core/Tooltip';
+import { IconButton} from '@material-ui/core';
+import axios from 'axios'
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+
+function TransitionUp(props) {
+  return <Slide {...props} direction="up" />;
+}
 
 const styles = theme => ({
   root: {
@@ -39,6 +47,12 @@ const styles = theme => ({
     border: `2px solid ${
       theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
     }`,
+  
+  },
+  margin: {
+    margin: "0 auto",
+    color : "red",
+    
   },
   favoritIcon:{
     color: red[800],
@@ -53,7 +67,9 @@ class ComplexGrid extends Component {
   totalScore=parseInt('0');
   totalRecommended=parseInt('0');
     state={
-        reviews : this.props.reviews
+        reviews : this.props.reviews,
+        open:false,
+        message:''
     }
 
     componentWillMount(){
@@ -63,6 +79,35 @@ class ComplexGrid extends Component {
           this.totalRecommended++
         }
       }
+    }
+    onClick=()=>{
+
+      const product={
+        productId:this.props.id,
+        qty:1
+      }
+  
+      axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+      axios.post('/api/carts/',product)
+        .then(res=>{
+          this.setState({
+            open:true,
+            message:res.data.message
+          })
+        })
+        .catch(err=>{
+          this.setState({
+            open:true,
+            message:err.response.data.message
+          })
+        })
+    }
+    handleClose = () => {
+      this.setState({ open: false });
+    };
+  
+    handleExit = ()=>{
+      
     }
 
     render(){
@@ -87,7 +132,14 @@ class ComplexGrid extends Component {
                     <Typography gutterBottom>{this.props.description}</Typography>
                   </Grid>
                   <Grid item>
-                    <ShoppingCart /> 
+                  <Tooltip title="Buy" placement="top">
+                    <IconButton disabled={!this.props.available} onClick={this.onClick} style={{outline: 'none'}}>
+                      <ShoppingCart fontSize="large"/>
+                    </IconButton>
+                    </Tooltip>
+                    <Typography style={{ visibility: this.props.available ? "hidden" : "visible" }} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
+                Not Available
+              </Typography>
                   <Typography variant="h5"><strong>${this.props.price}</strong></Typography>
                 </Grid>
                   <Grid item>
@@ -111,7 +163,17 @@ class ComplexGrid extends Component {
             </Grid>
             
           </Paper>
-          
+          <Snackbar 
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  transitionDuration={1500}
+                  onEntered={this.handleExit}
+                  TransitionComponent={TransitionUp}
+                  ContentProps={{
+                    'aria-describedby': 'message-id',
+                  }}
+                  message={<span id="message-id">{this.state.message}</span>}
+                 />
         </div>
       );
     }

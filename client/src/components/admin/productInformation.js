@@ -5,6 +5,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip'
+import { Link } from 'react-router-dom'
+import ArrowBack from '@material-ui/icons/ArrowBack';
+
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -81,6 +86,13 @@ class ProductInformation extends Component{
         const { classes } = this.props;
         return(
             <div >
+                <Tooltip title="Back">
+                    <Link to="/admin/panel/inventory/product-list">
+                        <Fab color="primary" aria-label="Add" className={classes.fab}>
+                            <ArrowBack />
+                        </Fab>
+                    </Link>
+                </Tooltip>
                 <Grid container alignItems="center">
                     <Grid item xs={4}>
                         <img style={{height:"400px",width:"80%"}}id="product-image" alt="product" />
@@ -107,7 +119,7 @@ class ProductInformation extends Component{
                                     label="Brand"
                                     className={classes.textField}
                                     value={this.state.brand}
-                                    onChange={this.handleChange('title')}
+                                    onChange={this.handleChange('brand')}
                                     margin="normal"
                                     variant="outlined"
                                 />

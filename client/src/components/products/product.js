@@ -18,21 +18,25 @@ class Product extends Component {
             // this.setState({message:err.response.data.message})
         })
   }
+ 
   render() {
    
     return (
         this.state.product === null?null:(
         <div>
           <Media
+          id={this.state.product._id}
           brand = {this.state.product.brand}
           title = {this.state.product.title}
           image = {this.state.product.imagePaths[0]}
           price = {this.state.product.price}
           description= {this.state.product.description}
+          available= {this.state.product.available}
           reviews={this.state.product.reviews}
           />
           <br/>
           <Comments comments={this.state.product}/>
+         
        </div>
        )
     )

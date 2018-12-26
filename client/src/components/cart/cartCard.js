@@ -13,6 +13,11 @@ import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import axios from 'axios'
+
 const styles = theme=>({
     card: {
         height:"100%",
@@ -32,7 +37,7 @@ const styles = theme=>({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width: 50,
+        width: 100,
         height:60
     },
     button: {
@@ -46,29 +51,77 @@ const styles = theme=>({
     }
 });
 
-class InventoryCard extends Component{
+class cartCard extends Component{
+    constructor(){
+        super();
+        this.state = {
+            number:1,
+            id:null,
+            isDisabled: true,
+            open:false,
+            productId:'',
+            openSnack:false
+            
+        }
 
-    state = {
-        number:0,
-        id:null,
-        isDisabled: true
     }
     handleChange = event => {
         if(event.target.value !== "-1"){
             this.setState({
                 number: parseInt(event.target.value),
-                isDisabled: false
             });
         }
     };
 
+    handleClickOpen = () => {
+        this.setState({ open: true});
+    };
+
+    handleClose = () => {
+        this.setState({ open: false});
+    };
+
+    handleDelete=()=>{
+        axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+       
+        const product={
+            productId:(this.state.productId)
+        }
+        console.log(product)
+        axios.delete('/api/carts/',{data:product})
+        .then(()=>{
+          window.location ='/cart'
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+        this.setState({ open: false });
+      
+    }
+
     componentWillMount(){
-        this.setState({number:this.props.count,id:this.props.id})
+        this.setState({
+            number:this.props.qty,
+            id:this.props.id
+        })
+    }
+    clickChange=(id)=>{
+        axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+        const update={
+            qty:this.state.number,
+            productId:id
+        }
+        axios.patch('/api/carts',update)
+        .then((res)=>{
+            console.log(res)
+            // window.location="/cart"
+        })
     }
     render(){
+        this.state.productId=this.props.productId
         const { classes } = this.props;
-        // console.log(props.available)
         return (
+            <div>
             <Card className={classes.card}>
                 <Grid container direction="column" justify="space-evenly" className={classes.fullHeight}>
                     <Grid item className={classes.item} >
@@ -92,11 +145,12 @@ class InventoryCard extends Component{
                             
                             <Grid container justify="space-between" alignItems="center" alignContent="center" >
                                 <Grid item xs={8}>
-                                    <Grid container justify="center" alignItems="center" alignContent="center">
+                                    <Grid container  alignItems="center" alignContent="center">
                                         <Grid item>
                                             <TextField
                                                 id="standard-number"
                                                 label="Quantity"
+                                                variant="outlined"
                                                 value={this.state.number}
                                                 onChange={this.handleChange}
                                                 type="number"
@@ -105,18 +159,14 @@ class InventoryCard extends Component{
                                                     shrink: true,
                                                 }}
                                                 margin="normal"
+                                                onClick={this.clickChange(this.props.productId)}
                                             />
-                                        </Grid>
-                                        <Grid item>
-                                            <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.props.changeQty(this.state.number, this.state.id); this.setState({ isDisabled: true }) }}>
-                                                Change
-                                            </Button>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Tooltip title="Delete" >
-                                        <IconButton onClick={()=>this.props.onDelete(this.state.id)}>
+                                    <IconButton onClick={()=>this.handleClickOpen(this.props.productId)}>
                                             <DeleteIcon />
                                         </IconButton>
                                     </Tooltip>
@@ -127,13 +177,32 @@ class InventoryCard extends Component{
                     </Grid>
                 </Grid>
             </Card>
+             <div>
+             <Dialog
+               open={this.state.open}
+               onClose={this.handleClose}
+               aria-labelledby="alert-dialog-title"
+               aria-describedby="alert-dialog-description"
+             >
+               <DialogTitle id="alert-dialog-title">{"Are you sure to delete?"}</DialogTitle>
+               <DialogActions>
+                 <Button onClick={this.handleDelete} color="primary">
+                   Yes
+                 </Button>
+                 <Button onClick={this.handleClose} color="primary" autoFocus>
+                   No
+                 </Button>
+               </DialogActions>
+             </Dialog>
+             </div>
+             </div>
         );
     }
     
 }
 
-InventoryCard.propTypes = {
+cartCard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(InventoryCard);
+export default withStyles(styles)(cartCard);

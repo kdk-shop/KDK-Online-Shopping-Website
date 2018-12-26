@@ -20,6 +20,8 @@ import AddStorage from '../src/components/admin/addStorage';
 import EditStorage from '../src/components/admin/editStorage';
 import ProductInformation from '../src/components/admin/productInformation';
 import ProductList from '../src/components/admin/productList';
+import AddProduct from '../src/components/admin/addProduct';
+import Cart from '../src/components/cart/cart';
 
 import './App.css';
 
@@ -48,6 +50,9 @@ class App extends Component {
           <Route path='/admin/panel/inventory/add-product' component={ProductInformation} />
           <Route path='/admin/panel/inventory/edit-product' component={ProductInformation} />
           <Route path='/admin/panel/inventory/product-list' component={ProductList} />
+          <Route path='/admin/panel/inventory/add' component={AddProduct}/>
+          <Route path='/cart' component={Cart} />
+          
         </div>
         <Footer/>
         </div>
