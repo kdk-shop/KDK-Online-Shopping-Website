@@ -19,6 +19,7 @@ const passport = require('passport');
 const multer = require('multer');
 const staticsPath = require('../../config/storage').staticsPath;
 const path = require('path');
+const childProcess = require('child_process');
 
 //load validators
 const validateProductInfo =
