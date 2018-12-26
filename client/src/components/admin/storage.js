@@ -92,6 +92,7 @@ const styles = theme => ({
     request.patch(null, product)
       .then(() => {
         this.setState({ openS: true })
+
         // window.location = '/admin/panel/storage?id=' + window.location.search.substr(4);
       }).catch(err => console.log(err))
 

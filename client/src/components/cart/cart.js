@@ -75,7 +75,7 @@ class cart extends Component {
   };
   
   handleExit = ()=>{
-    window.location = "/products"
+    window.location = "/cart"
   }
   
   handleClose = () => {
@@ -124,7 +124,28 @@ class cart extends Component {
             }
             
             
-            
+            handleChangeQty = (newQty,id)=>{
+              const product = {
+                productId: id,
+                qty: newQty
+              }
+              let request = axios.create({
+                method: 'PATCH',
+                baseURL: `/api/carts/`,
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt_token")
+                },
+              });
+             request.patch(null, product)
+               .then((res) => {
+                 this.setState({ openSnackbar: true ,message:res.data.message})
+                  console.log(res)
+               }).catch(err =>{
+                 this.setState({openSnackbar: true,message:err.response.data.message})
+               } )
+         
+            }
+         
             handleStep = step => () => {
               this.setState({
                 activeStep: step,
@@ -164,7 +185,8 @@ class cart extends Component {
                             brand={item.product.brand}
                             price={item.product.price}
                             title={item.product.title}
-                            qty={item.qty}        
+                            qty={item.qty}    
+                            changeQty={this.handleChangeQty}    
                             />
                         </Grid>)
                     })}
@@ -258,7 +280,7 @@ class cart extends Component {
                maxWidth="lg"
                fullWidth
              >
-               <DialogTitle >{"Press Ok to complete your shopping"}</DialogTitle>
+               <DialogTitle >{"Did You Finish Your Shopping?"}</DialogTitle>
                <DialogActions>
                  <Button onClick={this.handlePurchase} color="primary">
                    OK

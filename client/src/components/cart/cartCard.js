@@ -18,6 +18,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios'
 
+
 const styles = theme=>({
     card: {
         height:"100%",
@@ -66,11 +67,12 @@ class cartCard extends Component{
 
     }
     handleChange = event => {
-        if(event.target.value !== "-1"){
+        if(event.target.value !== "0"){
             this.setState({
                 number: parseInt(event.target.value),
             });
         }
+        this.state.isDisabled=false
     };
 
     handleClickOpen = () => {
@@ -90,6 +92,7 @@ class cartCard extends Component{
         console.log(product)
         axios.delete('/api/carts/',{data:product})
         .then(()=>{
+
           window.location ='/cart'
         })
         .catch(err=>{
@@ -102,23 +105,14 @@ class cartCard extends Component{
     componentWillMount(){
         this.setState({
             number:this.props.qty,
-            id:this.props.id
+            productId:this.props.productId
         })
+       
+        
     }
-    clickChange=(id)=>{
-        // axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
-        // const update={
-        //     qty:this.state.number,
-        //     productId:id
-        // }
-        // axios.patch('/api/carts',update)
-        // .then((res)=>{
-        //     console.log(res)
-        //     // window.location="/cart"
-        // })
-    }
+
     render(){
-        this.state.productId=this.props.productId
+        console.log('qty='+this.state.number+' id='+this.state.productId)
         const { classes } = this.props;
         return (
             <div>
@@ -159,11 +153,16 @@ class cartCard extends Component{
                                                     shrink: true,
                                                 }}
                                                 margin="normal"
-                                                onClick={this.clickChange(this.props.productId)}
                                             />
+                                        </Grid>
+                                        <Grid item>
+                                            <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.props.changeQty(this.state.number, this.state.productId); this.setState({ isDisabled: true }) }}>
+                                                Change
+                                            </Button>
                                         </Grid>
                                     </Grid>
                                 </Grid>
+                                
                                 <Grid item xs={2}>
                                     <Tooltip title="Delete" >
                                     <IconButton onClick={()=>this.handleClickOpen(this.props.productId)}>

@@ -201,7 +201,7 @@ router.patch('',
             }
 
             return res.status(200).json({
-              message: 'Product added to user cart',
+              message: 'Product quantity updated',
               user: doc
             });
           });
@@ -252,12 +252,12 @@ router.delete('',
               console.error(err);
 
               return res.status(500).json({
-                message: 'Could not save product in user cart'
+                message: 'Could not save product in your cart'
               });
             }
 
             return res.status(200).json({
-              message: 'Product deleted from user cart',
+              message: 'Product deleted from your cart',
               user: doc
             });
           });
