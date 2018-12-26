@@ -10,7 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
-
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = theme =>({
     card: {
@@ -79,6 +80,14 @@ class ImgMediaCard extends Component{
         const { classes } = this.props;
     
         return (
+            <div style={{height:'100%'}}>
+            <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    Add Product to Inventory
+                </Typography>
+                </Toolbar>
+            </AppBar>
             <Card className={classes.card}>
                 <CardActionArea className={classes.item}>
 
@@ -117,6 +126,7 @@ class ImgMediaCard extends Component{
                     <div style={{color:"red"}}>{this.state.message === '' ? null:this.state.message}</div>
                 </CardActions>
             </Card>
+            </div>
         );
     }
     

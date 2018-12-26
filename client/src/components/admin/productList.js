@@ -14,6 +14,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     fab: {
@@ -91,6 +94,14 @@ class storage extends Component {
         const { classes } = this.props;
         return (
             <div>
+            <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                   Products List
+                </Typography>
+                </Toolbar>
+            </AppBar>
+            <div>
                 <Tooltip title="Back">
                     <Link to="/admin/panel">
                         <Fab color="primary" aria-label="Add" className={classes.fab}>
@@ -150,6 +161,7 @@ class storage extends Component {
                     pageRangeDisplayed={5}
                     onChange={this.handlePageChange}
                 />
+            </div>
             </div>
         )
     }
