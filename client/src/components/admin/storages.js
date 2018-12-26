@@ -101,7 +101,7 @@ const styles = theme => ({
         <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
                 <Toolbar>
                 <Typography variant="h6" color="inherit" noWrap>
-                    
+                    Storages List
                 </Typography>
                 </Toolbar>
             </AppBar>
@@ -119,7 +119,7 @@ const styles = theme => ({
               </Fab>
             </Link>
           </Tooltip>
-          <h1 className="display-4 text-center">All Storages</h1>
+          {/* <h1 className="display-4 text-center">All Storages</h1> */}
             <hr/>
             <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
                 {this.state.storages.map((item)=>{

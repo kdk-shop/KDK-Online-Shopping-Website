@@ -43,7 +43,8 @@ class ProductInformation extends Component{
         brand: '',
         category: '',
         price:'',
-        image: ''
+        image: null,
+        edit:false
     }
     
     handleChange = name => event => {
@@ -53,6 +54,7 @@ class ProductInformation extends Component{
                 var output = document.getElementById('product-image');
                 output.src = reader.result;
             };
+            this.setState({image:event.target.files[0]})
             reader.readAsDataURL(event.target.files[0]);
             console.log(event.target.files[0])
         }
@@ -67,10 +69,11 @@ class ProductInformation extends Component{
     componentDidMount(){
         let id = window.location.search.substr(4);
         if(id){
+            
             axios.get(`/api/products/${id}`)
                 .then(res => {
                     console.log(res.data)
-                    this.setState({ title: res.data.title,description: res.data.description,brand:res.data.brand,category:res.data.category,price:res.data.price })
+                    this.setState({ edit:true,title: res.data.title,description: res.data.description,brand:res.data.brand,category:res.data.category,price:res.data.price })
                     var output = document.getElementById('product-image');
                     output.src = res.data.imagePaths[0];
                 })
@@ -80,6 +83,43 @@ class ProductInformation extends Component{
         }else{
             var output = document.getElementById('product-image');
             output.src = "https://cdn11.bigcommerce.com/s-auu4kfi2d9/stencil/59606710-d544-0136-1d6e-61fd63e82e44/e/74686f40-d544-0136-c2c6-0df18b975cb0/icons/icon-no-image.svg";
+        }
+    }
+
+    handleClick = ()=>{
+        if(this.state.edit){
+            if (this.state.title && this.state.price && this.state.description && this.state.category && this.state.brand) {
+
+                let data = {
+                    title: this.state.title,
+                    price: this.state.price,
+                    description: this.state.description,
+                    category: this.state.category,
+                    brand: this.state.brand
+                }
+                axios.put(`/api/products/update/${window.location.search.substr(4)}`, data)
+                    .then((res) => {
+                        window.location = '/admin/panel/inventory/product-list';
+                    })
+                    .catch((err) => console.log(err))
+            }
+        
+        }else{
+            if (this.state.title && this.state.price && this.state.description && this.state.category && this.state.brand){
+
+            let data = {
+                title: this.state.title,
+                price: this.state.price,
+                description: this.state.description,
+                category: this.state.category,
+                brand: this.state.brand
+            }
+            axios.post('/api/products/create/',data)
+            .then((res)=>{
+                window.location = '/admin/panel/inventory/product-list';
+            })
+            .catch((err)=>console.log(err))
+            }
         }
     }
     render(){
@@ -181,8 +221,8 @@ class ProductInformation extends Component{
                         
                     </Grid>
                 </Grid>
-                <Button variant="contained" color="primary" className={classes.button} type="submit">
-                    Add Product
+                <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClick} type="submit">
+                    {this.state.edit?"Change Information":"Add Product"}
                 </Button>
                 <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
                     Cancel

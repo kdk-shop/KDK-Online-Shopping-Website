@@ -141,6 +141,7 @@ class panel extends Component {
           <Button variant="contained" color="primary" onClick={this.onClickAvailability}>
             Update Availability
         </Button>
+        <hr/>
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum

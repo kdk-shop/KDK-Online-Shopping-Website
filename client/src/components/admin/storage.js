@@ -16,6 +16,10 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import { Typography } from '@material-ui/core';
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -133,6 +137,13 @@ const styles = theme => ({
     let addLink = "/admin/panel/inventory/add?id="+this.props.location.search.substr(4)
     return (
       <div>
+        <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    Inventories List
+                </Typography>
+                </Toolbar>
+            </AppBar>
        <Tooltip title="Back">
           <Link to="/admin/panel/storages">
             <Fab color="primary" aria-label="Back" className={classes.fab}>
@@ -147,7 +158,7 @@ const styles = theme => ({
             </Fab>
           </Link>
         </Tooltip>
-        <h1 className="display-4 text-center">{this.state.name}</h1>
+        {/* <h1 className="display-4 text-center"></h1> */}
         <hr/>
         <Grid container spacing={24} style={{ dispaly: "block", margin: "0 auto" }}>
           {this.state.products.map((item) => {
