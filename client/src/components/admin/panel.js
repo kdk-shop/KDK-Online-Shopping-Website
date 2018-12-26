@@ -18,6 +18,7 @@ import Slide from '@material-ui/core/Slide'
 import axios from 'axios'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -75,6 +76,17 @@ class panel extends Component {
   onClickProductList = ()=>{
     window.location = '/admin/panel/inventory/product-list'
   }
+
+  onClickAvailability = ()=>{
+    axios.post('/api/products/product_availability')
+      .then(res => {
+        console.log(res.data.message)
+      })
+      .catch(err => {
+        console.log(err.respones.data.message)
+      })
+    
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -125,7 +137,9 @@ class panel extends Component {
         <Divider />
       </Drawer>
       <main className={classes.content}>
-       
+          <Button variant="contained" color="primary" onClick={this.onClickAvailability}>
+            Update Availability
+        </Button>
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum

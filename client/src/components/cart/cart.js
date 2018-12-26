@@ -281,9 +281,9 @@ class cart extends Component {
                onClose={this.handleClose}
                aria-labelledby="max-width-dialog-title"
              >
-               <DialogTitle > {"Order Total:"+totalPrice }
+               <DialogTitle > {"Total Price  :  "+totalPrice }
             </DialogTitle>
-               <DialogTitle > {"Total Quantity:"+totalQTY}
+               <DialogTitle > {"Total Quantity  :  "+totalQTY}
             </DialogTitle>
                <DialogContent>
             <DialogContentText>
