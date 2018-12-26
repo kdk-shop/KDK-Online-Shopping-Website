@@ -121,12 +121,12 @@ class cartCard extends Component{
                 <Grid container direction="column" justify="space-evenly" className={classes.fullHeight}>
                     <Grid item className={classes.item} >
                         <CardActionArea className={classes.fullHeight}>
-                            <CardMedia
+                        <Link to={link} style={{textDecoration:'none'}}> <CardMedia
                                 className={classes.media}
                                 image={this.props.image}
                                 title={this.props.title} />
                             
-                            <Link to={link}> <CardContent>
+                            <CardContent>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {this.props.brand} - {this.props.title}
                                 </Typography>
