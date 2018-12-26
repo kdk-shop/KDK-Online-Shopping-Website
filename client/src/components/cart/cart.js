@@ -9,6 +9,8 @@ import StepButton from '@material-ui/core/StepButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogContent from '@material-ui/core/DialogContent';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button'
@@ -20,6 +22,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -277,13 +280,19 @@ class cart extends Component {
                open={this.state.open}
                onClose={this.handleClose}
                aria-labelledby="max-width-dialog-title"
-               maxWidth="lg"
-               fullWidth
              >
-               <DialogTitle >{"Did You Finish Your Shopping?"}</DialogTitle>
+               <DialogTitle > {"Order Total:"+totalPrice }
+            </DialogTitle>
+               <DialogTitle > {"Total Quantity:"+totalQTY}
+            </DialogTitle>
+               <DialogContent>
+            <DialogContentText>
+             
+            </DialogContentText>
+          </DialogContent>
                <DialogActions>
                  <Button onClick={this.handlePurchase} color="primary">
-                   OK
+                   Order
                  </Button>
                  <Button onClick={this.handleClose} color="primary" autoFocus>
                    Cancel

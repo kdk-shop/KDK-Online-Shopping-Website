@@ -88,7 +88,7 @@ class MediaCard extends Component {
     const { classes } = this.props;
     const show = this.props.available;
     return (
-      <div>
+      <div className={classes.fullHeight}>
         <Card className={classes.card}>
         <Grid container direction="column" justify="space-between" className={classes.fullHeight}>
           <Grid item className={classes.item} >
