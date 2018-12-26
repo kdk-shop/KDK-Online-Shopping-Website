@@ -176,7 +176,7 @@ class cart extends Component {
     const { activeStep } = this.state;
 
     return (
-      <div>
+      <div style={{height:'100%'}}>
           {this.state.cart==null?'null': 
           <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
                     {this.state.cart.map((item)=>{
