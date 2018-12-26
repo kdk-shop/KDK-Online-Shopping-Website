@@ -13,7 +13,11 @@ import axios from 'axios';
 
 const styles = theme =>({
     card: {
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
         maxWidth: 345,
+        margin: "0 auto"
     },
     media: {
         // ⚠️ object-fit is not supported by IE 11.
@@ -25,6 +29,12 @@ const styles = theme =>({
         width: 50,
         height: 60
     },
+    item: {
+        flex: 1
+    },
+    fullHeight: {
+        height: "100%"
+    }
 });
 
 class ImgMediaCard extends Component{
@@ -69,7 +79,7 @@ class ImgMediaCard extends Component{
     
         return (
             <Card className={classes.card}>
-                <CardActionArea>
+                <CardActionArea className={classes.item}>
 
                     <CardContent>
                         <Typography component="h5" variant="h5">
