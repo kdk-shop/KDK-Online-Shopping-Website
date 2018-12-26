@@ -78,12 +78,13 @@ class panel extends Component {
   }
 
   onClickAvailability = ()=>{
+    axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
     axios.post('/api/products/product_availability')
       .then(res => {
-        console.log(res.data.message)
+        // console.log('')
       })
       .catch(err => {
-        console.log(err.respones.data.message)
+        // console.log(err.respones.data.message)
       })
     
   }
