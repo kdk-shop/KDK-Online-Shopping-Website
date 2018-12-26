@@ -17,7 +17,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios'
-
+import {Link} from 'react-router-dom'
 
 const styles = theme=>({
     card: {
@@ -114,8 +114,9 @@ class cartCard extends Component{
     render(){
         console.log('qty='+this.state.number+' id='+this.state.productId)
         const { classes } = this.props;
+        const link=`/product?id=${this.state.productId}`
         return (
-            <div>
+            <div style={{height:'100%'}}>
             <Card className={classes.card}>
                 <Grid container direction="column" justify="space-evenly" className={classes.fullHeight}>
                     <Grid item className={classes.item} >
@@ -124,7 +125,8 @@ class cartCard extends Component{
                                 className={classes.media}
                                 image={this.props.image}
                                 title={this.props.title} />
-                            <CardContent>
+                            
+                            <Link to={link}> <CardContent>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {this.props.brand} - {this.props.title}
                                 </Typography>
@@ -132,6 +134,7 @@ class cartCard extends Component{
                                     <strong>${this.props.price}</strong>
                                 </Typography>
                             </CardContent>
+                            </Link>
                         </CardActionArea>
                     </Grid>
                     <Grid item style={{ display: "inline-grid"}}>
