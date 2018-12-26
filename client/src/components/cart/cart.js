@@ -86,11 +86,12 @@ class cart extends Component {
     axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
     
     axios.post('/api/carts/checkout')
-    .then(()=>{
-      this.setState({openSnackbar:true})
+    .then((res)=>{
+      this.setState({openSnackbar:true,message:res.data.message})
     })
     .catch(err=>{
       console.log(err)
+      this.setState({openSnackbar:true,message:err.response.data.message})
     })
     this.setState({ open: false,activeStep:0});
     
@@ -271,13 +272,13 @@ class cart extends Component {
              <Snackbar
           open={this.state.openSnackbar}
           onClose={this.handleCloseSnack}
-          transitionDuration={1500}
+          transitionDuration={2000}
           onEntered={this.handleExit}
           TransitionComponent={TransitionUp}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Shopping Completed, Thank you!</span>}
+          message={<span id="message-id">{this.state.message}</span>}
         />
       </div>
     )

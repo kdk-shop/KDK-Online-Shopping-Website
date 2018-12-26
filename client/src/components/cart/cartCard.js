@@ -106,16 +106,16 @@ class cartCard extends Component{
         })
     }
     clickChange=(id)=>{
-        axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
-        const update={
-            qty:this.state.number,
-            productId:id
-        }
-        axios.patch('/api/carts',update)
-        .then((res)=>{
-            console.log(res)
-            // window.location="/cart"
-        })
+        // axios.defaults.headers.common['Authorization'] ="Bearer " + localStorage.getItem("jwt_token");
+        // const update={
+        //     qty:this.state.number,
+        //     productId:id
+        // }
+        // axios.patch('/api/carts',update)
+        // .then((res)=>{
+        //     console.log(res)
+        //     // window.location="/cart"
+        // })
     }
     render(){
         this.state.productId=this.props.productId
