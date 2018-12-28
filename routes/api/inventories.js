@@ -11,6 +11,89 @@ const Inventory = require('../../models/Inventory');
 const Product = require('../../models/Product');
 const Update = require('../../models/Update');
 
+/**
+ * Get products not in inventory
+ *@route  {GET} /api/inventories/:storage_id/products_not_in
+ *@name   Get Products not in inventory
+ *@queryparam {String} [title] String to search for in titles
+ */
+router.get('/:storage_id/products_not_in',
+  passport.authenticate('admin-auth', {
+    session: false
+  }),
+  (req, res) => Storage.findOne({
+    _id: req.params.storage_id
+  }).then((storage) => {
+
+    let queryParam = {};
+
+    if (req.query.title) {
+      queryParam.title = new RegExp(req.query.title, 'i')
+    }
+
+    if (storage) {
+      Inventory.findOne({
+          _id: storage.inventory
+        })
+        .then(async (inventory) => {
+          let productsInInventory = {};
+          let productsNotIn = [];
+
+          for (let i = 0; i < inventory.products.length; i += 1) {
+            productsInInventory[inventory.products[i].product] = true;
+          }
+
+          let i = 0;
+
+          while (productsNotIn.length < 20) {
+            let fetchedProduct;
+
+            try {
+              fetchedProduct = await Product.findOne(queryParam).skip(i)
+                .exec();
+            } catch (err) {
+
+              return res.status(500).json({
+                message: 'Could not querry products'
+              });
+            }
+            if (fetchedProduct === null) {
+              break;
+            }
+
+            if (productsInInventory[fetchedProduct._id] !== true) {
+              productsNotIn.push(fetchedProduct);
+            }
+
+            i += 1;
+          }
+
+          res.status(200).json({
+            message: "Page fetched successfuly",
+            products: productsNotIn
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+
+          return res.status(500).json({
+            message: "Server could not retrieve inventory from database"
+          });
+        });
+    } else {
+      return res.status(404).json({
+        message: 'Storage not found'
+      });
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+
+    return res.status(500).json({
+      message: "Server could not retrieve storage from database"
+    })
+  }));
+
 //Retrieve list of products in inventory
 router.get('/:storage_id/',
   passport.authenticate('admin-auth', {

@@ -172,6 +172,49 @@ describe('Storages', () => {
           });
       });
 
+    it('it should retrieve list of' +
+      ' products not in inventory without query parameter', (done) => {
+        chai.request(server)
+          .get('/api/inventories/' + testStorageId + '/products_not_in')
+          .set("Authorization", "Bearer " + jwebtoken)
+          .end((err, res) => {
+
+            res.should.have.status(200);
+            res.should.be.json;
+            let products = res.body.products;
+
+
+            products.should.be.a('array');
+            products.length.should.eql(1);
+            products[0].title.should.eql('New product')
+
+            done();
+          });
+      });
+
+    it('it should retrieve list of' +
+      ' products not in inventory with query parameter', (done) => {
+        chai.request(server)
+          .get('/api/inventories/' + testStorageId + '/products_not_in')
+          .query({
+            'title': 'New'
+          })
+          .set("Authorization", "Bearer " + jwebtoken)
+          .end((err, res) => {
+
+            res.should.have.status(200);
+            res.should.be.json;
+            let products = res.body.products;
+
+
+            products.should.be.a('array');
+            products.length.should.eql(1);
+            products[0].title.should.eql('New product')
+
+            done();
+          });
+      });
+
     it('it should add a product to inventory', (done) => {
       chai.request(server)
         .post('/api/inventories/' + testStorageId)
