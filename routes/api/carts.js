@@ -12,6 +12,7 @@ const User = require('../../models/User');
 const Product = require('../../models/Product');
 const Inventory = require('../../models/Inventory');
 const Update = require('../../models/Update');
+const Purchase = require('../../models/Purchase');
 
 router.get('',
   passport.authenticate('user-auth', {
@@ -58,10 +59,12 @@ router.get('',
       });
   });
 
-//Add product to users cart
-//body params: 
-//productId: added product's id
-//qty: quantity of requested product 
+/*
+ *Add product to users cart
+ *body params:
+ *productId: added product's id
+ *qty: quantity of requested product
+ */
 
 router.post('',
   passport.authenticate('user-auth', {
@@ -103,38 +106,39 @@ router.post('',
           }
 
           Product.findOne({
-            _id: req.body.productId
-          }).then((product) => {
-            if (product === undefined || product.available !== true) {
-              return res.status(400).json({
-                message: 'Product not available'
-              });
-            }
-            cart.push({
-              product: req.body.productId,
-              qty
-            });
-            user.save((err, doc) => {
-              if (err) {
-                console.error(err);
-
-                return res.status(500).json({
-                  message: 'Could not save product in user cart'
+              _id: req.body.productId
+            }).then((product) => {
+              if (product === undefined || product.available !== true) {
+                return res.status(400).json({
+                  message: 'Product not available'
                 });
               }
+              cart.push({
+                product: req.body.productId,
+                qty
+              });
+              user.save((err, doc) => {
+                if (err) {
+                  console.error(err);
 
-              return res.status(201).json({
-                message: 'Product added to your cart',
-                user: doc
+                  return res.status(500).json({
+                    message: 'Could not save product in user cart'
+                  });
+                }
+
+                return res.status(201).json({
+                  message: 'Product added to your cart',
+                  user: doc
+                });
+              });
+            })
+            .catch((err) => {
+              console.error(err);
+
+              return res.status(500).json({
+                message: 'Could not query product on database'
               });
             });
-          }).catch((err) => {
-            console.error(err);
-
-            return res.status(500).json({
-              message: 'Could not query product on database'
-            });
-          });
         } else {
 
           return res.status(404).json({
@@ -291,6 +295,7 @@ router.post('/checkout',
       let productsInCart = [];
       let promises = [];
       let inventoriesToUpdate = {};
+      let purchasedProducts = [];
 
       if (user.shoppingCart.length === 0) {
         return res.status(400).json({
@@ -370,6 +375,29 @@ router.post('/checkout',
                 upsert: true
               }).exec());
             }
+
+            let retrievedProduct
+
+            try {
+              retrievedProduct = await Product.findOne({
+                _id: item.product
+              }).exec();
+            } catch (err) {
+              console.error(err);
+
+              return res.status(500).json({
+                message: "Could not query product on database"
+              });
+            }
+            purchasedProducts.push({
+              product: {
+                title: retrievedProduct.title,
+                category: retrievedProduct.category,
+                brand: retrievedProduct.brand,
+                price: retrievedProduct.price
+              },
+              qty: item.qty
+            });
             //Queue up inventory update
             if (inventoriesToUpdate[inventory._id] === undefined) {
               inventoriesToUpdate[String(inventory._id)] = currentInventory;
@@ -382,17 +410,40 @@ router.post('/checkout',
                   promises.push(Inventory.findOneAndUpdate({
                     _id: key
                   }, {
-                    products: inventoriesToUpdate[key]
+                    'products': inventoriesToUpdate[key]
                   }).exec());
                 }
               }
               user.shoppingCart = [];
               promises.push(user.save())
 
-              Promise.all(promises).then((promiseReturn) => {
-                res.status(200).json({
+              Promise.all(promises).then(async (promiseReturn) => {
+                purchaseUser = {
+                  email: user.email,
+                  name: user.name,
+                  phoneNumber: user.phoneNumber,
+                  address: user.address
+                };
+
+                let purchase = new Purchase({
+                  'user': purchaseUser,
+                  'products': purchasedProducts
+                });
+
+                try {
+                  purchase = await purchase.save();
+                } catch (err) {
+                  console.error(err);
+
+                  return res.status(500).json({
+                    message: 'Could not save purchase on database'
+                  });
+                }
+
+                return res.status(200).json({
                   message: 'Items purchased successfuly',
-                  user
+                  user,
+                  purchase
                 })
               }, (err) => {
                 console.error(err);

@@ -9,6 +9,7 @@ const Product = require('../../models/Product');
 const User = require('../../models/User');
 const Inventory = require('../../models/Inventory');
 const Update = require('../../models/Update');
+const Purchase = require('../../models/Purchase');
 
 //Require the dev-dependencies
 const chai = require('chai');
@@ -110,8 +111,10 @@ describe('Carts', () => {
                 newProduct.save((err, product) => {
                   newProductId = product._id;
                   Inventory.deleteMany({}, (err) => {
-                    done();
-                  })
+                    Purchase.deleteMany({}, (err) => {
+                      done();
+                    });
+                  });
                 });
               });
             });
@@ -262,6 +265,13 @@ describe('Carts', () => {
               res.should.have.status(200);
               res.should.be.json;
               res.body.user.shoppingCart.length.should.eql(0);
+
+              res.body.purchase.should.have.property('user');
+              res.body.purchase.should.have.property('purchaseDate');
+              res.body.purchase.products[0].product.title.should.eql(
+                'Test product');
+              res.body.purchase.products[0].qty.should.eql(1);
+
               Inventory.find({
                 products: {
                   '$elemMatch': {
@@ -360,6 +370,16 @@ describe('Carts', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.user.shoppingCart.length.should.eql(0);
+
+                res.body.purchase.should.have.property('user');
+                res.body.purchase.should.have.property('purchaseDate');
+                res.body.purchase.products[0].product.title.should.eql(
+                  'Test product');
+                res.body.purchase.products[0].qty.should.eql(2);
+
+                res.body.purchase.products[1].product.title.should.eql(
+                  'Test product 2');
+                res.body.purchase.products[1].qty.should.eql(1);
 
                 Inventory.find({
                   '$or': [{
