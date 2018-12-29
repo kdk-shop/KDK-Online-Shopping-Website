@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const Product = require('../../models/Product');
 const User = require('../../models/User');
 const Admin = require('../../models/Admin');
+const staticsPath = require('../../config/storage').staticsPath;
 
 //Require the dev-dependencies
 const chai = require('chai');
@@ -175,16 +176,21 @@ describe('Products', () => {
     });
 
     it('it should update an existing product', (done) => {
+      let createStream = fs.createWriteStream(path.join(
+        staticsPath, 'images', 'full', "test.jpg"));
+
+      createStream.end();
+
       chai.request(server)
         .put('/api/products/update/' + testProductId)
         .set("Authorization", "Bearer " + jwebtoken)
-        .send({
-          title: 'Updated product',
-          price: 3,
-          description: 'Updated description',
-          category: 'Updated',
-          brand: 'Updated Misc.'
-        })
+        .field('title', 'Updated product')
+        .field('price', 3)
+        .field('description', 'Updated description')
+        .field('category', 'Updated')
+        .field('brand', 'Updated Misc.')
+        .attach('image', fs.readFileSync(path.join(__dirname, '..',
+          'files', 'test-image.jpg')), 'test-image.jpg')
         .end((err, res) => {
           res.should.have.status(200);
           res.should.be.json;
@@ -197,6 +203,10 @@ describe('Products', () => {
             'description',
             'Updated description'
           );
+
+          testProduct.imagePaths.should.be.a('array');
+          testProduct.imagePaths.length.should.equal(1);
+
           testProduct.should.have.property('category', 'Updated');
           testProduct.imagePaths.should.be.a('array');
           testProduct.should.have.property('brand', 'Updated Misc.');
@@ -211,6 +221,10 @@ describe('Products', () => {
     });
 
     it('it should delete an existing product', (done) => {
+      let createStream = fs.createWriteStream(path.join(
+        staticsPath, 'images', 'full', "test.jpg"));
+
+      createStream.end();
       chai.request(server)
         .delete('/api/products/delete/' + testProductId)
         .set("Authorization", "Bearer " + jwebtoken)

@@ -20,6 +20,7 @@ const multer = require('multer');
 const staticsPath = require('../../config/storage').staticsPath;
 const path = require('path');
 const childProcess = require('child_process');
+const fs = require('fs');
 
 //load validators
 const validateProductInfo =
@@ -244,6 +245,12 @@ router.get('/amazing', (req, res) => {
 /**
  * POST     create new product
  *@route  {POST} /api/products/create/
+ *@bodyparam title
+ *@bodyparam price
+ *@bodyparam description
+ *@bodyparam category
+ *@bodyparam brand
+ *@bodyparam image
  */
 router.post("/create/",
   passport.authenticate('admin-auth', {
@@ -305,6 +312,12 @@ router.post("/create/",
 /**
  * PUT     update existing product
  *@route  {PUT} /api/products/update/:product_id
+ *@bodyparam title
+ *@bodyparam price
+ *@bodyparam description
+ *@bodyparam category
+ *@bodyparam brand
+ *@bodyparam image
  */
 router.put("/update/:product_id",
   passport.authenticate('admin-auth', {
@@ -327,7 +340,10 @@ router.put("/update/:product_id",
       price: req.body.price,
       description: req.body.description,
       category: req.body.category,
-      brand: req.body.brand
+      brand: req.body.brand,
+      imagePaths: req.file === undefined ? [] : [
+        'http://kdkshop.ir/images/' + req.file.filename
+      ]
     };
 
     Product.findOneAndUpdate({
@@ -348,6 +364,15 @@ router.put("/update/:product_id",
             message: "Could not update product in database"
           });
         }
+
+        let oldImageName = doc.imagePaths[0].split('/');
+
+        oldImageName = oldImageName[oldImageName.length - 1];
+
+        let oldImagePath = path.join(staticsPath,
+          'images', 'full', oldImageName);
+
+        fs.unlinkSync(oldImagePath);
 
         Product.findById(
           req.params.product_id,
@@ -382,6 +407,14 @@ router.delete("/delete/:product_id",
           message: "Could not delete product from database"
         })
       }
+      let oldImageName = product.imagePaths[0].split('/');
+
+      oldImageName = oldImageName[oldImageName.length - 1];
+
+      let oldImagePath = path.join(staticsPath,
+        'images', 'full', oldImageName);
+
+      fs.unlinkSync(oldImagePath);
 
       return res.status(200).json(product)
     });
