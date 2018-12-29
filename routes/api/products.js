@@ -28,21 +28,15 @@ const validateProductInfo =
 //load product model
 const Product = require('../../models/Product');
 
-//Setup multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(staticsPath, 'images', 'full'));
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname)
+//Utility functions
+function imageFilter(req, file, cb) {
+  //accept image only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return cb(null, false);
   }
-});
+  cb(null, true);
+}
 
-let upload = multer({
-  storage
-});
-
-//Helper functions
 function updateProducts(res) {
   childProcess.exec('/root/update_products.py', (err, stdout, stderr) => {
     console.log(stdout);
@@ -60,6 +54,22 @@ function updateProducts(res) {
   });
 }
 
+//Setup multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(staticsPath, 'images', 'full'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname)
+  }
+});
+
+let upload = multer({
+  storage,
+  fileFilter: imageFilter
+});
+
+//Helper functions
 /**
  * Get paginated product information
  *@route  {GET} /api/products
@@ -300,6 +310,7 @@ router.put("/update/:product_id",
   passport.authenticate('admin-auth', {
     session: false
   }),
+  upload.single('image'),
   (req, res) => {
 
     const {
