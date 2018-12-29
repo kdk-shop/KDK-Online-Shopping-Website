@@ -25,6 +25,10 @@ const purchaseSchema = new Schema({
 
   products: [{
     product: {
+      _id: {
+        type: Schema.Types.ObjectId,
+        required: true
+      },
       title: {
         type: String,
         unique: true,
@@ -44,7 +48,8 @@ const purchaseSchema = new Schema({
       },
       price: {
         type: Number,
-        index: true
+        index: true,
+        required: true
       }
     },
     qty: {

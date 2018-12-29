@@ -143,7 +143,7 @@ describe('Carts', () => {
     it('it should retrieve list of existing items in user cart',
       (done) => {
         chai.request(server)
-          .get('/api/users/cart')
+          .get('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .end((err, res) => {
             res.should.have.status(200);
@@ -165,7 +165,7 @@ describe('Carts', () => {
     it('it should add a product to user cart',
       (done) => {
         chai.request(server)
-          .post('/api/users/cart')
+          .post('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: newProductId,
@@ -189,7 +189,7 @@ describe('Carts', () => {
     it('it should update a product in user cart',
       (done) => {
         chai.request(server)
-          .patch('/api/users/cart')
+          .patch('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: testProductId,
@@ -213,7 +213,7 @@ describe('Carts', () => {
     it('it should delete a product from user cart',
       (done) => {
         chai.request(server)
-          .delete('/api/users/cart')
+          .delete('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: testProductId
@@ -233,7 +233,7 @@ describe('Carts', () => {
     it('it should not add an unavailable product to user cart',
       (done) => {
         chai.request(server)
-          .post('/api/users/cart')
+          .post('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: testProduct2Id,
@@ -258,7 +258,7 @@ describe('Carts', () => {
           }]
         }]).then((inv) => {
           chai.request(server)
-            .post('/api/users/cart/checkout')
+            .post('/api/carts/checkout')
             .set("Authorization", "Bearer " + jwebtoken)
             .send({})
             .end((err, res) => {
@@ -270,6 +270,8 @@ describe('Carts', () => {
               res.body.purchase.should.have.property('purchaseDate');
               res.body.purchase.products[0].product.title.should.eql(
                 'Test product');
+              res.body.purchase.products[0].product.should.have.property(
+                '_id');
               res.body.purchase.products[0].qty.should.eql(1);
 
               Inventory.find({
@@ -301,7 +303,7 @@ describe('Carts', () => {
           }]
         }]).then(() => {
           chai.request(server)
-            .post('/api/users/cart/checkout')
+            .post('/api/carts/checkout')
             .set("Authorization", "Bearer " + jwebtoken)
             .send({})
             .end((err, res) => {
@@ -363,7 +365,7 @@ describe('Carts', () => {
             ]
           }]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {
@@ -436,7 +438,7 @@ describe('Carts', () => {
             ]
           }]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {
@@ -516,7 +518,7 @@ describe('Carts', () => {
             }
           ]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {
@@ -579,7 +581,7 @@ describe('Carts', () => {
             ]
           }]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {
@@ -632,7 +634,7 @@ describe('Carts', () => {
     it('it should not add a duplicate product to user cart',
       (done) => {
         chai.request(server)
-          .post('/api/users/cart')
+          .post('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: testProductId,
@@ -651,7 +653,7 @@ describe('Carts', () => {
     it('it should not add a product to user cart without jwt',
       (done) => {
         chai.request(server)
-          .post('/api/users/cart')
+          .post('/api/carts')
           .send({
             productId: testProductId,
             qty: 2
@@ -666,7 +668,7 @@ describe('Carts', () => {
     it('it should not add a product to user cart with invalid qty',
       (done) => {
         chai.request(server)
-          .post('/api/users/cart')
+          .post('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: newProductId,
@@ -682,7 +684,7 @@ describe('Carts', () => {
     it('it should not update a non-existent product in user cart',
       (done) => {
         chai.request(server)
-          .patch('/api/users/cart')
+          .patch('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: newProductId,
@@ -701,7 +703,7 @@ describe('Carts', () => {
     it('it should not update a product in user cart without jwt',
       (done) => {
         chai.request(server)
-          .patch('/api/users/cart')
+          .patch('/api/carts')
           .send({
             productId: testProductId,
             qty: 2
@@ -716,7 +718,7 @@ describe('Carts', () => {
     it('it should update add a product in user cart with invalid qty',
       (done) => {
         chai.request(server)
-          .patch('/api/users/cart')
+          .patch('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: testProductId,
@@ -732,7 +734,7 @@ describe('Carts', () => {
     it('it should not delete a non-existent product from user cart',
       (done) => {
         chai.request(server)
-          .delete('/api/users/cart')
+          .delete('/api/carts')
           .set("Authorization", "Bearer " + jwebtoken)
           .send({
             productId: newProductId
@@ -750,7 +752,7 @@ describe('Carts', () => {
     it('it should not delete a product from user cart without jwt',
       (done) => {
         chai.request(server)
-          .delete('/api/users/cart')
+          .delete('/api/carts')
           .send({
             productId: testProductId
           })
@@ -784,7 +786,7 @@ describe('Carts', () => {
             ]
           }]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {
@@ -829,7 +831,7 @@ describe('Carts', () => {
             ]
           }]).then(() => {
             chai.request(server)
-              .post('/api/users/cart/checkout')
+              .post('/api/carts/checkout')
               .set("Authorization", "Bearer " + jwebtoken)
               .send({})
               .end((err, res) => {

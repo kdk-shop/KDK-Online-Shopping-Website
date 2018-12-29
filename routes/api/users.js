@@ -31,12 +31,6 @@ const validationResetPasswordInput = require('../../validation/user/reset_pwd')
 //load user model
 const User = require('../../models/User');
 
-//load dependable routes
-const carts = require('./carts.js');
-
-//Redirect user cart routes to carts.js
-router.use('/cart',carts);
-
 /**
  * Register new user
  *@route  {POST} /api/users/register
@@ -353,7 +347,8 @@ router.post(
               })
             });
           } else {
-            errors.currentPassword="Current password is incorrect"
+            errors.currentPassword = "Current password is incorrect"
+
             return res.status(401).json(errors)
           }
         })

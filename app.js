@@ -12,11 +12,13 @@ const admins = require('./routes/api/admins');
 const storages = require('./routes/api/storages');
 const inventories = require('./routes/api/inventories');
 const carts = require('./routes/api/carts');
+const purchases = require('./routes/api/purchases');
 
 const staticsPath = require('./config/storage').staticsPath;
 
 const app = express();
-console.log('NODE_ENV: '+process.env.NODE_ENV);
+
+console.log('NODE_ENV: ' + process.env.NODE_ENV);
 
 //log using morgan
 if (process.env.NODE_ENV !== "TRAVIS" &&
@@ -60,6 +62,7 @@ app.use('/api/admins', admins);
 app.use('/api/storages', storages);
 app.use('/api/inventories', inventories);
 app.use('/api/carts', carts);
+app.use('/api/purchases', purchases);
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.get('/*', (req, res) => {

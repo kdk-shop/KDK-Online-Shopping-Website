@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const keys = require('../../config/keys');
 const passport = require('passport');
 
 //load validators
@@ -391,6 +390,7 @@ router.post('/checkout',
             }
             purchasedProducts.push({
               product: {
+                _id: retrievedProduct._id,
                 title: retrievedProduct.title,
                 category: retrievedProduct.category,
                 brand: retrievedProduct.brand,

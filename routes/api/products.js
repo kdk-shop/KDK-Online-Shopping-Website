@@ -14,7 +14,6 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const keys = require('../../config/keys');
 const passport = require('passport');
 const multer = require('multer');
 const staticsPath = require('../../config/storage').staticsPath;
@@ -70,7 +69,6 @@ let upload = multer({
   fileFilter: imageFilter
 });
 
-//Helper functions
 /**
  * Get paginated product information
  *@route  {GET} /api/products
