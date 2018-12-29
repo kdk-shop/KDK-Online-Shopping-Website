@@ -286,9 +286,9 @@ router.post("/create/",
         brand: req.body.brand,
 
         available: false,
-        imagePaths: req.file === undefined ? [] : [
-          'http://kdkshop.ir/images/' + req.file.filename
-        ],
+        imagePaths: req.file === undefined ? [
+          'http://kdkshop.ir/images/not-found.png'
+        ] : ['http://kdkshop.ir/images/' + req.file.filename],
         rating: {
           score: 0,
           count: 0

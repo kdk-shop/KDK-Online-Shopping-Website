@@ -16,6 +16,7 @@ const carts = require('./routes/api/carts');
 const staticsPath = require('./config/storage').staticsPath;
 
 const app = express();
+console.log('NODE_ENV: '+process.env.NODE_ENV);
 
 //log using morgan
 if (process.env.NODE_ENV !== "TRAVIS" &&
