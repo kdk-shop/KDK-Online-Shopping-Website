@@ -9,9 +9,6 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip'
 import { Link } from 'react-router-dom'
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     container: {
@@ -51,20 +48,26 @@ class ProductInformation extends Component{
     }
     
     handleChange = name => event => {
-        if(name === 'image'){
-            var reader = new FileReader();
-            reader.onload = function () {
-                var output = document.getElementById('product-image');
-                output.src = reader.result;
-            };
-            this.setState({image:event.target.files[0]})
-            reader.readAsDataURL(event.target.files[0]);
-            console.log(event.target.files[0])
-        }
+    
         this.setState({
             [name]: event.target.value,
         });
     };
+
+    handleImage = (event)=>{
+        console.log(event.target.files[0])
+        this.setState({ image: event.target.files[0]})
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('product-image');
+            output.src = reader.result;
+        };
+        console.log(event.target.files[0])
+        reader.readAsDataURL(event.target.files[0]);
+       
+
+        console.log(event.target.files[0])
+    }
     onClick = () => {
         window.location = "/admin/panel"
     } 
@@ -72,7 +75,7 @@ class ProductInformation extends Component{
     componentDidMount(){
         let id = window.location.search.substr(4);
         if(id){
-            
+            axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
             axios.get(`/api/products/${id}`)
                 .then(res => {
                     console.log(res.data)
@@ -91,7 +94,6 @@ class ProductInformation extends Component{
 
     handleClick = ()=>{
         if(this.state.edit){
-            if (this.state.title && this.state.price && this.state.description && this.state.category && this.state.brand) {
 
                 let data = {
                     title: this.state.title,
@@ -100,42 +102,35 @@ class ProductInformation extends Component{
                     category: this.state.category,
                     brand: this.state.brand
                 }
+                // axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
                 axios.put(`/api/products/update/${window.location.search.substr(4)}`, data)
                     .then((res) => {
                         window.location = '/admin/panel/inventory/product-list';
                     })
                     .catch((err) => console.log(err))
-            }
+            
         
         }else{
-            if (this.state.title && this.state.price && this.state.description && this.state.category && this.state.brand){
-
-            let data = {
-                title: this.state.title,
-                price: this.state.price,
-                description: this.state.description,
-                category: this.state.category,
-                brand: this.state.brand
-            }
-            axios.post('/api/products/create/',data)
-            .then((res)=>{
-                window.location = '/admin/panel/inventory/product-list';
-            })
-            .catch((err)=>console.log(err))
-            }
+                const form = new FormData();
+                form.append('image',this.state.image,this.state.title)
+                form.set('title', this.state.title)
+                form.set('price', this.state.price)
+                form.set('description', this.state.description)
+                form.set('category', this.state.category)
+                form.set('brand', this.state.brand)
+                console.log(this.state.image)
+                axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
+                axios.post('/api/products/create/',form)
+                .then((res)=>{
+                    window.location = '/admin/panel/inventory/product-list';
+                })
+                .catch((err)=>console.log(err))
         }
     }
     render(){
         const { classes } = this.props;
         return(
             <div >
-                <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
-                <Toolbar>
-                <Typography variant="h6" color="inherit" noWrap>
-                    Product Info
-                </Typography>
-                </Toolbar>
-            </AppBar>
                 <Tooltip title="Back">
                     <Link to="/admin/panel/inventory/product-list">
                         <Fab color="primary" aria-label="Add" className={classes.fab}>
@@ -224,7 +219,7 @@ class ProductInformation extends Component{
                                     id="contained-button-file"
                                     multiple
                                     type="file"
-                                    onChange={this.handleChange('image')} />
+                                    onChange={this.handleImage} />
                             </Grid>
                         </Grid>
 

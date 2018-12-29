@@ -72,7 +72,8 @@ class cartCard extends Component{
                 number: parseInt(event.target.value),
             });
         }
-        this.state.isDisabled=false
+        // this.state.isDisabled=false
+        this.setState({isDisabled:false})
     };
 
     handleClickOpen = () => {

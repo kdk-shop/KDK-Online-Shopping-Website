@@ -97,7 +97,7 @@ class editStorage extends Component {
         <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
                 <Toolbar>
                 <Typography variant="h6" color="inherit" noWrap>
-                    
+                    Edit Storage
                 </Typography>
                 </Toolbar>
             </AppBar>

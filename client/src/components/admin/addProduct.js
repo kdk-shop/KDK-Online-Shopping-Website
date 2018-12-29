@@ -190,7 +190,7 @@ class AddProduct extends Component {
                 </div>
                 <Grid container spacing={24} style={{ dispaly: "block", margin: "0 auto" }}>
                     {this.state.products.map((item) => {
-                        let link = '/product?id=' + item._id
+                        // let link = '/product?id=' + item._id
                         return (<Grid item key={item._id} xs={12} sm={6} md={4}>
                             <Card
                                 id={item._id}
