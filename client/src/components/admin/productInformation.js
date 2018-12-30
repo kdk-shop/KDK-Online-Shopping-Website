@@ -73,7 +73,7 @@ class ProductInformation extends Component{
         window.location = "/admin/panel"
     } 
 
-    componentWillMount(){
+    componentDidMount(){
         let id = window.location.search.substr(4);
         if(id){
             axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
