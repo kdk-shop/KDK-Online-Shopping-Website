@@ -108,7 +108,8 @@ class Products extends Component{
     }
       handleSearch = (event)=>{
         if (event.key === 'Enter') {
-          // console.log(event.target.value)
+          
+          console.log(event.target.value)
           let text = event.target.value
           axios.get(`/api/products/?pagesize=12&page=1&title=${text}`)
           .then(res=>{
@@ -162,6 +163,7 @@ class Products extends Component{
               <SearchIcon />
             </div>
             <InputBase
+              onKeyPress={this.handleSearch}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,

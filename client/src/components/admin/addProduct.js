@@ -100,18 +100,7 @@ class AddProduct extends Component {
     }
 
     componentWillMount() {
-        axios.get(`/api/products/?pagesize=12&page=${this.state.page}`)
-            .then(res => {
-                console.log(res)
-                this.setState({
-                    products: res.data.products,
-                    maxProducts: res.data.maxProducts,
-                    message: res.data.message
-                })
-            })
-            .catch(err => {
-                // this.setState({ message: err.response.data.message })
-            })
+        
     }
     componentDidMount() {
         setTimeout(() => this.setState({ loading: false }));
@@ -120,7 +109,7 @@ class AddProduct extends Component {
         if (event.key === 'Enter') {
             // console.log(event.target.value)
             let text = event.target.value
-            axios.get(`/api/products/?pagesize=12&page=1&title=${text}`)
+            axios.get(`/api/products/?pagesize=18&page=1&title=${text}`)
                 .then(res => {
                     console.log(res)
                     this.setState({
@@ -201,15 +190,6 @@ class AddProduct extends Component {
                         </Grid>)
                     })}
                 </Grid>
-
-                <Pagination
-                    style={{ visibility: (this.state.products.length === 0 ? "hidden" : "visible") }}
-                    activePage={this.state.page}
-                    itemsCountPerPage={12}
-                    totalItemsCount={this.state.maxProducts}
-                    pageRangeDisplayed={5}
-                    onChange={this.handlePageChange}
-                />
 
                 <Snackbar
                     open={this.state.open}

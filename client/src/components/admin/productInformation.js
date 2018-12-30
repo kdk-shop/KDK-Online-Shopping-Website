@@ -44,7 +44,8 @@ class ProductInformation extends Component{
         category: '',
         price:'',
         image: null,
-        edit:false
+        edit:false,
+        type:''
     }
     
     handleChange = name => event => {
@@ -55,8 +56,7 @@ class ProductInformation extends Component{
     };
 
     handleImage = (event)=>{
-        console.log(event.target.files[0])
-        this.setState({ image: event.target.files[0]})
+        this.setState({ image: event.target.files[0], type: event.target.files[0].type.split('/')[1]})
         var reader = new FileReader();
         reader.onload = function () {
             var output = document.getElementById('product-image');
@@ -94,7 +94,21 @@ class ProductInformation extends Component{
 
     handleClick = ()=>{
         if(this.state.edit){
-
+            if(this.state.image){
+                const form = new FormData();
+                form.append('image', this.state.image, this.state.title + '.' + this.state.type)
+                form.set('title', this.state.title)
+                form.set('price', this.state.price)
+                form.set('description', this.state.description)
+                form.set('category', this.state.category)
+                form.set('brand', this.state.brand)
+                // axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
+                axios.put(`/api/products/update/${window.location.search.substr(4)}`, form)
+                    .then((res) => {
+                        window.location = '/admin/panel/inventory/product-list';
+                    })
+                    .catch((err) => console.log(err))
+            }else{
                 let data = {
                     title: this.state.title,
                     price: this.state.price,
@@ -108,23 +122,24 @@ class ProductInformation extends Component{
                         window.location = '/admin/panel/inventory/product-list';
                     })
                     .catch((err) => console.log(err))
+            }
             
         
         }else{
-                const form = new FormData();
-                form.append('image',this.state.image,this.state.title)
-                form.set('title', this.state.title)
-                form.set('price', this.state.price)
-                form.set('description', this.state.description)
-                form.set('category', this.state.category)
-                form.set('brand', this.state.brand)
-                console.log(this.state.image)
-                axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
-                axios.post('/api/products/create/',form)
-                .then((res)=>{
-                    window.location = '/admin/panel/inventory/product-list';
-                })
-                .catch((err)=>console.log(err))
+            const form = new FormData();
+            form.append('image', this.state.image, this.state.title +'.'+ this.state.type)
+            form.set('title', this.state.title)
+            form.set('price', this.state.price)
+            form.set('description', this.state.description)
+            form.set('category', this.state.category)
+            form.set('brand', this.state.brand)
+            console.log(this.state.image)
+            axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
+            axios.post('/api/products/create/',form)
+            .then((res)=>{
+                window.location = '/admin/panel/inventory/product-list';
+            })
+            .catch((err)=>console.log(err))
         }
     }
     render(){
