@@ -9,6 +9,9 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip'
 import { Link } from 'react-router-dom'
 import ArrowBack from '@material-ui/icons/ArrowBack';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
     container: {
@@ -70,7 +73,7 @@ class ProductInformation extends Component{
         console.log(event.target.files[0])
     }
     onClick = () => {
-        window.location = "/admin/panel"
+        window.location = '/admin/panel/inventory/product-list';
     } 
 
     componentDidMount(){
@@ -145,6 +148,13 @@ class ProductInformation extends Component{
         const { classes } = this.props;
         return(
             <div >
+                 <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                    {this.state.edit?'Edit product info':'Add new product'}
+                </Typography>
+                </Toolbar>
+            </AppBar>
                 <Tooltip title="Back">
                     <Link to="/admin/panel/inventory/product-list">
                         <Fab color="primary" aria-label="Add" className={classes.fab}>
@@ -247,7 +257,7 @@ class ProductInformation extends Component{
                     </Grid>
                 </Grid>
                 <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClick} type="submit">
-                    {this.state.edit?"Change Information":"Add Product"}
+                    {this.state.edit?"Submit":"Add"}
                 </Button>
                 <Button variant="contained" color="secondary" className={classes.button} onClick={this.onClick}>
                     Cancel

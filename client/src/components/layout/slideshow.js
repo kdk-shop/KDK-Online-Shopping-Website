@@ -1,31 +1,80 @@
 import React, { Component } from 'react'
-import { Zoom } from 'react-slideshow-image';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import IconButton from '@material-ui/core/IconButton';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import axios from 'axios'
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  title: {
+    color: theme.palette.primary.light,
+  },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+});
  
-const images = [
-  'https://gds-storage-prd.s3.amazonaws.com/unified-gallery/151217/6285/26642249/thumbnails/iphone-6-plus-rose-gold-black-background-3500-3500.jpg',
-  'http://demo.themerelic.com/ostore-pro/wp-content/uploads/2018/09/goldgenie-iphone-6-3.jpg',
-  'https://www.iclarified.com/images/news/33822/139872/139872.jpg',
-];
- 
-const zoomOutProperties = {
-  duration: 5000,
-  transitionDuration: 500,
-  infinite: true,
-  indicators: true,
-  scale: 0.5,
-  arrows: false
-}
- 
-export default class slideshow extends Component {
+ class slideshow extends Component {
+   state={
+     products:[],
+     message:''
+   }
+   componentWillMount(){
+     axios.get('/api/products/recent')
+      .then(res=>{
+        console.log(res)
+        this.setState({products:res.data.products,message:res.data.message})
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+   }
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-         <Zoom {...zoomOutProperties} >
-        {
-          images.map((each, index) => <img alt={index} key={index} style={{width: "100%"}} src={each} />)
-        }
-      </Zoom>
-      </div>
+      <div className={classes.root}>
+      <GridList className={classes.gridList} cols={2.5}>
+        {this.state.products.map(item => (
+          <GridListTile key={item._id}>
+            <img src={item.imagePaths[0]} alt={item.title} />
+            <GridListTileBar
+              title={item.title}
+              classes={{
+                root: classes.titleBar,
+                title: classes.title,
+              }}
+              // actionIcon={
+              //   <IconButton>
+              //     <StarBorderIcon className={classes.title} />
+              //   </IconButton>
+              // }
+            />
+          </GridListTile>
+        ))}
+      </GridList>
+    </div>
     )
   }
 }
+
+slideshow.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(slideshow);

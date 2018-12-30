@@ -38,7 +38,7 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    height:'88.89vh', //need to change!!!
+    height:'auto'
   },
   content: {
     flexGrow: 1,
@@ -119,7 +119,7 @@ class panel extends Component {
               <ListItemIcon>
                 <ListIcon />
               </ListItemIcon>
-              <ListItemText primary='Product' />
+              <ListItemText primary='Products' />
             </ListItem>
             <Divider />
             <ListItem button onClick={this.onClickChangePassword}>
@@ -138,7 +138,7 @@ class panel extends Component {
         <Divider />
       </Drawer>
       <main className={classes.content}>
-          <Button variant="contained" color="primary" onClick={this.onClickAvailability}>
+          <Button variant="contained" color="secondary" onClick={this.onClickAvailability}>
             Update Availability
         </Button>
         <hr/>
