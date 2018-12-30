@@ -26,6 +26,7 @@ chai.use(chaiHttp);
 describe('Products', () => {
   let testProductId;
   let testUserId;
+  let newUserId;
 
   beforeEach((done) => {
     //Make sure users collection is empty except for test user
@@ -33,6 +34,14 @@ describe('Products', () => {
       let testUser = new User({
         name: "test",
         email: "test@example.com",
+        password: "$2a$10$U2axE8DVGi2m/BAt4RDFZeMG" +
+          "t0OPSkRf8T0oec5KFVIBy5Y4fGBUa",
+        address: "Test address",
+        phoneNumber: 989120000000
+      });
+      let newUser = new User({
+        name: "newUser",
+        email: "new@example.com",
         password: "$2a$10$U2axE8DVGi2m/BAt4RDFZeMG" +
           "t0OPSkRf8T0oec5KFVIBy5Y4fGBUa",
         address: "Test address",
@@ -65,23 +74,26 @@ describe('Products', () => {
 
           testProduct.save((err, prod) => {
             testProductId = prod._id;
-            done();
+            newUser.save((err, doc) => {
+              newUserId = doc._id;
+              done();
+            });
           })
         });
       });
     });
   });
   //Again make sure users collection is empty after tests
+
+  afterEach((done) => {
+    User.deleteMany({}, (err) => {
+      Product.deleteMany({}, (err) => {
+        done();
+      });
+    });
+  });
+
   /*
-   * afterEach((done) => {
-   * User.deleteMany({}, (err) => {
-   * Product.deleteMany({}, (err) => {
-   * done();
-   * });
-   * });
-   * });
-   *
-   * /*
    * Register test user
    */
   describe('Product admin CRUD operations', () => {
@@ -383,11 +395,11 @@ describe('Products', () => {
   });
 
   describe('Product review CRUD operations', () => {
-    it("it should add a review to a product", (done) => {
+    it("it should add a new review to a product", (done) => {
       chai.request(server)
-        .put('/api/products/review/' + testProductId + '/' + testUserId)
+        .put('/api/products/review/' + testProductId + '/' + newUserId)
         .send({
-          name: "test",
+          name: "newUser",
           text: "Test review 2",
           recommended: false,
           score: 2
@@ -407,12 +419,42 @@ describe('Products', () => {
           let testReview = testProduct.reviews[1];
 
           testReview.should.have.property('creatorId');
-          testReview.should.have.property('creatorName', 'test');
+          testReview.should.have.property('creatorName', 'newUser');
           testReview.should.have.property('review', 'Test review 2');
           testReview.should.have.property('recommended', false);
           done();
         });
+    });
 
+    it("it should update an existing review on a product", (done) => {
+      chai.request(server)
+        .put('/api/products/review/' + testProductId + '/' + testUserId)
+        .send({
+          name: "test",
+          text: "Test review 3",
+          recommended: true,
+          score: 2
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.json;
+          let testProduct = res.body.product;
+
+          testProduct.should.be.a('object');
+          testProduct.should.have.property('title', 'Test product');
+          testProduct.reviews.should.be.a('array');
+
+          testProduct.rating.should.have.property("score", 2);
+          testProduct.rating.should.have.property("count", 1);
+
+          let testReview = testProduct.reviews[0];
+
+          testReview.should.have.property('creatorId');
+          testReview.should.have.property('creatorName', 'test');
+          testReview.should.have.property('review', 'Test review 3');
+          testReview.should.have.property('recommended', true);
+          done();
+        });
     });
   });
 

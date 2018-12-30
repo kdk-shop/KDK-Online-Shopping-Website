@@ -32,6 +32,9 @@ const Product = require('../../models/Product');
 function imageFilter(req, file, cb) {
   //accept image only
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    console.error('Invalid file format! Only .jpg/jpeg/png/gif allowed.')
+    console.error('file name: ' + file.originalname)
+
     return cb(null, false);
   }
   cb(null, true);
@@ -256,7 +259,6 @@ router.post("/create/",
   }),
   upload.single('image'),
   (req, res) => {
-
     const {
       errors,
       isValid
@@ -425,33 +427,73 @@ router.delete("/delete/:product_id",
 router.put("/review/:product_id/:user_id", (req, res) => {
   Product.findById(req.params.product_id).then((product) => {
 
-    let score = parseInt(req.body.score, 10);
-    let review = {
-      creatorId: req.params.user_id,
-      creatorName: req.body.name,
-      review: req.body.text,
-      recommended: req.body.recommended,
-      score
-    };
+    let reviews = product.reviews;
+    let prevReview = null;
 
+    for (let i = 0; i < reviews.length; i += 1) {
+      if (String(reviews[i].creatorId) === String(req.params.user_id)) {
+        prevReview = reviews[i];
+        break;
+      }
+    }
+
+    if (prevReview === null) {
+      let score = parseInt(req.body.score, 10);
+      let currentScore = product.rating.score;
+      let currentCount = product.rating.count;
+      let totalScore = currentScore * currentCount;
+
+      let newReview = {
+        creatorId: req.params.user_id,
+        creatorName: req.body.name,
+        review: req.body.text,
+        recommended: req.body.recommended,
+        score
+      };
+
+      product.rating.count = currentCount + 1;
+      product.rating.score = (totalScore + score) / product.rating.count;
+
+      product.reviews.push(newReview);
+
+      return product.save()
+        .then((product) => res.status(201).json({
+          message: 'Review added successfully',
+          product
+        }))
+        .catch((err) => {
+          console.error(err);
+
+          return res.status(500).json({
+            message: "Server could not save product on database"
+          });
+        });
+    }
+
+    let newScore = parseInt(req.body.score, 10);
+    let prevScore = prevReview.score;
     let currentScore = product.rating.score;
-    let currentCount = product.rating.count;
-    let totalScore = currentScore * currentCount;
+    let totalScore = currentScore * product.rating.count;
 
-    product.rating.count = currentCount + 1;
-    product.rating.score = (totalScore + score) / product.rating.count;
+    prevReview.review = req.body.text;
+    prevReview.recommended = req.body.recommended;
+    prevReview.score = newScore;
 
-    product.reviews.push(review);
-    product.save()
-      .then((product) => res.status(201).json({
+    product.rating.score =
+      (totalScore + newScore - prevScore) / product.rating.count;
+
+    return product.save()
+      .then((product) => res.status(200).json({
+        message: 'Review updated successfully',
         product
       }))
       .catch((err) => {
         console.error(err);
-        res.status(500).json({
-          message: "Server could not save review on db"
-        })
-      })
+
+        return res.status(500).json({
+          message: "Server could not save product on database"
+        });
+      });
   });
 })
 
