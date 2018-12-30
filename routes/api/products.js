@@ -340,12 +340,14 @@ router.put("/update/:product_id",
       price: req.body.price,
       description: req.body.description,
       category: req.body.category,
-      brand: req.body.brand,
-      imagePaths: req.file === undefined ? [] : [
-        'http://kdkshop.ir/images/' + req.file.filename
-      ]
+      brand: req.body.brand
     };
 
+    if (req.file !== undefined) {
+      updatedProduct.imagePaths = [
+        'http://kdkshop.ir/images/' + req.file.filename
+      ];
+    }
     Product.findOneAndUpdate({
         _id: req.params.product_id
       }, {
@@ -368,11 +370,13 @@ router.put("/update/:product_id",
         let oldImageName = doc.imagePaths[0].split('/');
 
         oldImageName = oldImageName[oldImageName.length - 1];
+        if (req.file !== undefined && oldImageName !== 'not-found.png') {
 
-        let oldImagePath = path.join(staticsPath,
-          'images', 'full', oldImageName);
+          let oldImagePath = path.join(staticsPath,
+            'images', 'full', oldImageName);
 
-        fs.unlinkSync(oldImagePath);
+          fs.unlinkSync(oldImagePath);
+        }
 
         Product.findById(
           req.params.product_id,
@@ -411,10 +415,13 @@ router.delete("/delete/:product_id",
 
       oldImageName = oldImageName[oldImageName.length - 1];
 
-      let oldImagePath = path.join(staticsPath,
-        'images', 'full', oldImageName);
+      if (oldImageName !== 'not-found.png') {
 
-      fs.unlinkSync(oldImagePath);
+        let oldImagePath = path.join(staticsPath,
+          'images', 'full', oldImageName);
+
+        fs.unlinkSync(oldImagePath);
+      }
 
       return res.status(200).json(product)
     });

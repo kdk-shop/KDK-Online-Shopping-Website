@@ -260,11 +260,15 @@ describe('Products', () => {
         });
     });
 
-    it('it should not create a new product with empty fields', (done) => {
+    it('it should not create a new product with empty title field', (done) => {
       chai.request(server)
         .post('/api/products/create/')
         .set("Authorization", "Bearer " + jwebtoken)
-        .send({})
+        .send({
+          brand: 'test',
+          category: 'test',
+          price: -2
+        })
         .end((err, res) => {
           res.should.have.status(400);
           res.should.be.json;
@@ -272,8 +276,89 @@ describe('Products', () => {
           let errors = res.body;
 
           errors.should.have.property('title', 'Title field is required');
+          done();
+        });
+    });
+
+    it('it should not create a new product with empty brand field', (done) => {
+      chai.request(server)
+        .post('/api/products/create/')
+        .set("Authorization", "Bearer " + jwebtoken)
+        .send({
+          title: 'test 2',
+          category: 'test',
+          price: -2
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+
+          let errors = res.body;
+
+          errors.should.have.property('brand', 'Brand field is required');
+          done();
+        });
+    });
+
+    it('it should not create a new product with empty category field',
+      (done) => {
+        chai.request(server)
+          .post('/api/products/create/')
+          .set("Authorization", "Bearer " + jwebtoken)
+          .send({
+            title: 'test 2',
+            brand: 'test',
+            price: -2
+          })
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.should.be.json;
+
+            let errors = res.body;
+
+            errors.should.have.property(
+              'category', 'Category field is required');
+            done();
+          });
+      });
+
+    it('it should not create a new product with empty price field', (done) => {
+      chai.request(server)
+        .post('/api/products/create/')
+        .set("Authorization", "Bearer " + jwebtoken)
+        .send({
+          brand: 'test',
+          category: 'test',
+          test: 'test 2'
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+
+          let errors = res.body;
+
           errors.should.have.property('price', 'Price field is required');
-          errors.should.have.property('category', 'Category field is required');
+          done();
+        });
+    });
+
+    it('it should not create a new product with invalid price', (done) => {
+      chai.request(server)
+        .post('/api/products/create/')
+        .set("Authorization", "Bearer " + jwebtoken)
+        .send({
+          title: 'Test product 2',
+          brand: 'test',
+          category: 'test',
+          price: -2
+        })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.json;
+
+          let errors = res.body;
+
+          errors.should.have.property('price', 'Price field is invalid');
           done();
         });
     });
