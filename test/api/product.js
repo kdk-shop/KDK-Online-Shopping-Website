@@ -337,7 +337,7 @@ describe('Products', () => {
 
           let errors = res.body;
 
-          errors.should.have.property('price', 'Price field is required');
+          errors.should.have.property('price', 'Price field is invalid');
           done();
         });
     });
@@ -399,8 +399,9 @@ describe('Products', () => {
           let errors = res.body;
 
           errors.should.have.property('title', 'Title field is required');
-          errors.should.have.property('price', 'Price field is required');
+          errors.should.have.property('price', 'Price field is invalid');
           errors.should.have.property('category', 'Category field is required');
+          errors.should.have.property('brand', 'Brand field is required');
           done();
         });
     });
