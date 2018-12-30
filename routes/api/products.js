@@ -32,6 +32,9 @@ const Product = require('../../models/Product');
 function imageFilter(req, file, cb) {
   //accept image only
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    console.error('Invalid file format! Only .jpg/jpeg/png/gif allowed.')
+    console.error('file name: '+file.originalname)
+
     return cb(null, false);
   }
   cb(null, true);
@@ -256,7 +259,6 @@ router.post("/create/",
   }),
   upload.single('image'),
   (req, res) => {
-
     const {
       errors,
       isValid
