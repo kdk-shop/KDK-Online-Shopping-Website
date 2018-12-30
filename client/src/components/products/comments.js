@@ -100,10 +100,10 @@ const styles = theme => ({
       if(this.state.text!==''){
       axios.put(`/api/products/review/${this.props.comments._id}/${this.state.user._id}`,newComment)
         .then(res=>{
-          this.setState({open:true,message:'Your Comment Has Sent Successfuly'})
+          this.setState({open:true,message:res.data.message})
         })
         .catch(err=>{
-          this.setState({open:true})
+          this.setState({open:true,message:err.response.data.message})
           console.log("failed while sending comment")
 
       })
