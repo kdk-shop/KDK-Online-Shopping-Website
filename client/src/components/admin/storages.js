@@ -97,7 +97,7 @@ const styles = theme => ({
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <div >
         <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
                 <Toolbar>
                 <Typography variant="h6" color="inherit" noWrap>
@@ -121,13 +121,13 @@ const styles = theme => ({
           </Tooltip>
           {/* <h1 className="display-4 text-center">All Storages</h1> */}
             <hr/>
-            <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
+            <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}} >
                 {this.state.storages.map((item)=>{
                     let link = '/admin/panel/storage?id='+item._id
                     let editlink = '/admin/panel/storages/edit?id='+item._id
                     return(<Grid item key={item._id}  xs={6} >
 
-                            <List >
+                            <List style={{height:'10vh'}}>
                                 <ListItem component="a" href={link} style={{ textDecoration: 'none' }}>
                                 <ListItemText>
                                     <Typography>{item.name}</Typography>

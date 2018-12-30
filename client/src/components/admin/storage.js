@@ -121,7 +121,7 @@ const styles = theme => ({
      this.setState({ open: true, deleted_id: id });
    };
 
-   handleClose = () => {
+   handleCloseDelete = () => {
      this.setState({ open: false, deleted_id: null });
    };
 
@@ -193,7 +193,7 @@ const styles = theme => ({
               <Button onClick={this.handleDelete} color="primary">
                 Yes
                 </Button>
-              <Button onClick={this.handleClose} color="primary" autoFocus>
+              <Button onClick={this.handleCloseDelete} color="primary" autoFocus>
                 No
                 </Button>
             </DialogActions>

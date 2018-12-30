@@ -45,7 +45,8 @@ class ProductInformation extends Component{
         price:'',
         image: null,
         edit:false,
-        type:''
+        type:'',
+        errors:{}
     }
     
     handleChange = name => event => {
@@ -72,7 +73,7 @@ class ProductInformation extends Component{
         window.location = "/admin/panel"
     } 
 
-    componentDidMount(){
+    componentWillMount(){
         let id = window.location.search.substr(4);
         if(id){
             axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
@@ -83,9 +84,7 @@ class ProductInformation extends Component{
                     var output = document.getElementById('product-image');
                     output.src = res.data.imagePaths[0];
                 })
-                .catch(err => {
-                    // this.setState({message:err.response.data.message})
-                })
+                .catch(err=>this.setState({errors:err.response.data}))
         }else{
             var output = document.getElementById('product-image');
             output.src = "https://cdn11.bigcommerce.com/s-auu4kfi2d9/stencil/59606710-d544-0136-1d6e-61fd63e82e44/e/74686f40-d544-0136-c2c6-0df18b975cb0/icons/icon-no-image.svg";
@@ -102,12 +101,12 @@ class ProductInformation extends Component{
                 form.set('description', this.state.description)
                 form.set('category', this.state.category)
                 form.set('brand', this.state.brand)
-                // axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
+                axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
                 axios.put(`/api/products/update/${window.location.search.substr(4)}`, form)
                     .then((res) => {
                         window.location = '/admin/panel/inventory/product-list';
                     })
-                    .catch((err) => console.log(err))
+                    .catch(err=>this.setState({errors:err.response.data}))
             }else{
                 let data = {
                     title: this.state.title,
@@ -116,12 +115,12 @@ class ProductInformation extends Component{
                     category: this.state.category,
                     brand: this.state.brand
                 }
-                // axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
+                axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
                 axios.put(`/api/products/update/${window.location.search.substr(4)}`, data)
                     .then((res) => {
                         window.location = '/admin/panel/inventory/product-list';
                     })
-                    .catch((err) => console.log(err))
+                    .catch(err=>this.setState({errors:err.response.data}))
             }
             
         
@@ -139,7 +138,7 @@ class ProductInformation extends Component{
             .then((res)=>{
                 window.location = '/admin/panel/inventory/product-list';
             })
-            .catch((err)=>console.log(err))
+            .catch(err=>this.setState({errors:err.response.data}))
         }
     }
     render(){
@@ -170,6 +169,8 @@ class ProductInformation extends Component{
                                     onChange={this.handleChange('title')}
                                     margin="normal"
                                     variant="outlined"
+                                    error={this.state.errors.title}
+                                    helperText={this.state.errors.title === "" ? ' ' :this.state.errors.title }
                                 />
                             </Grid>
                             <Grid item xs={5}>
@@ -182,6 +183,8 @@ class ProductInformation extends Component{
                                     onChange={this.handleChange('brand')}
                                     margin="normal"
                                     variant="outlined"
+                                    error={this.state.errors.brand}
+                                    helperText={this.state.errors.brand === "" ? ' ' :this.state.errors.brand }
                                 />
                             </Grid>
                         </Grid>
@@ -196,6 +199,8 @@ class ProductInformation extends Component{
                                     onChange={this.handleChange('category')}
                                     margin="normal"
                                     variant="outlined"
+                                    error={this.state.errors.category}
+                                    helperText={this.state.errors.category === "" ? ' ' :this.state.errors.category }
                                 />
                             </Grid>
                             <Grid item xs={5}>

@@ -111,7 +111,7 @@ class AddProduct extends Component {
             let text = event.target.value
             axios.get(`/api/products/?pagesize=18&page=1&title=${text}`)
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.setState({
                         products: res.data.products,
                         maxProducts: res.data.maxProducts,
@@ -182,6 +182,7 @@ class AddProduct extends Component {
                         // let link = '/product?id=' + item._id
                         return (<Grid item key={item._id} xs={12} sm={6} md={4}>
                             <Card
+                                message={this.state.message}
                                 id={item._id}
                                 name={item.title} 
                                 brand={item.brand}/>

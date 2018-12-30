@@ -12,14 +12,21 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
 
+function TransitionUp(props) {
+    return <Slide {...props} direction="up" />;
+  }
+  
 const styles = theme =>({
     card: {
         display: "flex",
         flexDirection: "column",
         height: "100%",
         maxWidth: 345,
-        margin: "0 auto"
+        margin: "0 auto",
+
     },
     media: {
         // ⚠️ object-fit is not supported by IE 11.
@@ -42,10 +49,11 @@ const styles = theme =>({
 class ImgMediaCard extends Component{
 
     state ={
-        number: 0,
+        number: 1,
         id:null,
         message: '',
-        isDisabled: false
+        isDisabled: false,
+        openSnack:false
     }
     
     componentWillMount(){
@@ -53,12 +61,14 @@ class ImgMediaCard extends Component{
     }
 
     handleChange = (e)=>{
-        if(e.target.value !== '-1'){
+        if(e.target.value !== '0'){
             this.setState({ number: parseInt(e.target.value), isDisabled: false})
         }
         
     }
-
+    handleCloses = () => {
+        this.setState({ openSnack: false });
+      };
     changeQty(){
         if(this.state.number !== 0){
             axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("jwt_token");
@@ -118,7 +128,7 @@ class ImgMediaCard extends Component{
                             />
                         </Grid>
                         <Grid item>
-                            <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.changeQty(this.state.number, this.state.id); this.setState({ isDisabled: true }) }}>
+                            <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.changeQty(this.state.number, this.state.id); this.setState({ isDisabled: true,openSnack:true }) }}>
                                 Add
                             </Button>
                         </Grid>
@@ -126,6 +136,19 @@ class ImgMediaCard extends Component{
                     <div style={{color:"red"}}>{this.state.message === '' ? null:this.state.message}</div>
                 </CardActions>
             </Card>
+            {/* <div>
+          <Snackbar
+            open={this.state.openSnack}
+            onClose={this.handleCloses}
+            transitionDuration={1500}
+            onEntered={this.handleCloses}
+            TransitionComponent={TransitionUp}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.props.message}</span>}
+          />
+        </div> */}
             </div>
         );
     }
