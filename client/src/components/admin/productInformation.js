@@ -223,6 +223,8 @@ class ProductInformation extends Component{
                                     onChange={this.handleChange('price')}
                                     margin="normal"
                                     variant="outlined"
+                                    error={this.state.errors.price}
+                                    helperText={this.state.errors.price === "" ? ' ' :this.state.errors.price }
                                 />
                             </Grid>
                         </Grid>

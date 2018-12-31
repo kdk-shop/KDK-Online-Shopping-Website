@@ -78,7 +78,8 @@ class ImgMediaCard extends Component{
             }
             axios.post(`/api/inventories/${window.location.search.substr(4)}`,product)
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
+                    window.location=`/admin/panel/storage?id=${window.location.search.substr(4)}`
                     
                 })
                 .catch(err => {

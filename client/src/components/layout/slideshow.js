@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import axios from 'axios'
 
 const styles = theme => ({
@@ -38,7 +36,7 @@ const styles = theme => ({
    componentWillMount(){
      axios.get('/api/products/recent')
       .then(res=>{
-        console.log(res)
+        // console.log(res)
         this.setState({products:res.data.products,message:res.data.message})
       })
       .catch(err=>{
@@ -59,11 +57,6 @@ const styles = theme => ({
                 root: classes.titleBar,
                 title: classes.title,
               }}
-              // actionIcon={
-              //   <IconButton>
-              //     <StarBorderIcon className={classes.title} />
-              //   </IconButton>
-              // }
             />
           </GridListTile>
         ))}
