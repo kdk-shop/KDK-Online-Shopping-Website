@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Wave } from 'react-animated-text';
 import SlideShow from '../layout/slideshow'
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 class Landing extends Component {
   state={
@@ -30,6 +31,7 @@ class Landing extends Component {
      })
   }
   render() {
+  
     return (
       <div>
         <div className="landing">
@@ -56,6 +58,7 @@ class Landing extends Component {
            <hr/>
            <br/>
            Recent Products
+           
          <SlideShow 
          products={this.state.RecentProducts}
          message={this.state.RecentProductsMessage}

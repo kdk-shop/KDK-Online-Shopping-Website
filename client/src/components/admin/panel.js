@@ -38,7 +38,8 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    height:'auto'
+    // height:'auto'
+    zIndex: -1
   },
   content: {
     flexGrow: 1,

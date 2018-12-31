@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 const styles = theme => ({
   root: {
@@ -16,6 +16,8 @@ const styles = theme => ({
   },
   gridList: {
     flexWrap: 'nowrap',
+    // width: 500,
+    height: 450,
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },
@@ -29,14 +31,14 @@ const styles = theme => ({
 });
  
  class slideshow extends Component {
-   
-  
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.5}>
         {this.props.products.map(item => (
+          <Link to={`/product?id=${item._id}`}>
           <GridListTile key={item._id}>
             <img src={item.imagePaths[0]} alt={item.title} />
             <GridListTileBar
@@ -45,8 +47,9 @@ const styles = theme => ({
                 root: classes.titleBar,
                 title: classes.title,
               }}
-            />
+              />
           </GridListTile>
+              </Link>
         ))}
       </GridList>
     </div>
