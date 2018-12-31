@@ -29,26 +29,14 @@ const styles = theme => ({
 });
  
  class slideshow extends Component {
-   state={
-     products:[],
-     message:''
-   }
-   componentWillMount(){
-     axios.get('/api/products/recent')
-      .then(res=>{
-        // console.log(res)
-        this.setState({products:res.data.products,message:res.data.message})
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-   }
+   
+  
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.5}>
-        {this.state.products.map(item => (
+        {this.props.products.map(item => (
           <GridListTile key={item._id}>
             <img src={item.imagePaths[0]} alt={item.title} />
             <GridListTileBar

@@ -1,9 +1,34 @@
 import React, { Component } from 'react'
 import { Wave } from 'react-animated-text';
 import SlideShow from '../layout/slideshow'
+import axios from 'axios'
 
 class Landing extends Component {
+  state={
+    RecentProducts:[],
+    AmazingProducts:[],
+    RecentProductsMessage:'',
+    AmazingProductsMessage:''
+  }
+  componentWillMount(){
+    axios.get('/api/products/recent')
+     .then(res=>{
+       // console.log(res)
+       this.setState({RecentProducts:res.data.products,RecentProductsMessage:res.data.message})
+     })
+     .catch(err=>{
+       console.log(err)
+     })
 
+    axios.get('/api/products/amazing')
+     .then(res=>{
+       // console.log(res)
+       this.setState({AmazingProducts:res.data.products,AmazingProductsMessage:res.data.message})
+     })
+     .catch(err=>{
+       console.log(err)
+     })
+  }
   render() {
     return (
       <div>
@@ -28,7 +53,19 @@ class Landing extends Component {
          </div>
          </div>
          <div>
-         <SlideShow />
+           <hr/>
+           <br/>
+           Recent Products
+         <SlideShow 
+         products={this.state.RecentProducts}
+         message={this.state.RecentProductsMessage}
+         />
+         <hr/>
+          Amazing Products
+         <SlideShow 
+         products={this.state.AmazingProducts}
+         message={this.state.AmazingProductsMessage}
+         />
         </div>
       </div>
     )
