@@ -5,6 +5,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {Link} from 'react-router-dom'
+import IconButton from '@material-ui/core/IconButton';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 const styles = theme => ({
   root: {
@@ -17,7 +19,7 @@ const styles = theme => ({
   gridList: {
     flexWrap: 'nowrap',
     // width: 500,
-    height: 450,
+    height: 250,
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },
@@ -39,17 +41,22 @@ const styles = theme => ({
       <GridList className={classes.gridList} cols={2.5}>
         {this.props.products.map(item => (
           <Link to={`/product?id=${item._id}`}>
-          <GridListTile key={item._id}>
-            <img src={item.imagePaths[0]} alt={item.title} />
-            <GridListTileBar
-              title={item.title}
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              />
-          </GridListTile>
-              </Link>
+            <GridListTile key={item._id}>
+              <img src={item.imagePaths[0]} alt={item.title} />
+              <GridListTileBar
+                title={item.title}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title,
+                }}
+                actionIcon={
+                  <IconButton>
+                    <StarBorderIcon className={classes.title} />
+                  </IconButton>
+                }
+                />
+            </GridListTile>
+          </Link>
         ))}
       </GridList>
     </div>
