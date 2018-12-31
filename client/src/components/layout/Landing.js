@@ -24,7 +24,7 @@ class Landing extends Component {
 
     axios.get('/api/products/amazing')
      .then(res=>{
-       // console.log(res)
+      //  console.log(res)
        this.setState({AmazingProducts:res.data.products,AmazingProductsMessage:res.data.message})
      })
      .catch(err=>{

@@ -142,6 +142,7 @@ class ComplexGrid extends Component {
                 Not Available
               </Typography>
                   <Typography variant="h5"><strong>${this.props.price}</strong></Typography>
+                  {this.props.discounted !== ''?<Typography color='error' variant="h5"><strong>${this.props.discounted}</strong></Typography>:null}
                 </Grid>
                   <Grid item>
                   <StarRating 
