@@ -13,7 +13,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    overflow: 'hidden',
+    overflow: 'auto',
     backgroundColor: theme.palette.background.paper,
   },
   gridList: {

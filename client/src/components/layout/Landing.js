@@ -3,6 +3,7 @@ import { Wave } from 'react-animated-text';
 import SlideShow from '../layout/slideshow'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
+import Slider from "react-slick";
 
 class Landing extends Component {
   state={
@@ -31,7 +32,13 @@ class Landing extends Component {
      })
   }
   render() {
-  
+    var settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 5,
+      slidesToScroll: 5
+    };
     return (
       <div>
         <div className="landing">
@@ -55,7 +62,10 @@ class Landing extends Component {
          </div>
          </div>
          <div>
-           <hr/>
+           
+        </div>
+
+        {/* <hr/>
            <br/>
            Recent Products
            
@@ -64,12 +74,23 @@ class Landing extends Component {
          message={this.state.RecentProductsMessage}
          />
          <hr/>
-          Amazing Products
+          Amazing Offers
          <SlideShow 
          products={this.state.AmazingProducts}
          message={this.state.AmazingProductsMessage}
-         />
+         /> */}
+         <div style={{marginTop:30}}>Recent Products</div>
+        <div style={{marginTop:50}}>
+        <Slider {...settings}>
+                {this.state.RecentProducts.map((item)=>{
+                  return(
+                    <div><img src={item.imagePaths[0]} alt='item'/> </div>
+                  )
+                })}
+                
+              </Slider>
         </div>
+
       </div>
     )
   }
