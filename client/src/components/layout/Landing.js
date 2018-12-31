@@ -32,6 +32,7 @@ class Landing extends Component {
      })
   }
   render() {
+    console.log(this.state.RecentProducts)
     var settings = {
       dots: true,
       infinite: true,
@@ -83,6 +84,17 @@ class Landing extends Component {
         <div style={{marginTop:50}}>
         <Slider {...settings}>
                 {this.state.RecentProducts.map((item)=>{
+                  return(
+                    <div><img src={item.imagePaths[0]} alt='item'/> </div>
+                  )
+                })}
+                
+              </Slider>
+        </div>
+         <div style={{marginTop:30}}>Amazing Offers</div>
+        <div style={{marginTop:50}}>
+        <Slider {...settings}>
+                {this.state.AmazingProducts.map((item)=>{
                   return(
                     <div><img src={item.imagePaths[0]} alt='item'/> </div>
                   )
