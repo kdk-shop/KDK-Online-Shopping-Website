@@ -81,11 +81,12 @@ class Landing extends Component {
          message={this.state.AmazingProductsMessage}
          /> */}
          <div style={{marginTop:30}}>Recent Products</div>
+         
         <div style={{marginTop:50}}>
         <Slider {...settings}>
                 {this.state.RecentProducts.map((item)=>{
                   return(
-                    <div><img src={item.imagePaths[0]} alt='item'/> </div>
+                    <div><Link to={`/product?id=${item._id}`}><img src={item.imagePaths[0]} alt='item'/></Link> </div>
                   )
                 })}
                 
@@ -96,7 +97,7 @@ class Landing extends Component {
         <Slider {...settings}>
                 {this.state.AmazingProducts.map((item)=>{
                   return(
-                    <div><img src={item.imagePaths[0]} alt='item'/> </div>
+                    <div><Link to={`/product?id=${item._id}`}><img src={item.imagePaths[0]} alt='item'/> </Link></div>
                   )
                 })}
                 
