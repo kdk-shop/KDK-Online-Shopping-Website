@@ -54,7 +54,7 @@ class App extends Component {
           <Route path='/cart' component={Cart} />
           
         </div>
-        <Footer/>
+        {/* <Footer/> */}
         </div>
       </Router>
     );
