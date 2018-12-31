@@ -63,6 +63,11 @@ const purchaseSchema = new Schema({
     type: Date,
     default: Date.now,
     index: true
+  },
+
+  price: {
+    type: Number,
+    require: true
   }
 });
 
