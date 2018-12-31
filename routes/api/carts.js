@@ -295,6 +295,7 @@ router.post('/checkout',
       let promises = [];
       let inventoriesToUpdate = {};
       let purchasedProducts = [];
+      let totalCost = 0;
 
       if (user.shoppingCart.length === 0) {
         return res.status(400).json({
@@ -353,6 +354,7 @@ router.post('/checkout',
             if (inventoriesToUpdate[inventory._id] !== undefined) {
               currentInventory = inventoriesToUpdate[inventory._id];
             }
+
             for (let i = 0; i < currentInventory.length; i += 1) {
               if (String(currentInventory[i].product) ===
                 String(item.product)) {
@@ -398,6 +400,10 @@ router.post('/checkout',
               },
               qty: item.qty
             });
+
+            totalCost += retrievedProduct.discountedPrice === undefined ?
+              item.qty * retrievedProduct.price :
+              item.qty * retrievedProduct.discountedPrice;
             //Queue up inventory update
             if (inventoriesToUpdate[inventory._id] === undefined) {
               inventoriesToUpdate[String(inventory._id)] = currentInventory;
@@ -427,7 +433,8 @@ router.post('/checkout',
 
                 let purchase = new Purchase({
                   'user': purchaseUser,
-                  'products': purchasedProducts
+                  'products': purchasedProducts,
+                  'price': totalCost
                 });
 
                 try {

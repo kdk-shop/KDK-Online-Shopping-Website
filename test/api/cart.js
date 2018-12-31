@@ -34,7 +34,7 @@ describe('Carts', () => {
     Product.deleteMany({}, (err) => {
       let testProduct = new Product({
         title: "Test product",
-        price: 1.0,
+        price: 1,
         description: "Test description",
         category: "Test",
         brand: "Misc.",
@@ -48,7 +48,7 @@ describe('Carts', () => {
 
       let testProduct2 = new Product({
         title: "Test product 2",
-        price: 1.0,
+        price: 2,
         description: "Test description",
         category: "Test",
         brand: "Misc.",
@@ -268,6 +268,7 @@ describe('Carts', () => {
 
               res.body.purchase.should.have.property('user');
               res.body.purchase.should.have.property('purchaseDate');
+              res.body.purchase.should.have.property('price',1);
               res.body.purchase.products[0].product.title.should.eql(
                 'Test product');
               res.body.purchase.products[0].product.should.have.property(
@@ -310,6 +311,7 @@ describe('Carts', () => {
               res.should.have.status(200);
               res.should.be.json;
               res.body.user.shoppingCart.length.should.eql(0);
+              res.body.purchase.should.have.property('price',1);
 
               Inventory.find({
                 products: {
@@ -375,6 +377,7 @@ describe('Carts', () => {
 
                 res.body.purchase.should.have.property('user');
                 res.body.purchase.should.have.property('purchaseDate');
+              res.body.purchase.should.have.property('price',4);
                 res.body.purchase.products[0].product.title.should.eql(
                   'Test product');
                 res.body.purchase.products[0].qty.should.eql(2);
@@ -445,6 +448,7 @@ describe('Carts', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.user.shoppingCart.length.should.eql(0);
+              res.body.purchase.should.have.property('price',5);
                 Inventory.find({
                   '$or': [{
                       products: {
@@ -525,6 +529,7 @@ describe('Carts', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.user.shoppingCart.length.should.eql(0);
+              res.body.purchase.should.have.property('price',5);
 
                 Inventory.find({
                   '$or': [{
@@ -588,6 +593,7 @@ describe('Carts', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.user.shoppingCart.length.should.eql(0);
+              res.body.purchase.should.have.property('price',5);
 
                 Inventory.find({
                   '$or': [{
