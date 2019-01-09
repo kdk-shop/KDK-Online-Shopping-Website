@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Divider from '@material-ui/core/Divider';
 import { red } from '@material-ui/core/colors';
 
+import '../../App.css';
 class Landing extends Component {
   state={
     RecentProducts:[],

@@ -52,4 +52,7 @@ img {
   background-color: #343a40;
 }
 
+.slick-next:before, .slick-prev:before {
+  color: black;
+}
 
