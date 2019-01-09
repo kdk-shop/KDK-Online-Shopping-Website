@@ -94,7 +94,7 @@ class ComplexGrid extends Component {
             open:true,
             message:res.data.message
           })
-          window.location="/products"
+          window.location="/cart"
         })
         .catch(err=>{
           this.setState({

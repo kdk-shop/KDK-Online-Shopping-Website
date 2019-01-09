@@ -140,7 +140,7 @@ class addStorage extends Component {
           <Snackbar
           open={this.state.open}
           onClose={this.handleClose}
-          transitionDuration={1500}
+          transitionDuration={2500}
           onEntered={this.handleExit}
           TransitionComponent={TransitionUp}
           ContentProps={{

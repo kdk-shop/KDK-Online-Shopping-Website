@@ -127,7 +127,7 @@ class editStorage extends Component {
                   />
                   <TextField
                   fullWidth
-                  label="Addres"
+                  label="Address"
                   className={classes.textField}
                   margin="normal"
                   variant="outlined"
@@ -153,7 +153,7 @@ class editStorage extends Component {
           <Snackbar
           open={this.state.open}
           onClose={this.handleClose}
-          transitionDuration={1500}
+          transitionDuration={2500}
           onEntered={this.handleExit}
           TransitionComponent={TransitionUp}
           ContentProps={{

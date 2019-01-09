@@ -181,7 +181,7 @@ class panel extends Component {
       <Snackbar 
           open={this.state.open}
           onClose={this.handleClose}
-          transitionDuration={2000}
+          transitionDuration={2500}
           onEntered={this.handleExit}
           TransitionComponent={TransitionUp}
           ContentProps={{
