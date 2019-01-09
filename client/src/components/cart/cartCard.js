@@ -160,7 +160,7 @@ class cartCard extends Component{
                                                 margin="normal"
                                             />
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={8}> 
                                             <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.props.changeQty(this.state.number, this.state.productId); this.setState({ isDisabled: true }) }}>
                                                 Change
                                             </Button>
@@ -168,7 +168,7 @@ class cartCard extends Component{
                                     </Grid>
                                 </Grid>
                                 
-                                <Grid item xs={2}>
+                                <Grid item xs={8}>
                                     <Tooltip title="Delete" >
                                     <IconButton onClick={()=>this.handleClickOpen(this.props.productId)}>
                                             <DeleteIcon />

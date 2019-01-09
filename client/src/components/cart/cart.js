@@ -254,10 +254,11 @@ class cart extends Component {
         <Stepper nonLinear activeStep={activeStep} style={{outline:'none'}}>
           {steps.map((label, index) => {
             return (
-              <Step key={label}>
+              <Step key={label}  style={{outline:'none'}}>
                 <StepButton
                   onClick={this.handleStep(index)}
                   completed={this.state.completed[index]}
+                  style={{outline:'none'}}
                 >
                   {label}
                 </StepButton>
@@ -287,7 +288,7 @@ class cart extends Component {
                onClose={this.handleClose}
                aria-labelledby="max-width-dialog-title"
              >
-               <DialogTitle > {"Total Price  :  "+totalPrice }
+               <DialogTitle > {"Total Price  :  "+totalPrice+" ($)"}
             </DialogTitle>
                <DialogTitle > {"Total Quantity  :  "+totalQTY}
             </DialogTitle>
@@ -300,7 +301,7 @@ class cart extends Component {
                  <Button onClick={this.handlePurchase} color="primary">
                    Order
                  </Button>
-                 <Button onClick={this.handleClose} color="primary" autoFocus>
+                 <Button onClick={this.handleClose} color="secondary" autoFocus>
                    Cancel
                  </Button>
                </DialogActions>
