@@ -205,7 +205,7 @@ class cart extends Component {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Item</TableCell>
+            {/* <TableCell>Item</TableCell> */}
             <TableCell>Name</TableCell>
             <TableCell align="right">Brand</TableCell>
             <TableCell align="right">Price($)</TableCell>

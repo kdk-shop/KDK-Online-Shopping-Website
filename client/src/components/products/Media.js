@@ -99,7 +99,7 @@ class ComplexGrid extends Component {
         .catch(err=>{
           this.setState({
             open:true,
-            message:err.response.data.message
+            message:'You Need To Login First'
           })
         })
     }
