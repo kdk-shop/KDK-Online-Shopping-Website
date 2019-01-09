@@ -33,6 +33,7 @@
     "passport-jwt": "^4.0.0",
     "react-js-pagination": "^3.0.2",
     "reactstrap": "^6.5.0",
+    "slick-carousel": "^1.8.1",
     "validator": "^10.9.0"
   },
   "devDependencies": {

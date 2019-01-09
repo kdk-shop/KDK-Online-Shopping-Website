@@ -4,7 +4,8 @@ import SlideShow from '../layout/slideshow'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import Slider from "react-slick";
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 class Landing extends Component {
   state={
     RecentProducts:[],
@@ -80,9 +81,9 @@ class Landing extends Component {
          products={this.state.AmazingProducts}
          message={this.state.AmazingProductsMessage}
          /> */}
-         <div style={{marginTop:30}}>Recent Products</div>
+         <div style={{marginLeft:50,marginTop:30}}>Recent Products</div>
          
-        <div style={{marginTop:50}}>
+        <div style={{marginLeft:50,marginRight:50,marginTop:50}}>
         <Slider {...settings}>
                 {this.state.RecentProducts.map((item)=>{
                   return(
