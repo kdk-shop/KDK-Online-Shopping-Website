@@ -251,7 +251,7 @@ class cart extends Component {
       </Table>
     </Paper>
         <div className={classes.root}>
-        <Stepper nonLinear activeStep={activeStep}>
+        <Stepper nonLinear activeStep={activeStep} style={{outline:'none'}}>
           {steps.map((label, index) => {
             return (
               <Step key={label}>

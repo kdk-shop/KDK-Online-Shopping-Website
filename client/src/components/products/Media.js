@@ -91,7 +91,7 @@ class ComplexGrid extends Component {
       axios.post('/api/carts/',product)
         .then(res=>{
           this.setState({
-            open:true,
+            // open:true,
             message:res.data.message
           })
           window.location="/cart"
@@ -172,7 +172,7 @@ class ComplexGrid extends Component {
           <Snackbar 
                   open={this.state.open}
                   onClose={this.handleClose}
-                  transitionDuration={1500}
+                  transitionDuration={2500}
                   onEntered={this.handleExit}
                   TransitionComponent={TransitionUp}
                   ContentProps={{

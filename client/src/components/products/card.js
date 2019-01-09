@@ -64,7 +64,7 @@ class MediaCard extends Component {
     axios.post('/api/carts/',product)
       .then(res=>{
         this.setState({
-          open:true,
+          // open:true,
           message:res.data.message
         })
         window.location="/cart"
