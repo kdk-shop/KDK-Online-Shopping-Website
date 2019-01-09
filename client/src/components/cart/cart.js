@@ -266,15 +266,6 @@ class cart extends Component {
             );
           })}
         </Stepper>
-          {/* <Pagination
-         
-          style={{visibility:(this.state.cart.length== 0?"hidden":"visible")}}
-           activePage={this.state.page}
-           itemsCountPerPage={12}
-           totalItemsCount={this.state.cart.length}
-           pageRangeDisplayed={5}
-           onChange={this.handlePageChange}
-            /> */}
              <nav aria-label="...">
                 
                 <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.cart.length} onChange={this.handlePageChange}/>
@@ -297,7 +288,7 @@ class cart extends Component {
              
             </DialogContentText>
           </DialogContent>
-               <DialogActions>
+               <DialogActions style={{outline:'none'}}>
                  <Button onClick={this.handlePurchase} color="primary" style={{outline:'none'}}>
                    Order
                  </Button>

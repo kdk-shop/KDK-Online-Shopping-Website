@@ -113,11 +113,11 @@ class cartCard extends Component{
     }
 
     render(){
-        console.log('qty='+this.state.number+' id='+this.state.productId)
+        // console.log('qty='+this.state.number+' id='+this.state.productId)
         const { classes } = this.props;
         const link=`/product?id=${this.state.productId}`
         return (
-            <div style={{height:'100%'}}>
+            // <div style={{height:'100%'}}>
             <Card className={classes.card}>
                 <Grid container direction="column" justify="space-evenly" className={classes.fullHeight}>
                     <Grid item className={classes.item} >
@@ -142,7 +142,7 @@ class cartCard extends Component{
                         <CardActions>
                             
                             <Grid container justify="space-between" alignItems="center" alignContent="center" >
-                                <Grid item >
+                                <Grid item  xs={8}>
                                     <Grid container  
                                     justify="center" alignItems="center" alignContent="center">
                                         <Grid item>
@@ -168,7 +168,7 @@ class cartCard extends Component{
                                     </Grid>
                                 </Grid>
                                 
-                                <Grid item >
+                                <Grid item xs={2}>
                                     <Tooltip title="Delete" >
                                     <IconButton onClick={()=>this.handleClickOpen(this.props.productId)}>
                                             <DeleteIcon />
@@ -181,7 +181,7 @@ class cartCard extends Component{
                     </Grid>
                 </Grid>
             </Card>
-             <div>
+            //  <div>
              <Dialog
                open={this.state.open}
                onClose={this.handleClose}
