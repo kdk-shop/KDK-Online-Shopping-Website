@@ -142,7 +142,7 @@ class cartCard extends Component{
                         <CardActions>
                             
                             <Grid container justify="space-between" alignItems="center" alignContent="center" >
-                                <Grid item xs={8}>
+                                <Grid item >
                                     <Grid container  
                                     justify="center" alignItems="center" alignContent="center">
                                         <Grid item>
@@ -160,7 +160,7 @@ class cartCard extends Component{
                                                 margin="normal"
                                             />
                                         </Grid>
-                                        <Grid item xs={8}> 
+                                        <Grid item>
                                             <Button disabled={this.state.isDisabled} variant="contained" color="primary" className={classes.button} type="submit" onClick={() => { this.props.changeQty(this.state.number, this.state.productId); this.setState({ isDisabled: true }) }}>
                                                 Change
                                             </Button>
@@ -168,7 +168,7 @@ class cartCard extends Component{
                                     </Grid>
                                 </Grid>
                                 
-                                <Grid item xs={8}>
+                                <Grid item >
                                     <Tooltip title="Delete" >
                                     <IconButton onClick={()=>this.handleClickOpen(this.props.productId)}>
                                             <DeleteIcon />

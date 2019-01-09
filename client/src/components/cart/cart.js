@@ -255,7 +255,7 @@ class cart extends Component {
           {steps.map((label, index) => {
             return (
               <Step key={label}  style={{outline:'none'}}>
-                <StepButton
+                <StepButton  style={{outline:'none'}}
                   onClick={this.handleStep(index)}
                   completed={this.state.completed[index]}
                   style={{outline:'none'}}
@@ -286,8 +286,8 @@ class cart extends Component {
              <Dialog
                open={this.state.open}
                onClose={this.handleClose}
-               aria-labelledby="max-width-dialog-title"
-             >
+                style={{width: '150px'}}
+  >
                <DialogTitle > {"Total Price  :  "+totalPrice+" ($)"}
             </DialogTitle>
                <DialogTitle > {"Total Quantity  :  "+totalQTY}
@@ -298,10 +298,10 @@ class cart extends Component {
             </DialogContentText>
           </DialogContent>
                <DialogActions>
-                 <Button onClick={this.handlePurchase} color="primary">
+                 <Button onClick={this.handlePurchase} color="primary" style={{outline:'none'}}>
                    Order
                  </Button>
-                 <Button onClick={this.handleClose} color="secondary" autoFocus>
+                 <Button onClick={this.handleClose} color="secondary" autoFocus  style={{outline:'none'}}>
                    Cancel
                  </Button>
                </DialogActions>
