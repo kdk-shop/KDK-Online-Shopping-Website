@@ -198,7 +198,7 @@ class cart extends Component {
                 </Grid>}
         
        {this.state.cart.length == 0?(<div>
-         <h1></h1>
+         <h1 style={{marginTop:50,textAlign:"center"}}>Your Cart Is Empty</h1>
        </div>):
        <div>
          <Paper className={classes.root}>

@@ -15,9 +15,11 @@ import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import RCPagination from 'rc-pagination';
 import 'rc-pagination/assets/index.css';
+import { Typography } from '@material-ui/core';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -153,6 +155,13 @@ class AddProduct extends Component {
         const { classes } = this.props;
         return (
             <div>
+                 <AppBar position="fixed" className={classes.appBar} style={{ background: '#2b2f35' }}>
+                <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                   Select Product 
+                </Typography>
+                </Toolbar>
+            </AppBar>
                 <Tooltip title="Back">
                     <Link to={backLink}>
                         <Fab color="primary" aria-label="Back" className={classes.fab}>
@@ -160,12 +169,7 @@ class AddProduct extends Component {
                         </Fab>
                     </Link>
                 </Tooltip>
-                {this.state.loading ? <LinearProgress
-                    classes={{
-                        colorPrimary: classes.linearColorPrimary,
-                        barColorPrimary: classes.linearBarColorPrimary,
-                    }}
-                /> : ''}
+                <hr/>
                 {/* <div className={classes.grow} /> */}
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -180,6 +184,7 @@ class AddProduct extends Component {
                         }}
                     />
                 </div>
+                <hr/>
                 <Grid container spacing={24} style={{ dispaly: "block", margin: "0 auto" }}>
                     {this.state.products.map((item) => {
                         // let link = '/product?id=' + item._id

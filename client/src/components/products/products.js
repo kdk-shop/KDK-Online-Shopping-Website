@@ -200,6 +200,7 @@ class Products extends Component{
         return(
           <div>
             <div className={classes.grow} />
+            <hr/>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -213,6 +214,7 @@ class Products extends Component{
               }}
             />
           </div>
+          <hr/>
           {this.state.products.length == 0 ?<div style={{marginTop: 50,fontSize:30,textAlign:"center"}}>No Item Found</div>:this.items(classes)}
           </div>
           
