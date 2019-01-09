@@ -117,7 +117,7 @@ class cartCard extends Component{
         const { classes } = this.props;
         const link=`/product?id=${this.state.productId}`
         return (
-            // <div style={{height:'100%'}}>
+            <div >
             <Card className={classes.card}>
                 <Grid container direction="column" justify="space-evenly" className={classes.fullHeight}>
                     <Grid item className={classes.item} >
@@ -181,7 +181,7 @@ class cartCard extends Component{
                     </Grid>
                 </Grid>
             </Card>
-            //  <div>
+             <div>
              <Dialog
                open={this.state.open}
                onClose={this.handleClose}

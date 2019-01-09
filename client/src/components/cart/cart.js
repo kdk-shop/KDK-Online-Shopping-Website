@@ -277,7 +277,7 @@ class cart extends Component {
              <Dialog
                open={this.state.open}
                onClose={this.handleClose}
-                style={{width: '150px'}}
+                style={{width: '100%'}}
   >
                <DialogTitle > {"Total Price  :  "+totalPrice+" ($)"}
             </DialogTitle>
