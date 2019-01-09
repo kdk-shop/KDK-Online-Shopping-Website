@@ -158,7 +158,7 @@ onClick=()=>{
               helperText={this.state.errors.tel === "" ? ' ' :this.state.errors.tel }
             />
               
-              <Typography><Link to="/change-password">Want to change your password?</Link></Typography>
+              <Typography style={{marginLeft:18.5}}> <Link to="/change-password">Want to change your password?</Link></Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
               <Button variant="contained" color="primary" className={classes.button} type="submit">
@@ -178,13 +178,13 @@ onClick=()=>{
       <Snackbar
           open={this.state.open}
           onClose={this.handleClose}
-          transitionDuration={1500}
+          transitionDuration={2500}
           onEntered={this.handleExit}
           TransitionComponent={TransitionUp}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Your Information Has Updated Successfuly</span>}
+          message={<span id="message-id">Your Information Has Updated Successfully</span>}
         />
   </div>
     )

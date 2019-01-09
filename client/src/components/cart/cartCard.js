@@ -143,12 +143,13 @@ class cartCard extends Component{
                             
                             <Grid container justify="space-between" alignItems="center" alignContent="center" >
                                 <Grid item xs={8}>
-                                    <Grid container  alignItems="center" alignContent="center">
+                                    <Grid container  
+                                    justify="center" alignItems="center" alignContent="center">
                                         <Grid item>
                                             <TextField
                                                 id="standard-number"
                                                 label="Quantity"
-                                                variant="outlined"
+                                                // variant="outlined"
                                                 value={this.state.number}
                                                 onChange={this.handleChange}
                                                 type="number"

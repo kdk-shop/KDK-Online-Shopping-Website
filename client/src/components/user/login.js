@@ -132,7 +132,7 @@ function TransitionUp(props) {
               error={this.state.errors.password}
               helperText={this.state.errors.password === "" ? ' ' :this.state.errors.password }
             />
-                <Typography><Link to="/recover-password">Forgot Password?</Link></Typography>
+                <Typography style={{marginLeft:18.5}}><Link to="/recover-password">Forgot Password?</Link></Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                 <Button variant="contained" color="primary" className={classes.button} type="submit">
@@ -157,7 +157,7 @@ function TransitionUp(props) {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">You Have Successfuly Logged In</span>}
+          message={<span id="message-id">You Have Successfully Logged In</span>}
         />
       </div>
     )
