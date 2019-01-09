@@ -92,8 +92,8 @@ class Landing extends Component {
                 
               </Slider>
         </div>
-         <div style={{marginTop:30}}>Amazing Offers</div>
-        <div style={{marginTop:50}}>
+         <div style={{marginLeft:50,marginTop:30}}>Amazing Offers</div>
+        <div style={{marginLeft:50,marginRight:50,marginTop:50}}>
         <Slider {...settings}>
                 {this.state.AmazingProducts.map((item)=>{
                   return(
