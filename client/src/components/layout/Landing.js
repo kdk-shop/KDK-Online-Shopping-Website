@@ -6,6 +6,9 @@ import {Link} from 'react-router-dom'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import Divider from '@material-ui/core/Divider';
+import { red } from '@material-ui/core/colors';
+
 class Landing extends Component {
   state={
     RecentProducts:[],
@@ -81,10 +84,10 @@ class Landing extends Component {
          products={this.state.AmazingProducts}
          message={this.state.AmazingProductsMessage}
          /> */}
-         <div style={{marginLeft:50,marginTop:30}}>Recent Products</div>
+         <div style={{marginLeft:50,marginTop:100, fontSize:30,fontFamily: 'Shrikhand'}}>Recent Products</div>
          
-        <div style={{marginLeft:50,marginRight:50,marginTop:50}}>
-        <Slider {...settings}>
+        <div style={{margin: 50}}>
+        <Slider style={{color: "#000000"}} {...settings}>
                 {this.state.RecentProducts.map((item)=>{
                   return(
                     <div><Link to={`/product?id=${item._id}`}><img src={item.imagePaths[0]} alt='item'/></Link> </div>
@@ -93,9 +96,10 @@ class Landing extends Component {
                 
               </Slider>
         </div>
-         <div style={{marginLeft:50,marginTop:30}}>Amazing Offers</div>
-        <div style={{marginLeft:50,marginRight:50,marginTop:50}}>
-        <Slider {...settings}>
+          <Divider />
+         <div style={{marginLeft:50,marginTop:60, fontSize: 30,fontFamily: 'Shrikhand'}}>Amazing Offers <strong style={{fontSize: 20,color:"red"}}>Up to 30% Off</strong></div>
+        <div style={{margin: 50}}>
+        <Slider style={{color: "#000000"}} {...settings}>
                 {this.state.AmazingProducts.map((item)=>{
                   return(
                     <div><Link to={`/product?id=${item._id}`}><img src={item.imagePaths[0]} alt='item'/> </Link></div>
