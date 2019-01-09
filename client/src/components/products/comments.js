@@ -61,7 +61,8 @@ const styles = theme => ({
       message:'',
       open:false,
       notAuth:true,
-      score:0
+      score:0,
+      hasCommented : false
      }
      this.onChange=this.onChange.bind(this);
      this.onSubmit=this.onSubmit.bind(this);
@@ -100,10 +101,10 @@ const styles = theme => ({
       if(this.state.text!==''){
       axios.put(`/api/products/review/${this.props.comments._id}/${this.state.user._id}`,newComment)
         .then(res=>{
-          this.setState({open:true,message:res.data.message})
+          this.setState({open:true,message:'Comment Has Been Sent Successfully'})
         })
         .catch(err=>{
-          this.setState({open:true,message:err.response.data.message})
+          this.setState({open:true,message:'You Need To Login First'})
           console.log("failed while sending comment")
 
       })
@@ -152,6 +153,9 @@ const styles = theme => ({
                   </Typography>
                 </Grid>
                 {this.props.comments.reviews.map((x)=>{
+                  if(x.creatorId === this.state.user._id && !this.state.hasCommented){
+                    this.setState({hasCommented: true})
+                  }
                   return(
                   <Grid item key={x.creatorId} >
                       <TextField 
@@ -183,7 +187,7 @@ const styles = theme => ({
                   
                       <TextField
                         id="filled-multiline-static"
-                        label="New Comment"
+                        label={this.state.hasCommented?"Edit Comment":"New Comment"}
                         multiline
                         rows="5"
                         value={this.state.text}
@@ -215,7 +219,7 @@ const styles = theme => ({
   <Snackbar
         open={this.state.open}
         onClose={this.handleClose}
-        transitionDuration={1500}
+        transitionDuration={2500}
         onEntered={this.handleExit}
         TransitionComponent={TransitionUp}
         ContentProps={{
