@@ -222,9 +222,9 @@ class cart extends Component {
                 totalPrice+=r.totalAmount
                 return (                  
                   <TableRow key={r.id}>
-                    <TableCell component="th" scope="row">
+                    {/* <TableCell component="th" scope="row">
                       {r.id}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell component="th" scope="row">
                       {r.name}
                     </TableCell>
@@ -240,7 +240,7 @@ class cart extends Component {
           })}
           
           <TableRow style={{backgroundColor:'#c0c3c6',opacity:0.5,color:'black'}}>
-            <TableCell>{rows[0].length}</TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
