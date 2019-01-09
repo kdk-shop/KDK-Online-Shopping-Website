@@ -109,13 +109,13 @@ const styles = theme => ({
                 </Typography>
                 </Toolbar>
             </AppBar>
-          <Tooltip title="Back">
             <Link to="/admin/panel">
+          <Tooltip title="Back">
             <Fab color="primary" aria-label="Add" className={classes.fab}>
               <ArrowBack />
               </Fab>
-            </Link> 
           </Tooltip>
+            </Link> 
           <Tooltip title="Add" >
             <Link to="/admin/panel/storages/add-storage">
               <Fab color="primary" aria-label="Add" className={classes.fab}>
