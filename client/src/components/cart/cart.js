@@ -23,6 +23,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -263,7 +265,7 @@ class cart extends Component {
             );
           })}
         </Stepper>
-          <Pagination
+          {/* <Pagination
          
           style={{visibility:(this.state.cart.length== 0?"hidden":"visible")}}
            activePage={this.state.page}
@@ -271,7 +273,11 @@ class cart extends Component {
            totalItemsCount={this.state.cart.length}
            pageRangeDisplayed={5}
            onChange={this.handlePageChange}
-            />
+            /> */}
+             <nav aria-label="...">
+                
+                <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.cart.length} onChange={this.handlePageChange}/>
+               </nav>
       </div>
       </div>
        }

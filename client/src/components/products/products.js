@@ -149,30 +149,14 @@ class Products extends Component{
       handleExit = ()=>{
         
       }
-    render(){
-        const { classes } = this.props;
-        return(
-            <div>
-              {this.state.loading? <LinearProgress
-                classes={{
-                  colorPrimary: classes.linearColorPrimary,
-                  barColorPrimary: classes.linearBarColorPrimary,
-                }}
-              />:''}
-                <div className={classes.grow} />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              onKeyPress={this.handleSearch}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
-          </div>
+
+    items(classes){
+      return(
+        <div>
+              
+                
+              
+                
                 <Grid container spacing={24} style={{dispaly: "block",margin: "0 auto"}}>
                     {this.state.products.map((item)=>{
                         let link = '/product?id='+item._id
@@ -208,8 +192,30 @@ class Products extends Component{
                   message={<span id="message-id">{this.state.message}</span>}
                  />
             </div>
-
-            
+      )
+      
+    }
+    render(){
+        const { classes } = this.props;
+        return(
+          <div>
+            <div className={classes.grow} />
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              onKeyPress={this.handleSearch}
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+            />
+          </div>
+          {this.state.products.length == 0 ?<div style={{marginTop: 50,fontSize:30,textAlign:"center"}}>No Item Found</div>:this.items(classes)}
+          </div>
+          
         )
     }
 }

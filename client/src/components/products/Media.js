@@ -114,6 +114,10 @@ class ComplexGrid extends Component {
     render(){
       // {console.log(this.state.reviews[0].score)}
         const { classes } = this.props;
+      let temp = {}
+      if(this.props.discounted !== ""){
+        temp = {textDecoration: "line-through"}
+      }
       return (
         <div className={classes.root}>
           <Paper className={classes.paper}>
@@ -141,7 +145,7 @@ class ComplexGrid extends Component {
                     <Typography style={{ visibility: this.props.available ? "hidden" : "visible" }} className={classes.margin} gutterBottom variant="subtitle1" component="h2">
                 Not Available
               </Typography>
-                  <Typography variant="h5"><strong>${this.props.price}</strong></Typography>
+                  <Typography style={temp} variant="h5"><strong>${this.props.price}</strong></Typography>
                   {this.props.discounted !== ''?<Typography color='error' variant="h5"><strong>${this.props.discounted}</strong></Typography>:null}
                 </Grid>
                   <Grid item>

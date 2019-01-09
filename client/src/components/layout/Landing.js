@@ -105,7 +105,6 @@ class Landing extends Component {
          <div style={{margin: 50}}>
         <Slider style={{color: "#000000"}} {...settings}>
                 {this.state.AmazingProducts.map((item)=>{
-                  console.log(item.imagePaths[0])
                   return(
                     <div><Link to={`/product?id=${item._id}`}><img src={item.imagePaths[0]} alt='item'/></Link> </div>
                   )
