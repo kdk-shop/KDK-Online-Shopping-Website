@@ -43,7 +43,8 @@ class Landing extends Component {
       infinite: true,
       speed: 500,
       slidesToShow: 5,
-      slidesToScroll: 5
+      slidesToScroll: 5,
+      adaptiveHeight: true
     };
     return (
       <div>
@@ -97,9 +98,11 @@ class Landing extends Component {
                 
               </Slider>
         </div>
+
           <Divider />
+        
          <div style={{marginLeft:50,marginTop:60, fontSize: 30,fontFamily: 'Shrikhand'}}>Amazing Offers <strong style={{fontSize: 20,color:"red"}}>Up to 30% Off</strong></div>
-        <div style={{margin: 50}}>
+        <div style={{margin: 50,marginBottom:80}}>
         <Slider style={{color: "#000000"}} {...settings}>
                 {this.state.AmazingProducts.map((item)=>{
                   return(

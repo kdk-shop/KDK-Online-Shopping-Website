@@ -20,6 +20,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Typography } from '@material-ui/core';
 
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -162,7 +165,7 @@ const styles = theme => ({
         <hr/>
         <Grid container spacing={24} style={{ dispaly: "block", margin: "0 auto" }}>
           {this.state.products.map((item) => {
-              console.log(item)
+              // console.log(item)
             if (item.product) {
               return (<Grid item key={item._id} xs={12} sm={6} md={4}>
                 <Card 
@@ -198,19 +201,14 @@ const styles = theme => ({
                 </Button>
             </DialogActions>
           </Dialog>
-        </div>
-        <Pagination
-          activePage={this.state.page}
-          itemsCountPerPage={12}
-          totalItemsCount={this.state.maxProducts}
-          pageRangeDisplayed={5}
-          onChange={this.handlePageChange}
-        />
-        <div>
+          <nav aria-label="...">
+                
+                <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.maxProducts} onChange={this.handlePageChange}/>
+               </nav>
           <Snackbar
             open={this.state.openS}
             onClose={this.handleCloses}
-            transitionDuration={1500}
+            transitionDuration={2500}
             onEntered={this.handleCloses}
             TransitionComponent={TransitionUp}
             ContentProps={{

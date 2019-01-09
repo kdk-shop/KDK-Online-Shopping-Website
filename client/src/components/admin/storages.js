@@ -24,6 +24,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 
+
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
+
 const styles = theme => ({
   fab: {
     margin: theme.spacing.unit*2,
@@ -171,14 +175,10 @@ const styles = theme => ({
               </DialogActions>
             </Dialog>
             </div>
-        <Pagination
-        style={{visibility:(this.state.storages.length === 0?"hidden":"visible")}}
-        activePage={this.state.page}
-        itemsCountPerPage={12}
-        totalItemsCount={this.state.maxStorages}
-        pageRangeDisplayed={5}
-        onChange={this.handlePageChange}
-          />
+            <nav aria-label="...">
+                
+                <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.maxStorages} onChange={this.handlePageChange}/>
+               </nav>
     </div>
     )
   }

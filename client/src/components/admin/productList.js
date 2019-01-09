@@ -21,6 +21,9 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
+
 const styles = theme => ({
     fab: {
         margin: theme.spacing.unit,
@@ -116,18 +119,19 @@ class storage extends Component {
     }
 
     handlePageChange = (pageNumber) => {
+        console.log(pageNumber)
         this.setState({ page: pageNumber })
         axios.get(`/api/products/?pagesize=12&page=${pageNumber}`)
             .then(res => {
                 // console.log(res)
                 this.setState({
-                    products: res.data.inventory,
+                    products: res.data.products,
                     maxProducts: res.data.maxProducts,
                     message: res.data.message
                 })
             })
             .catch(err => {
-                this.setState({ message: err.response.data.message })
+   
             })
     }
 
@@ -211,6 +215,7 @@ class storage extends Component {
                             }}
                         />
                     </div>
+                <hr/>
                 <Grid container spacing={24} style={{ dispaly: "block", margin: "0 auto" }}>
                     {this.state.products.map((item) => {
                         if(item){
@@ -247,13 +252,10 @@ class storage extends Component {
                         </DialogActions>
                     </Dialog>
                 </div>
-                <Pagination
-                    activePage={this.state.page}
-                    itemsCountPerPage={12}
-                    totalItemsCount={this.state.maxProducts}
-                    pageRangeDisplayed={5}
-                    onChange={this.handlePageChange}
-                />
+                <nav aria-label="...">
+                
+                 <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.maxProducts} onChange={this.handlePageChange}/>
+                </nav>
             </div>
             </div>
         )

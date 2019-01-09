@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import Card from './card';
 import Grid from '@material-ui/core/Grid'
-import Pagination from "react-js-pagination";
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
@@ -11,6 +10,9 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import PropTypes from 'prop-types';
+
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
@@ -129,7 +131,7 @@ class Products extends Component{
         this.setState({page:pageNumber})
         axios.get(`/api/products/?pagesize=12&page=${pageNumber}`)
         .then(res=>{
-            console.log(res)
+            // console.log(res)
             this.setState({
                products:res.data.products,
                maxProducts:res.data.maxProducts,
@@ -188,20 +190,16 @@ class Products extends Component{
                         </Grid>)
                     })}
                 </Grid>
-
-                <Pagination
-                style={{visibility:(this.state.products.length === 0?"hidden":"visible")}}
-                activePage={this.state.page}
-                itemsCountPerPage={12}
-                totalItemsCount={this.state.maxProducts}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange}
-                 />
+                <nav aria-label="...">
+                
+                 <RCPagination style={{marginTop: 50,display:"flex", justifyContent:"center"}} locale="en_US" pageSize={12} current={this.state.page} total={this.state.maxProducts} onChange={this.handlePageChange}/>
+                </nav>
+                
 
                  <Snackbar 
                   open={this.state.open}
                   onClose={this.handleClose}
-                  transitionDuration={1500}
+                  transitionDuration={2500}
                   onEntered={this.handleExit}
                   TransitionComponent={TransitionUp}
                   ContentProps={{

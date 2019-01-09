@@ -114,7 +114,7 @@ class addStorage extends Component {
                   />
                   <TextField
                   fullWidth
-                  label="Addres"
+                  label="Address"
                   className={classes.textField}
                   margin="normal"
                   variant="outlined"

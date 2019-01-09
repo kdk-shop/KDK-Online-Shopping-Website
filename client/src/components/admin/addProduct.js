@@ -16,6 +16,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 
+import RCPagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
+
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
 }
