@@ -142,7 +142,7 @@ class cartCard extends Component{
                         <CardActions>
                             
                             <Grid container justify="space-between" alignItems="center" alignContent="center" >
-                                <Grid item  xs={8}>
+                                <Grid item  xs={9}>
                                     <Grid container  
                                     justify="center" alignItems="center" alignContent="center">
                                         <Grid item>
