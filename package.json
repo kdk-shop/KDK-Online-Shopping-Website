@@ -9,7 +9,9 @@
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "author": "Khatere Tajfar",
   "license": "MIT",
@@ -36,7 +38,8 @@
     "react-js-pagination": "^3.0.2",
     "reactstrap": "^6.5.0",
     "slick-carousel": "^1.8.1",
-    "validator": "^10.9.0"
+    "validator": "^10.9.0",
+    "snyk": "^1.192.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -46,5 +49,6 @@
     "mocha": "^5.2.0",
     "mockery": "^2.1.0",
     "nodemon": "^1.18.6"
-  }
+  },
+  "snyk": true
 }
