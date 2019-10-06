@@ -18,7 +18,7 @@
     "react-star-rating-component": "^1.4.1",
     "react-swipeable-views": "^0.13.0",
     "webpack": "4.19.1",
-    "snyk": "^1.163.3"
+    "snyk": "^1.231.0"
   },
   "scripts": {
     "start": " react-scripts start",
